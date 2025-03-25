@@ -1,7 +1,9 @@
+#include "menus.h"
+
 #include <stdio.h>
 #include "utils.h"
 
-void menuPrincipal()
+void menuPrincipalAdmin()
 {
     printf("1. Gestionar menú\n");
     printf("2. Gestionar cuentas\n");
@@ -27,7 +29,7 @@ void menuPrincipal()
             printf("prueba");
             break;
         case 4:
-            printf("prueba");
+            menuEstadisticas();
             break;
         case 0:
             printf("prueba");
@@ -39,44 +41,6 @@ void menuPrincipal()
     while (ans == -1);
 }
 
-
-void menuAdministrador()
-{
-    printf("1. Gestionar cuentas\n");
-    printf("2. Gestionar menu\n");
-    printf("3. Ver estado de los robots\n");
-    printf("4. Ver numero de pedidos diarios\n");
-    printf("0. Volver al menu principal\n");
-    fflush(stdout);
-
-    int ans;
-    do
-    {
-        ans = gestionar_respuesta();
-
-        switch (ans)
-        {
-        case 1:
-            printf("prueba");
-            break;
-        case 2:
-            printf("prueba");
-            break;
-        case 3:
-            printf("prueba");
-            break;
-        case 4:
-            printf("prueba");
-            break;
-        case 0:
-            printf("prueba");
-            break;
-        default:
-            ans = -1;
-        }
-    }
-    while (ans == -1);
-}
 
 void menuGestionCuentas()
 {
@@ -188,4 +152,71 @@ void menuEstadoRobots()
         }
     }
     while (ans == -1);
+}
+
+
+void menuEstadisticas() {
+    char opcion;
+
+    // Estadisticas del negocio general
+    printf("ESTADISTICAS DE NEGOCIO\n");
+    printf("1. Pedidos por día/semana/mes\n");
+    printf("2. Zonas mas popular\n");
+    printf("3. Hora pico de pedidos\n");
+    printf("4. Platos mas vendidos\n");
+    printf("5. Clientes recurrentes\n");
+    printf("6. Valor promedio de pedido\n");
+
+    //Estadisticas de Robots
+    printf("ESTADISTICAS DE ROBOTS\n");
+    printf("7. Kilometros recorridos por robot\n");
+    printf("8. Pedidos completados por robot\n");
+    printf("9. Robots activos\n");
+
+    printf("0. Volver al menu administrador\n");
+    fflush(stdout);
+
+    int ans;
+    do
+    {
+        ans = gestionar_respuesta();
+
+        switch (ans)
+        {
+        case 1:
+            printf("1prueba");
+            break;
+        case 2:
+            printf("2prueba");
+            break;
+        case 3:
+            printf("3prueba");
+            break;
+        case 4:
+            printf("4prueba");
+            break;
+        case 5:
+            printf("5prueba");
+            break;
+        case 6:
+            printf("6prueba");
+            break;
+        case 7:
+            printf("7prueba");
+            break;
+        case 8:
+            printf("8prueba");
+            break;
+        case 9:
+            printf("9prueba");
+            break;
+        case 0:
+            menuPrincipalAdmin();
+            break;
+        default:
+            ans = -1;
+        }
+    }
+    while (ans == -1);
+
 }

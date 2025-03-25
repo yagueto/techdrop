@@ -5,9 +5,8 @@
 #ifndef MENUS_H
 #define MENUS_H
 
-void menuPrincipal();
+void menuPrincipalAdmin();
 void menu_gestion_menus();
-void menuAdministrador();
 void menuGestionCuentas();
 void menuGestionMenu();
 void menuEstadoRobots();
