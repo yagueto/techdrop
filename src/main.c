@@ -2,21 +2,6 @@
 #include "menus.h"
 
 
-char menuPrincipal()
-{
-    char opcion;
-
-    printf("1. Gestionar menú\n");
-    printf("2. Gestionar cuentas\n");
-    printf("3. Gestionar robots\n");
-    printf("4. Estadísticas\n");
-    printf("0. Salir\n");
-    printf("Elige una opcion: ");
-    fflush(stdout);
-    scanf(" %c", &opcion); // Espacio antes de %c para evitar problemas con el buffer
-
-    return opcion;
-}
 
 int main()
 {

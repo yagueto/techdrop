@@ -3,4 +3,4 @@ project(techdrop C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(techdrop src/main.c)
+add_executable(techdrop src/main.c src/menus.c)
