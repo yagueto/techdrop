@@ -4,6 +4,6 @@
 
 int main()
 {
-    menuPrincipal();
+    menuPrincipalAdmin();
     return 0;
 }

@@ -11,6 +11,7 @@ void menuAdministrador();
 void menuGestionCuentas();
 void menuGestionMenu();
 void menuEstadoRobots();
+void menuEstadisticas();
 int gestionar_respuesta();
 
 #endif //MENUS_H
