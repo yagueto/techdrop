@@ -5,11 +5,12 @@
 #ifndef MENUS_H
 #define MENUS_H
 
-char menuPrincipal();
-char menuCliente();
-char menuAdministrador();
-char menuGestionCuentas();
-char menuGestionMenu();
-char menuEstadoRobots();
+void menuPrincipal();
+void menuCliente();
+void menuAdministrador();
+void menuGestionCuentas();
+void menuGestionMenu();
+void menuEstadoRobots();
+int gestionar_respuesta();
 
 #endif //MENUS_H
