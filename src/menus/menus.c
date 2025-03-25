@@ -1,6 +1,5 @@
-#include "menus.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include "utils.h"
 
 void menuPrincipal()
 {
@@ -40,43 +39,6 @@ void menuPrincipal()
     while (ans == -1);
 }
 
-void menuCliente()
-{
-    printf("1. Hacer pedido\n");
-    printf("2. Ver mi pedido\n");
-    printf("3. Cancelar pedido\n");
-    printf("4. Ver tiempo restante para la entrega\n");
-    printf("0. Volver al menu principal\n");
-    fflush(stdout);
-
-    int ans;
-    do
-    {
-        ans = gestionar_respuesta();
-
-        switch (ans)
-        {
-        case 1:
-            printf("prueba");
-            break;
-        case 2:
-            printf("prueba");
-            break;
-        case 3:
-            printf("prueba");
-            break;
-        case 4:
-            printf("prueba");
-            break;
-        case 0:
-            printf("prueba");
-            break;
-        default:
-            ans = -1;
-        }
-    }
-    while (ans == -1);
-}
 
 void menuAdministrador()
 {
@@ -226,17 +188,4 @@ void menuEstadoRobots()
         }
     }
     while (ans == -1);
-}
-
-int gestionar_respuesta()
-{
-    printf("Elige una opcion: ");
-
-    char opcion;
-    scanf(" %c", &opcion); // Espacio antes de %c para evitar problemas con el buffer
-
-    char* endptr;
-    const int out = strtol(&opcion, &endptr, 10);
-
-    return out;
 }
