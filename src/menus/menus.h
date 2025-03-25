@@ -6,7 +6,7 @@
 #define MENUS_H
 
 void menuPrincipal();
-void menuCliente();
+void menu_gestion_menus();
 void menuAdministrador();
 void menuGestionCuentas();
 void menuGestionMenu();
