@@ -8,5 +8,9 @@ add_executable(techdrop src/main.c src/menus/menus.c src/menus/utils.c src/menus
         src/sqlite3.c
         src/bd.c
         src/bd.h
+        src/estadisticas.h
+        src/estadisticas.c
+        src/estructuras.h
+        src/estructuras.c
 
 )

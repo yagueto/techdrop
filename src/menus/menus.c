@@ -2,8 +2,11 @@
 
 #include <stdio.h>
 #include "utils.h"
+#include "../estadisticas.h"
+#include "../estructuras.h"
+#include "../bd.h"
 
-void menuPrincipalAdmin()
+void menuPrincipalAdmin(sqlite3 *db)
 {
     printf("1. Gestionar menú\n");
     printf("2. Gestionar cuentas\n");
@@ -29,7 +32,7 @@ void menuPrincipalAdmin()
             printf("prueba");
             break;
         case 4:
-            menuEstadisticas();
+            menuEstadisticas(db);
             break;
         case 0:
             printf("prueba");
@@ -155,7 +158,7 @@ void menuEstadoRobots()
 }
 
 
-void menuEstadisticas() {
+void menuEstadisticas(sqlite3 *db) {
     char opcion;
 
     // Estadisticas del negocio general
@@ -184,7 +187,8 @@ void menuEstadisticas() {
         switch (ans)
         {
         case 1:
-            printf("1prueba");
+            printf("Pedidos por dia:");
+            calcularPedidosPorDia(db);
             break;
         case 2:
             printf("2prueba");
@@ -211,7 +215,7 @@ void menuEstadisticas() {
             printf("9prueba");
             break;
         case 0:
-            menuPrincipalAdmin();
+            menuPrincipalAdmin(db);
             break;
         default:
             ans = -1;

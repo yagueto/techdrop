@@ -5,23 +5,23 @@
 
 int main()
 {
+    sqlite3 *db;
+    // abrir o crear base de datos
+    if (sqlite3_open("bd.db", &db) != SQLITE_OK) {
+        fprintf(stderr, "Error al abrir la BD: %s\n", sqlite3_errmsg(db));
+        return 1;
+    }
 
-    //crear base de datos
-  //  sqlite3 *db;
-   // int rc = sqlite3_open("bd.db", &db);
+    // crear tablas si no existen
+    if (crearTablas(db) != 0) {
+        fprintf(stderr, "Error al crear tablas\n");
+        sqlite3_close(db);
+        return 1;
+    }
 
-  //  if (rc != SQLITE_OK) {
-   //     printf("No se puede abrir la base de datos: %s\n", sqlite3_errmsg(db));
-   //     return -1;
-  //  }
-    //if (crearTablas(db) != 0)
-    ////      printf("Error creado tablas");
-     //   sqlite3_close(db);
-      ///  return 1;
-    //}
-
-  //  sqlite3_close(db);
-
-    menuPrincipalAdmin();
+    crearTablas(db);
+    //datosPruebaPedido(db);
+    menuPrincipalAdmin(db);
+    sqlite3_close(db);
     return 0;
 }
