@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "bd.h"
-#include "menus/menus.h"
+#include "menu.h"
 #include "sqlite3.h"
 
 int main()
@@ -21,7 +21,7 @@ int main()
 
     crearTablas(db);
     //datosPruebaPedido(db);
-    menuPrincipalAdmin(db);
+    initializeMenus();
     sqlite3_close(db);
     return 0;
 }

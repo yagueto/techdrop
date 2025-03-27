@@ -3,7 +3,9 @@ project(techdrop C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(techdrop src/main.c src/menus/menus.c src/utils.c src/menus/menu_menus.c
+add_executable(techdrop
+        src/main.c
+        src/utils.c
         src/sqlite3.c
         src/bd.c
         src/estadisticas.c
@@ -11,4 +13,6 @@ add_executable(techdrop src/main.c src/menus/menus.c src/utils.c src/menus/menu_
         src/estructuras/usuario.c
         src/estructuras/robot.c
         src/estructuras/robot.h
+        src/menu.c
+        src/menu.h
 )
