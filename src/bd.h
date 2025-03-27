@@ -2,7 +2,7 @@
 // Created by maddi.esparta on 26/03/2025.
 //
 #include "sqlite3.h"
-#include "estructuras.h"
+#include "estructuras/estructuras.h"
 #ifndef BD_H
 #define BD_H
 

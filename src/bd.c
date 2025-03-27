@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "bd.h"
-#include "estructuras.h"
+#include "estructuras/estructuras.h"
 #include "estadisticas.h"
 int crearTablas(sqlite3* db) {
 
@@ -15,9 +15,6 @@ int crearTablas(sqlite3* db) {
                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                    "dni TEXT NOT NULL UNIQUE,"
                    "nombre TEXT NOT NULL,"
-                   "apellido TEXT NOT NULL,"
-                   "direccion TEXT NOT NULL,"
-                   "municipio TEXT NOT NULL,"
                    "mail TEXT NOT NULL,"
                    "fecha_nac TEXT NOT NULL,"
                    "username TEXT NOT NULL UNIQUE,"

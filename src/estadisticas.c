@@ -3,7 +3,7 @@
 //
 
 #include "estadisticas.h"
-#include "estructuras.h"
+#include "estructuras/estructuras.h"
 #include "bd.h"
 #include <stdio.h>
 #include <stdlib.h>

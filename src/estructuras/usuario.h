@@ -5,10 +5,8 @@ typedef struct
 {
   char nombre[20];
   char contraseña[20];
-}usuario;
+} Usuario;
 
-void menuUsuario();
-void crearUsuario(usuario *user);
-int gestionar_respuesta();
+void crearUsuario(Usuario *user);
 
 #endif //USUARIO_H

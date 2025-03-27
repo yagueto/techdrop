@@ -1,10 +1,12 @@
 #include "menus.h"
-#include "usuario.h"
 #include <stdio.h>
-#include "utils.h"
+#include <stdlib.h>
+#include "../utils.h"
 #include "../estadisticas.h"
-#include "../estructuras.h"
+#include "../estructuras/estructuras.h"
 #include "../bd.h"
+#include "../estructuras/usuario.h"
+
 
 void menuPrincipalAdmin(sqlite3 *db)
 {
@@ -223,4 +225,50 @@ void menuEstadisticas(sqlite3 *db) {
     }
     while (ans == -1);
 
+}
+
+void menuUsuario()
+{
+    printf("Menu de usuarios:\n");
+    printf("Pulsa 1 para crear un nuevo usuario\n");
+    printf("Pulsa 2 para iniciar sesión con un usuario existente\n");
+    printf("Pulsa 3 para eliminar un usuario\n");
+    printf("Pulsa 0 para salir del menú\n");
+    printf("Elección: ");
+    fflush(stdout);
+
+    char ans;
+    do
+    {
+        ans = gestionar_respuesta();
+
+        switch (ans)
+        {
+            case 1:
+                Usuario *user = (Usuario *)malloc(sizeof(Usuario));
+            if (user == NULL) {
+                printf("Error al asignar memoria para el usuario.\n");
+                exit(1);
+            }
+            crearUsuario(user);
+            //Futuro insert en la BBDD
+            free(user);
+            break;
+            case 2:
+                printf("prueba");
+            break;
+            case 3:
+                printf("prueba");
+            break;
+            case 4:
+                printf("prueba");
+            break;
+            case 0:
+                printf("prueba");
+            break;
+            default:
+                ans = -1;
+        }
+    }
+    while (ans == -1);
 }
