@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "menu.h"
 #include <stdlib.h>
 #include <string.h>
@@ -22,7 +23,7 @@ Menu* createMenu(const char* title, const int numOptions)
     return menu;
 }
 
-void addOption(Menu* menu, int index, char* option, void (*handler)())
+void addOption(Menu* menu, const int index, const char* option, void (*handler)())
 {
     if (!menu || index < 0 || index >= menu->numOptions) return;
     menu->options[index] = strdup(option);
@@ -104,20 +105,20 @@ void initializeMenus()
     addOption(menuGestionPlatos, 2, "Eliminar plato(s)", NULL);
 
     menuGestionCuentas = createMenu("Gestión cuentas", 3);
-    addOption(menuGestionPlatos, 0, "Listar cuentas", NULL);
-    addOption(menuGestionPlatos, 1, "Añadir cuenta", NULL);
-    addOption(menuGestionPlatos, 2, "Eliminar cuenta(s)", NULL);
+    addOption(menuGestionCuentas, 0, "Listar cuentas", NULL);
+    addOption(menuGestionCuentas, 1, "Añadir cuenta", NULL);
+    addOption(menuGestionCuentas, 2, "Eliminar cuenta(s)", NULL);
 
-    menuEstadisticas = createMenu("Estadísticas del sistema", 3);
-    addOption(menuGestionPlatos, 0, "Pedidos por día/semana/mes", NULL);
-    addOption(menuGestionPlatos, 1, "Zonas mas popular", NULL);
-    addOption(menuGestionPlatos, 2, "Hora pico de pedidos", NULL);
-    addOption(menuGestionPlatos, 3, "Platos más vendidos", NULL);
-    addOption(menuGestionPlatos, 4, "Clientes recurrentes", NULL);
-    addOption(menuGestionPlatos, 5, "Valor promedio de pedido", NULL);
-    addOption(menuGestionPlatos, 6, "Kilómetros recorridos por robot", NULL);
-    addOption(menuGestionPlatos, 7, "Pedidos completados por robot", NULL);
-    addOption(menuGestionPlatos, 8, "Robots activos", NULL);
+    menuEstadisticas = createMenu("Estadísticas del sistema", 9);
+    addOption(menuEstadisticas, 0, "Pedidos por día/semana/mes", NULL);
+    addOption(menuEstadisticas, 1, "Zonas mas popular", NULL);
+    addOption(menuEstadisticas, 2, "Hora pico de pedidos", NULL);
+    addOption(menuEstadisticas, 3, "Platos más vendidos", NULL);
+    addOption(menuEstadisticas, 4, "Clientes recurrentes", NULL);
+    addOption(menuEstadisticas, 5, "Valor promedio de pedido", NULL);
+    addOption(menuEstadisticas, 6, "Kilómetros recorridos por robot", NULL);
+    addOption(menuEstadisticas, 7, "Pedidos completados por robot", NULL);
+    addOption(menuEstadisticas, 8, "Robots activos", NULL);
 
 
     showMenu(menuPrincipal);
@@ -125,4 +126,6 @@ void initializeMenus()
     // Liberar la memoria
     destroyMenu(menuPrincipal);
     destroyMenu(menuGestionPlatos);
+    destroyMenu(menuGestionCuentas);
+    destroyMenu(menuEstadisticas);
 }
