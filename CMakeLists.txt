@@ -9,4 +9,6 @@ add_executable(techdrop src/main.c src/menus/menus.c src/utils.c src/menus/menu_
         src/estadisticas.c
         src/estructuras/estructuras.c
         src/estructuras/usuario.c
+        src/estructuras/robot.c
+        src/estructuras/robot.h
 )

@@ -14,9 +14,6 @@ int crearTablas(sqlite3* db) {
    const char * crearUsuario = "CREATE TABLE IF NOT EXISTS Usuario ("
                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                    "dni TEXT NOT NULL UNIQUE,"
-                   "nombre TEXT NOT NULL,"
-                   "mail TEXT NOT NULL,"
-                   "fecha_nac TEXT NOT NULL,"
                    "username TEXT NOT NULL UNIQUE,"
                    "password TEXT NOT NULL);";
 
@@ -44,7 +41,7 @@ int crearTablas(sqlite3* db) {
                    "id_usuario INTEGER NOT NULL,"
                    "direccion TEXT NOT NULL,"
                    "fecha TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,"
-                   "estado TEXT NOT NULL,"
+                   "estado INT NOT NULL CHECK(estado IN (0,1,2))," //0->En cola, 1->En camino, 2->entregado
                    "FOREIGN KEY(id_usuario) REFERENCES Usuario(id));";
 
    rc = sqlite3_exec(db, crearPedido, NULL, NULL, &zErrMsg);
@@ -54,9 +51,8 @@ int crearTablas(sqlite3* db) {
    }
    const char * crearRobot = "CREATE TABLE IF NOT EXISTS Robot ("
                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                   "estado TEXT NOT NULL CHECK(estado IN ('Disponible', 'Ocupado', 'Siesta')),"
-                   "descripcion TEXT,"
-                   "pedido_actual INTEGER NOT NULL,"
+                   "estado INTEGER NOT NULL CHECK(estado IN (0,1,2)) DEFAULT 2," //0->Ocupado, 1->Mantenimiento, 2->Disponible
+                   "pedido_actual INTEGER DEFAULT -1," //al crearse no tiene pedido asignado
                    "FOREIGN KEY(pedido_actual) REFERENCES Pedido(id_pedido) ON DELETE CASCADE);";
 
 

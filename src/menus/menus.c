@@ -127,6 +127,7 @@ void menuEstadoRobots()
 
     printf("1. Ver robots disponibles\n");
     printf("2. Ver cola de pedidos pendientes\n");
+    printf("3. Insertar Robot\n");
     printf("0. Volver al menu administrador\n");
     fflush(stdout);
 
@@ -144,6 +145,8 @@ void menuEstadoRobots()
             printf("prueba");
             break;
         case 3:
+           // Robot *robot;
+           // crearRobot(robot);
             printf("prueba");
             break;
         case 4:

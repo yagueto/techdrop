@@ -26,12 +26,12 @@ typedef struct {
     int cantidad;
     float precio_unitario;
 } PedidoDetalle;
-
 typedef struct {
     int id_robot;
-    char estado[20]; // "Disponible", "Ocupado", "Siesta"
+    int estado; // 0->Ocupado, 1->Mantenimiento, 2->Disponible
     int pedido_actual;
 } Robot;
+
 
 // Funciones para arrays
 Pedido* crearArrayPedidos(int capacidad);
