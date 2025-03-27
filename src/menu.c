@@ -32,28 +32,31 @@ void addOption(Menu* menu, int index, char* option, void (*handler)())
 void showMenu(Menu* menu)
 {
     if (!menu) return;
-
-    clrscr(); // Limpiar pantalla antes de dibujar menú
-    printf(" _            _         _                 \n| |_ ___  ___| |__   __| |_ __ ___  _ __  \n| __/ _ \\/ __| '_ \\ / _` | '__/ _ \\| '_ \\ \n| ||  __/ (__| | | | (_| | | | (_) | |_) |\n \\__\\___|\\___| |_|_|\\__,_|_|  \\___/| .__/ \n                                   |_|    \n");
-
-    printf("-----%s----\n", menu->title);
-    for (int i = 0; i < menu->numOptions; ++i)
-    {
-        printf("%d: %s\n", i + 1, menu->options[i]);
-    }
-    printf("0: Volver\n");
-
-    int opcion;
     do
     {
-        printf("Elige una opción: ");
-        fflush(stdout);
-        scanf("%d", &opcion);
-        if (menu->handlers[opcion - 1] == NULL) printf("Aún no implementado\n");
+        clrscr(); // Limpiar pantalla antes de dibujar menú
+        printf(
+            " _            _         _                 \n| |_ ___  ___| |__   __| |_ __ ___  _ __  \n| __/ _ \\/ __| '_ \\ / _` | '__/ _ \\| '_ \\ \n| ||  __/ (__| | | | (_| | | | (_) | |_) |\n \\__\\___|\\___| |_|_|\\__,_|_|  \\___/| .__/ \n                                   |_|    \n");
 
+        printf("-----%s----\n", menu->title);
+        for (int i = 0; i < menu->numOptions; ++i)
+        {
+            printf("%d: %s\n", i + 1, menu->options[i]);
+        }
+        printf("0: Volver\n");
+        int opcion;
+        do
+        {
+            printf("Elige una opción: ");
+            fflush(stdout);
+            scanf("%d", &opcion);
+            if (menu->handlers[opcion - 1] == NULL) printf("Aún no implementado\n");
+        }
+        while (opcion < 0 || opcion > menu->numOptions || menu->handlers[opcion - 1] == NULL);
+        if (opcion == 0) return;
+        menu->handlers[opcion - 1]();
     }
-    while (opcion <= 0 || opcion > menu->numOptions || menu->handlers[opcion - 1] == NULL);
-    menu->handlers[opcion - 1]();
+    while (1);
 }
 
 void destroyMenu(Menu* menu)
