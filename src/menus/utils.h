@@ -5,4 +5,5 @@
 #ifndef UTILS_H
 #define UTILS_H
 int gestionar_respuesta();
+void clearIfNeeded(char *str, int max_line);
 #endif //UTILS_H

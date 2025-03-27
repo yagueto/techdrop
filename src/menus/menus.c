@@ -1,5 +1,5 @@
 #include "menus.h"
-
+#include "usuario.h"
 #include <stdio.h>
 #include "utils.h"
 #include "../estadisticas.h"
@@ -26,7 +26,7 @@ void menuPrincipalAdmin(sqlite3 *db)
             printf("prueba");
             break;
         case 2:
-            printf("prueba");
+            menuUsuario();
             break;
         case 3:
             printf("prueba");

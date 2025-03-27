@@ -1,9 +1,10 @@
 #include "usuario.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-char menuUsuario()
+void menuUsuario()
 {
   printf("Menu de usuarios:\n");
   printf("Pulsa 1 para crear un nuevo usuario\n");
@@ -21,8 +22,14 @@ char menuUsuario()
     switch (ans)
     {
       case 1:
-        usuario *user;
-        crearUsuario(user);
+        usuario *user = (usuario *)malloc(sizeof(usuario));
+      if (user == NULL) {
+        printf("Error al asignar memoria para el usuario.\n");
+        exit(1);
+      }
+      crearUsuario(user);
+      //Futuro insert en la BBDD
+      free(user);
       break;
       case 2:
         printf("prueba");
@@ -50,22 +57,13 @@ void crearUsuario(usuario *user)
   printf("Introduce el nombre del usuario: ");
   fflush(stdout);
   fgets(name, 20, stdin);
+  clearIfNeeded(name, 20);
+
   printf("Contraseña: ");
   fflush(stdout);
   fgets(pass, 20, stdin);
-  user->nombre = name;
-  user->contraseña = pass;
-}
+  clearIfNeeded(pass, 20);
 
-int gestionar_respuesta()
-{
-  printf("Elige una opcion: ");
-
-  char opcion;
-  scanf(" %c", &opcion); // Espacio antes de %c para evitar problemas con el buffer
-
-  char* endptr;
-  const int out = strtol(&opcion, &endptr, 10);
-
-  return out;
+  strcpy(user->nombre, name);
+  strcpy(user->contraseña, pass);
 }

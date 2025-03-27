@@ -7,7 +7,7 @@ typedef struct
   char contraseña[20];
 }usuario;
 
-char menuUsuario();
+void menuUsuario();
 void crearUsuario(usuario *user);
 int gestionar_respuesta();
 
