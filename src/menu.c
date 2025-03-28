@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include "menu.h"
+#include "estadisticas.h"
 #include <stdlib.h>
 #include <string.h>
 
+static sqlite3* dbCon = NULL;
 
 Menu* menuPrincipal;
 Menu* menuGestionPlatos;
@@ -91,8 +93,9 @@ void handle_menuEstadisticas()
     showMenu(menuEstadisticas);
 }
 
-void initializeMenus()
+void initializeMenus(sqlite3* db)
 {
+    dbCon = db;
     // Crear menús
     menuPrincipal = createMenu("Menú principal", 3);
     addOption(menuPrincipal, 0, "Gestionar menú", handle_menuPlatos);
@@ -110,7 +113,7 @@ void initializeMenus()
     addOption(menuGestionCuentas, 2, "Eliminar cuenta(s)", NULL);
 
     menuEstadisticas = createMenu("Estadísticas del sistema", 9);
-    addOption(menuEstadisticas, 0, "Pedidos por día/semana/mes", NULL);
+    addOption(menuEstadisticas, 0, "Pedidos por día", NULL);
     addOption(menuEstadisticas, 1, "Zonas mas popular", NULL);
     addOption(menuEstadisticas, 2, "Hora pico de pedidos", NULL);
     addOption(menuEstadisticas, 3, "Platos más vendidos", NULL);

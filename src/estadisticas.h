@@ -8,7 +8,7 @@
 #include "estructuras/estructuras.h"
 
 //Funciones para las estadisticas de negocio
-void calcularPedidosPorDia(sqlite3 *db);
+void calcularPedidosPorDia(sqlite3 *db, const char *fecha);
 void calcularPedidosPorMes(sqlite3 *db);
 void calcularZonasPopulares(sqlite3 *db);
 void calcularHoraPico(sqlite3 *db);

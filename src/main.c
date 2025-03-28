@@ -19,8 +19,9 @@ int main()
         return 1;
     }
 
-    crearTablas(db);
-    //datosPruebaPedido(db);
+    //sqlite3_exec(db, "DROP TABLE IF EXISTS Usuario;", NULL, NULL, NULL);
+    //crearTablas(db);
+    //datosPrueba(db);//Llena las tablas con datos de prueba
     initializeMenus();
     sqlite3_close(db);
     return 0;
