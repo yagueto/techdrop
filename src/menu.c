@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include "menu.h"
 #include "estadisticas.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
+#include "screens/gestion_menu.h"
 
 static sqlite3* dbCon = NULL;
 
@@ -38,6 +40,8 @@ void showMenu(Menu* menu)
     do
     {
         clrscr(); // Limpiar pantalla antes de dibujar menú
+
+        // Cabecera del programa
         printf(
             " _            _         _                 \n| |_ ___  ___| |__   __| |_ __ ___  _ __  \n| __/ _ \\/ __| '_ \\ / _` | '__/ _ \\| '_ \\ \n| ||  __/ (__| | | | (_| | | | (_) | |_) |\n \\__\\___|\\___| |_|_|\\__,_|_|  \\___/| .__/ \n                                   |_|    \n");
 
@@ -103,8 +107,8 @@ void initializeMenus(sqlite3* db)
     addOption(menuPrincipal, 2, "Estadísticas", handle_menuEstadisticas);
 
     menuGestionPlatos = createMenu("Gestión menú", 3);
-    addOption(menuGestionPlatos, 0, "Listar platos", NULL);
-    addOption(menuGestionPlatos, 1, "Añadir platos", NULL);
+    addOption(menuGestionPlatos, 0, "Listar platos", handle_listarPlatos);
+    addOption(menuGestionPlatos, 1, "Añadir platos", handle_añadirPlato);
     addOption(menuGestionPlatos, 2, "Eliminar plato(s)", NULL);
 
     menuGestionCuentas = createMenu("Gestión cuentas", 3);
@@ -125,6 +129,10 @@ void initializeMenus(sqlite3* db)
 
 
     showMenu(menuPrincipal);
+
+    clrscr();
+
+    printf("Saliendo...\n");
 
     // Liberar la memoria
     destroyMenu(menuPrincipal);
