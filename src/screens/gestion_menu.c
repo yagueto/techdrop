@@ -1,7 +1,6 @@
 #include "gestion_menu.h"
-
+#include <stdio.h>
 #include <string.h>
-
 #include "../utils.h"
 
 void handle_listarPlatos()
@@ -13,7 +12,6 @@ void handle_listarPlatos()
     printf("Elige una opción: ");
     fflush(stdout);
     scanf("%d", &opcion);
-
 }
 
 void handle_añadirPlato()
@@ -40,10 +38,8 @@ void handle_añadirPlato()
     puts("\n");
     printf("Nombre: %s, descripción: %s, precio: %f", nombre, descripcion, precio);
     waitForEnter();
-
 }
 
 void handle_eliminarPlato()
 {
-
 }

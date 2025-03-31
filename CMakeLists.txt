@@ -3,6 +3,8 @@ project(techdrop C)
 
 set(CMAKE_C_STANDARD 11)
 
+include_directories(src lib)
+
 add_executable(techdrop
         src/main.c
         src/utils.c
