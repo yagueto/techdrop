@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "bd.h"
-#include "estructuras/usuario.h"
+
 
 #include <stdlib.h>
 
@@ -56,6 +56,7 @@ int crearTablas(sqlite3* db) {
    }
    const char * crearRobot = "CREATE TABLE IF NOT EXISTS Robot ("
                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "nombre TEXT NOT NULL,"
                    "estado INTEGER NOT NULL CHECK(estado IN (0,1,2)) DEFAULT 2," //0->Ocupado, 1->Mantenimiento, 2->Disponible
                    "pedido_actual INTEGER DEFAULT -1," //al crearse no tiene pedido asignado
                    "FOREIGN KEY(pedido_actual) REFERENCES Pedido(id_pedido) ON DELETE CASCADE);";
