@@ -5,23 +5,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 //Funciones para las estadisticas de negocio
 void calcularPedidosPorDia(sqlite3 *db, const char *fecha){
     if (!fecha || strlen(fecha) != 10) {
-        printf("Formato de fecha inválido. Usar YYYY-MM-DD\n");
+        printf("\nFormato de fecha inválido. Usar YYYY-MM-DD\n");
         return;
     }
     int total = obtenerTotalPedidosPorDia(db, fecha);
     if (total >= 0)
     {
-        printf("Pedidos del dia %s: %d\n", fecha, total);
+        printf("\nPedidos del dia %s: %d\n", fecha, total);
     }else
     {
-        printf("Error al obtener datos\n");
+        printf("\nError al obtener datos\n");
     }
-    //waitForEnter();
 }
 
 void calcularZonasPopulares(sqlite3 *db)
@@ -29,10 +27,10 @@ void calcularZonasPopulares(sqlite3 *db)
     char zonas[5][100]; //maximo 5 zonas para mostrar por pantalla
     int contadores[5] = {0};
     int total = obtenerZonasPopulares(db, zonas, contadores, 5);
-
+    printf("\n");
     if (total>0)
     {
-        printf("\nZonas mas populares:\n");
+        printf("Zonas mas populares:\n\n");
         for (int i = 0; i < total; i++)
         {
             printf("%d. %s: %d pedidos\n", i + 1, zonas[i], contadores[i]);
@@ -41,7 +39,6 @@ void calcularZonasPopulares(sqlite3 *db)
     {
         printf("No hay datos de zonas\n");
     }
-    //waitForEnter();
 }
 
 void calcularHoraPico(sqlite3 *db)
@@ -75,17 +72,47 @@ void calcularPlatosMasVendidos(sqlite3 *db)
 }
 void calcularClientesRecurrentes(sqlite3 *db)
 {
+    int ids_usuarios[5];
+    int total_pedidos[5];
+    int total = obtenerClientesRecurrentes(db, ids_usuarios, total_pedidos, 5);
 
+    if (total > 0)
+    {
+        printf("\nClientes recurrentes:\n");
+        for (int i = 0; i < total; i++)
+        {
+            printf("%d. Usuario %d: %d pedidos\n", i+1, ids_usuarios[i], total_pedidos[i]);
+        }
+    }else
+    {
+        printf("No hay datos de clientes recurrentes.");
+    }
 }
 void calcularValorMedioPedido(sqlite3 *db)
 {
-
+    double valor_medio = obtenerValorMedioPedido(db);
+    if (valor_medio >= 0) {
+        printf("\nValor medio de pedido: %.2f€\n", valor_medio);
+    } else {
+        printf("No hay datos para calcular el valor medio\n");
+    }
 }
 
 //Funciones para las estadisticas de robots
 void calcularPedidosPorRobot(sqlite3 *db)
 {
+    int ids_robots[5];
+    int total_pedidos[5];
+    int total = obtenerPedidosPorRobot(db, ids_robots, total_pedidos, 5);
 
+    if (total > 0) {
+        printf("\nPedidos por robot:\n");
+        for (int i = 0; i < total; i++) {
+            printf("%d. Robot %d: %d pedidos\n", i + 1, ids_robots[i], total_pedidos[i]);
+        }
+    } else {
+        printf("No hay datos de pedidos por robot\n");
+    }
 }
 void calcularRobotsActivos(sqlite3 *db)
 {

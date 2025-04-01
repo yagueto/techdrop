@@ -16,7 +16,11 @@ void verificarDatos(sqlite3 *db);
 Pedido* cargarPedidos(sqlite3 *db, int *total);
 Plato* cargarPlatos(sqlite3 *db, int *total);
 Robot* cargarRobots(sqlite3 *db, int *total);
-void insertarUsuario(sqlite3 *db,Usuario usuario);
+
+//insertar/eliminar
+int insertarUsuario(sqlite3 *db,Usuario usuario);
+int eliminarUsuario(sqlite3 *db,Usuario usuario);
+int insertarRobot(sqlite3 *db,Robot robot);
 
 int actualizarPedido(sqlite3 *db, const Pedido *pedido);
 int actualizarArrayPedidos(sqlite3 *db, const Pedido *pedidos, int total);

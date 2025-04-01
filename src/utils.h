@@ -4,6 +4,7 @@
 void clearIfNeeded(char *str, int max_line);
 void waitForEnter();
 void getDate(char* buffer, int size);
+void clearInputBuffer();
 
 #ifdef _WIN32
 #include <stdlib.h>

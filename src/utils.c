@@ -13,8 +13,8 @@ void clearIfNeeded(char *str, int max_line)
 // Funcion para continuar(esperar a que el usuario pulse)
 void waitForEnter() {
     printf("\nPresione Enter para continuar...");
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+    fflush(stdout);
+    clearInputBuffer();
 }
 
 // Funcion para obtener fecha de input
@@ -22,4 +22,10 @@ void getDate(char* buffer, int size) {
     printf("Introduce la fecha (YYYY-MM-DD): ");
     fgets(buffer, size, stdin);
     buffer[strcspn(buffer, "\n")] = '\0';
+}
+
+//Limpia el buffer despues de recibir input
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }

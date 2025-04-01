@@ -6,6 +6,7 @@
 #define ROBOT_H
 typedef struct {
     int id_robot;
+    char nombre[20];
     int estado; // 0->Ocupado, 1->Mantenimiento, 2->Disponible
     int pedido_actual;
 } Robot;

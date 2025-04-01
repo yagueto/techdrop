@@ -4,10 +4,18 @@
 
 #include "robot.h"
 #include <stdio.h>
+
+#include <string.h>
 void crearRobot(Robot *robot) {
     int estado;
     int pedido;
+    char nombre[20];
     robot->id_robot = 0;
+    printf("Introduce el nombre del robot: ");
+    fflush(stdout);
+    fgets(nombre, 20, stdin);
+    strcpy(robot->nombre, nombre);
+
     printf("Introduce el estado del robot(0->Ocupado, 1->Mantenimiento, 2->Libre): ");
     fflush(stdout);
     scanf("%d", &estado);

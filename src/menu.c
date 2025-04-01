@@ -57,6 +57,8 @@ void showMenu(Menu* menu)
             printf("Elige una opción: ");
             fflush(stdout);
             scanf("%d", &opcion);
+            clearInputBuffer();
+
             if (menu->handlers[opcion - 1] == NULL) printf("Aún no implementado\n");
         }
         while (opcion < 0 || opcion > menu->numOptions || menu->handlers[opcion - 1] == NULL);
@@ -100,17 +102,27 @@ void handle_menuEstadisticas()
 //Implementacion de handlers de estadistica
 void handle_pedidosPorDia() {
     clrscr();
-    printf("=== PEDIDOS POR DÍA ===\n\n");
+    printf("\n=== PEDIDOS POR DÍA ===\n");
 
     char fecha[11];
     printf("Introduce la fecha (YYYY-MM-DD): ");
-    scanf("%10s", fecha);
-    calcularPedidosPorDia(dbCon, fecha);
+
+    if (fgets(fecha, sizeof(fecha), stdin))
+    {
+        //Quitar el salto de linea
+        fecha[strcspn(fecha, "\n")] = '\0';
+
+        if (strlen(fecha) == 10) {
+            calcularPedidosPorDia(dbCon, fecha);
+        } else {
+            printf("\nUsa formato: YYYY-MM-DD\n");
+        }
+    }
     waitForEnter();
 }
-void handle_zonasPopulares() {
+void handle_zonasPopulares(){
     clrscr();
-    printf("=== ZONAS POPULARES ===\n\n");
+    printf("\n=== ZONAS POPULARES ===\n");
 
     calcularZonasPopulares(dbCon);
     waitForEnter();
@@ -118,7 +130,7 @@ void handle_zonasPopulares() {
 
 void handle_horaPico() {
     clrscr();
-    printf("=== HORA PICO ===\n\n");
+    printf("\n=== HORA PICO ===\n");
 
     calcularHoraPico(dbCon);
     waitForEnter();
@@ -126,35 +138,35 @@ void handle_horaPico() {
 
 void handle_platosMasVendidos() {
     clrscr();
-    printf("=== PLATOS MAS VENDIDOS ===\n\n");
+    printf("\n=== PLATOS MAS VENDIDOS ===\n");
     calcularPlatosMasVendidos(dbCon);
     waitForEnter();
 }
 
 void handle_clientesRecurrentes() {
     clrscr();
-    printf("=== CLIENTES RECURRENTES ===\n\n");
+    printf("\n=== CLIENTES RECURRENTES ===\n");
     calcularClientesRecurrentes(dbCon);
     waitForEnter();
 }
 
 void handle_valorMedioPedido() {
     clrscr();
-    printf("=== VALOR MEDIO DE PEDIDOS ===\n\n");
+    printf("\n=== VALOR MEDIO DE PEDIDOS ===\n");
     calcularValorMedioPedido(dbCon);
     waitForEnter();
 }
 
 void handle_pedidosPorRobot() {
     clrscr();
-    printf("=== PEDIDOS POR ROBOT ===\n\n");
+    printf("\n=== PEDIDOS POR ROBOT ===\n");
     calcularPedidosPorRobot(dbCon);
     waitForEnter();
 }
 
 void handle_robotsActivos() {
     clrscr();
-    printf("=== ROBOTS ACTIVOS ===\n\n");
+    printf("\n=== ROBOTS ACTIVOS ===\n");
     calcularRobotsActivos(dbCon);
     waitForEnter();
 }
@@ -179,7 +191,7 @@ void initializeMenus(sqlite3* db)
     addOption(menuGestionCuentas, 1, "Añadir cuenta", NULL);
     addOption(menuGestionCuentas, 2, "Eliminar cuenta(s)", NULL);
 
-    menuEstadisticas = createMenu("Estadísticas del sistema", 9);
+    menuEstadisticas = createMenu("Estadísticas del sistema", 8);
     addOption(menuEstadisticas, 0, "Pedidos por día", handle_pedidosPorDia);
     addOption(menuEstadisticas, 1, "Zonas mas popular", handle_zonasPopulares);
     addOption(menuEstadisticas, 2, "Hora pico de pedidos", handle_horaPico);
