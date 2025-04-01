@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "bd.h"
-#include "estructuras/usuario.h"
+
 
 #include <stdlib.h>
 
@@ -56,6 +56,7 @@ int crearTablas(sqlite3* db) {
    }
    const char * crearRobot = "CREATE TABLE IF NOT EXISTS Robot ("
                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "nombre TEXT NOT NULL,"
                    "estado INTEGER NOT NULL CHECK(estado IN (0,1,2)) DEFAULT 2," //0->Ocupado, 1->Mantenimiento, 2->Disponible
                    "pedido_actual INTEGER DEFAULT -1," //al crearse no tiene pedido asignado
                    "FOREIGN KEY(pedido_actual) REFERENCES Pedido(id_pedido) ON DELETE CASCADE);";
@@ -84,24 +85,115 @@ int crearTablas(sqlite3* db) {
    printf("Tablas creadas\n") ;
    return 0;
 }
-//insertar datos
-void insertarUsuario(sqlite3 *db, Usuario usuario) {
+//insertar/eliminar datos
+int eliminarUsuario(sqlite3 *db, Usuario usuario) { //de momento se crean con el mismo dni (meter campo dni o como veais)
+    char *errMsg = 0;
     sqlite3_stmt *stmt;
 
-    char sql[] = "INSERT INTO USUARIO (id,dni,username,password) VALUES (NULL,?,?,?)";
+    char sql[] = "DELETE FROM Usuario WHERE dni = ?";
 
-    int rc = sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL) ;
-    sqlite3_bind_text(stmt, 1, '1234567Z',-1,SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, usuario.nombre, strlen(usuario.nombre), SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 3, usuario.contraseña, strlen(usuario.contraseña), SQLITE_STATIC);
 
-    rc = sqlite3_step(stmt);
-    if (rc != SQLITE_DONE) {
-        printf("Error SQL tabla USUARIO: %s\n", sqlite3_errmsg(db));
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        printf("Error preparing statement (DELETE): %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+
+    sqlite3_bind_text(stmt, 1, "1234567Z", -1, SQLITE_STATIC);
+
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        printf("Error executing DELETE: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
+
+    sqlite3_finalize(stmt);
+    return SQLITE_OK;
+
+}
+int insertarUsuario(sqlite3 *db, Usuario usuario) {
+    sqlite3_stmt *stmt;
+    char sql[] = "INSERT INTO Usuario (id, dni, username, password) VALUES (NULL, ?, ?, ?)";
+
+
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        fprintf(stderr, "Error preparing statement: %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+
+    sqlite3_bind_text(stmt, 1, "1234567Z", -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, usuario.nombre, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 3, usuario.contraseña, -1, SQLITE_STATIC);
+
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        fprintf(stderr, "Error executing statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
     }
 
     sqlite3_finalize(stmt);
+    return SQLITE_OK;
 
+
+}
+int eliminarRobot(sqlite3 *db, Robot robot) {
+    char *errMsg = 0;
+    sqlite3_stmt *stmt;
+
+    char sql[] = "DELETE FROM Robot WHERE nombre = ?";
+
+
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        printf("Error preparing statement (DELETE): %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+    sqlite3_bind_text(stmt, 1, robot.nombre, -1, SQLITE_STATIC);
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        printf("Error executing DELETE: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
+    sqlite3_finalize(stmt);
+    return SQLITE_OK;
+
+}
+int insertarRobot(sqlite3 *db, Robot robot) {
+    sqlite3_stmt *stmt;
+    char sql[] = "INSERT INTO Robot (id, nombre, estado, pedido_actual) VALUES (NULL, ?, ?, ?)";
+
+
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        fprintf(stderr, "Error preparing statement: %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+    sqlite3_bind_text(stmt, 1, robot.nombre, -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 2, robot.estado);
+    sqlite3_bind_int(stmt, 3, robot.pedido_actual);
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        fprintf(stderr, "Error executing statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
+    sqlite3_finalize(stmt);
+    return SQLITE_OK;
 }
 void datosPrueba(sqlite3 *db) {
     char *errMsg = 0;
@@ -152,11 +244,11 @@ void datosPrueba(sqlite3 *db) {
 
     //Datios robots
     const char *sqlRobots =
-        "INSERT INTO Robot (estado, pedido_actual) VALUES "
-        "(2, -1), "  // 2 = Disponible
-        "(0, 1), "   // 0 = Ocupado
-        "(2, -1), "  // 2 = Disponible
-        "(1, -1);";  // 1 = Mantenimiento
+        "INSERT INTO Robot (nombre, estado, pedido_actual) VALUES "
+        "('Robocop-1', 2, -1), "  // 2 = Disponible
+        "('Robocop-2',0, 1), "   // 0 = Ocupado
+        "('Robocop-3',2, -1), "  // 2 = Disponible
+        "('Robocop-4',1, -1);";  // 1 = Mantenimiento
 
     //Datos pedidos
     const char *sqlPedidos =
