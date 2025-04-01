@@ -2,7 +2,7 @@
 #include "bd.h"
 #include "menu.h"
 #include "sqlite3.h"
-
+#include "estructuras/usuario.h"
 int main()
 {
     sqlite3 *db;

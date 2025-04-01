@@ -17,3 +17,4 @@ void crearRobot(Robot *robot) {
     scanf("%d", &pedido);
     robot->pedido_actual = pedido;
 }
+

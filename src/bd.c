@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "bd.h"
+#include "estructuras/usuario.h"
 
 #include <stdlib.h>
 
@@ -83,7 +84,25 @@ int crearTablas(sqlite3* db) {
    printf("Tablas creadas\n") ;
    return 0;
 }
+//insertar datos
+void insertarUsuario(sqlite3 *db, Usuario usuario) {
+    sqlite3_stmt *stmt;
 
+    char sql[] = "INSERT INTO USUARIO (id,dni,username,password) VALUES (NULL,?,?,?)";
+
+    int rc = sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL) ;
+    sqlite3_bind_text(stmt, 1, '1234567Z',-1,SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, usuario.nombre, strlen(usuario.nombre), SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 3, usuario.contraseña, strlen(usuario.contraseña), SQLITE_STATIC);
+
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+        printf("Error SQL tabla USUARIO: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+
+}
 void datosPrueba(sqlite3 *db) {
     char *errMsg = 0;
 

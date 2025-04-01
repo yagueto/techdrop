@@ -1,6 +1,8 @@
 //
 // Created by maddi.esparta on 26/03/2025.
 //
+#include <estructuras/usuario.h>
+
 #include "sqlite3.h"
 #include "estructuras/estructuras.h"
 #ifndef BD_H
@@ -14,6 +16,7 @@ void verificarDatos(sqlite3 *db);
 Pedido* cargarPedidos(sqlite3 *db, int *total);
 Plato* cargarPlatos(sqlite3 *db, int *total);
 Robot* cargarRobots(sqlite3 *db, int *total);
+void insertarUsuario(sqlite3 *db,Usuario usuario);
 
 int actualizarPedido(sqlite3 *db, const Pedido *pedido);
 int actualizarArrayPedidos(sqlite3 *db, const Pedido *pedidos, int total);
