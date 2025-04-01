@@ -11,7 +11,6 @@ int main()
         fprintf(stderr, "Error al abrir la BD: %s\n", sqlite3_errmsg(db));
         return 1;
     }
-
     // crear tablas si no existen
     if (crearTablas(db) != 0) {
         fprintf(stderr, "Error al crear tablas\n");
@@ -21,7 +20,8 @@ int main()
 
     //sqlite3_exec(db, "DROP TABLE IF EXISTS Usuario;", NULL, NULL, NULL);
     //crearTablas(db);
-    //datosPrueba(db);//Llena las tablas con datos de prueba
+    datosPrueba(db);//Llena las tablas con datos de prueba
+    //verificarDatos(db); //Comprueba cuantos datos hay en cada tabla
     initializeMenus();
     sqlite3_close(db);
     return 0;

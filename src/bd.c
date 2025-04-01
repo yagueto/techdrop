@@ -22,17 +22,18 @@ int crearTablas(sqlite3* db) {
 
 
    int rc = sqlite3_exec(db, crearUsuario, NULL, NULL, &zErrMsg);
+    //Ejecuta el statement y si se ejecuta correctamente rc resulta en 0 (SQLITE_OK)
    if (rc != SQLITE_OK) {
        printf("Error SQL tabla Usuario: %s\n", zErrMsg);
        sqlite3_free(zErrMsg);
    }
+
    const char * crearPlato = "CREATE TABLE IF NOT EXISTS Plato ("
                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                    "nombre TEXT UNIQUE NOT NULL,"
                    "descripcion TEXT,"
                    "precio REAL NOT NULL CHECK(precio>0),"
                    "disponible INTEGER NOT NULL DEFAULT 1 CHECK(disponible IN (0, 1)));";  // 1 no disponible, 0 disponible
-
 
    rc = sqlite3_exec(db, crearPlato, NULL, NULL, &zErrMsg);
    if (rc != SQLITE_OK) {
@@ -58,7 +59,6 @@ int crearTablas(sqlite3* db) {
                    "pedido_actual INTEGER DEFAULT -1," //al crearse no tiene pedido asignado
                    "FOREIGN KEY(pedido_actual) REFERENCES Pedido(id_pedido) ON DELETE CASCADE);";
 
-
    rc = sqlite3_exec(db, crearRobot, NULL, NULL, &zErrMsg);
    if (rc != SQLITE_OK) {
        printf("Error SQL tabla Robot: %s\n", zErrMsg);
@@ -72,6 +72,7 @@ int crearTablas(sqlite3* db) {
                    "precio_unitario REAL NOT NULL,"
                    "FOREIGN KEY(id_pedido) REFERENCES Pedido(id_pedido),"
                    "FOREIGN KEY(id_plato) REFERENCES Plato(id));";
+
    rc = sqlite3_exec(db, crearPedidoDetalle, NULL, NULL, &zErrMsg);
    if (rc != SQLITE_OK) {
        printf("Error SQL tabla Pedido Detalle: %s\n", zErrMsg);
@@ -81,6 +82,114 @@ int crearTablas(sqlite3* db) {
 
    printf("Tablas creadas\n") ;
    return 0;
+}
+
+void datosPrueba(sqlite3 *db) {
+    char *errMsg = 0;
+
+    //Transacciones operacionales para muchos insert
+    sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, &errMsg);
+
+    /*Como las tablas son dependientes entre si desactivamos las FK temporalmente
+     *para poder limpiarlas sin problemas
+     * https://sentry.io/answers/mysql-foreign-key-constraint/
+     */
+
+    sqlite3_exec(db, "SET FOREIGN_KEY_CHECKS=0;", NULL,NULL, &errMsg);
+
+    //Limpiamos
+    const char *cleanup[] = {
+        "DELETE FROM PedidoDetalle",
+        "DELETE FROM Pedido",
+        "DELETE FROM Robot",
+        "DELETE FROM Plato",
+        "DELETE FROM Usuario"
+    };
+
+    for (int i = 0; i < 5; i++) {
+        //Comprobar que las tablas se limpian correctamente
+        if (sqlite3_exec(db, cleanup[i], NULL, NULL, &errMsg) != SQLITE_OK) {
+            fprintf(stderr, "Error limpiando tabla: %s\n", errMsg);
+            sqlite3_free(errMsg);
+        }
+    }
+
+    //Datos usuarios
+    const char *sqlUsuarios =
+        "INSERT INTO Usuario (dni, username, password) VALUES "
+        "('12345678A', 'cliente1', 'cliente1pass'), "
+        "('87654321B', 'cliente2', 'cliente2pass'), "
+        "('11111111C', 'admin', 'adminpass');";
+
+    //Datos platos
+    const char *sqlPlatos =
+        "INSERT INTO Plato (nombre, descripcion, precio, disponible) VALUES "
+        "('Paella', 'Paella valenciana tradicional', 12.50, 1), "
+        "('Hamburguesa', 'Con queso y bacon', 8.90, 1), "
+        "('Ensalada César', 'Con pollo y aderezo especial', 7.20, 1), "
+        "('Tarta de chocolate', 'Postre casero', 4.50, 1), "
+        "('Agua mineral', 'Botella 50cl', 1.80, 1), "
+        "('Coca-Cola', 'Lata 33cl', 2.00, 0);";
+
+    //Datios robots
+    const char *sqlRobots =
+        "INSERT INTO Robot (estado, pedido_actual) VALUES "
+        "(2, -1), "  // 2 = Disponible
+        "(0, 1), "   // 0 = Ocupado
+        "(2, -1), "  // 2 = Disponible
+        "(1, -1);";  // 1 = Mantenimiento
+
+    //Datos pedidos
+    const char *sqlPedidos =
+        "INSERT INTO Pedido (id_usuario, direccion, fecha, estado) VALUES "
+        "(1, 'Calle Mayor 5, 3ºB', '2025-04-01 12:30:00', 2), "
+        "(2, 'Avenida Libertad 12', '2025-04-01 13:15:00', 1), "
+        "(1, 'Plaza España 7', '2025-04-02 14:00:00', 0);";
+
+    //Datos detalles de pedidos
+    const char *sqlDetalles =
+        "INSERT INTO PedidoDetalle (id_pedido, id_plato, cantidad, precio_unitario) VALUES "
+        "(1, 1, 2, 12.50), "  // 2 paellas en pedido 1
+        "(1, 5, 3, 1.80), "    // 3 aguas en pedido 1
+        "(2, 2, 1, 8.90), "    // 1 hamburguesa en pedido 2
+        "(2, 3, 1, 7.20), "    // 1 ensalada en pedido 2
+        "(3, 4, 4, 4.50);";    // 4 tartas en pedido 3
+
+    //Ejecutar
+    const char *inserciones[] = {sqlUsuarios, sqlPlatos, sqlRobots, sqlPedidos, sqlDetalles};
+    const char *nombresTablas[] = {"Usuario", "Plato", "Robot", "Pedido", "PedidoDetalle"};
+
+    for (int i = 0; i < 5; i++) {
+        if (sqlite3_exec(db, inserciones[i], NULL, NULL, &errMsg) != SQLITE_OK) {
+            fprintf(stderr, "Error insertando datos en %s: %s\n", nombresTablas[i], errMsg);
+            sqlite3_free(errMsg);
+        }
+    }
+
+    /*Activamos otra vez las FK*/
+    sqlite3_exec(db, "SET FOREIGN_KEY_CHECKS=1;", NULL, NULL, &errMsg);
+
+    //Commitear transaccion
+    sqlite3_exec(db, "END TRANSACTION", NULL, NULL, &errMsg);
+
+}
+
+void verificarDatos(sqlite3 *db) {
+    printf("\nVerificar datos de bd:\n");
+
+    const char *tablas[] = {"Usuario", "Plato", "Robot", "Pedido", "PedidoDetalle"};
+    for (int i = 0; i < 5; i++) {
+        char sql[100];
+        sprintf(sql, "SELECT COUNT(*) FROM %s;", tablas[i]);
+
+        sqlite3_stmt *stmt;
+        if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK) {
+            if (sqlite3_step(stmt) == SQLITE_ROW) {
+                printf("%s: %d registros\n", tablas[i], sqlite3_column_int(stmt, 0));
+            }
+            sqlite3_finalize(stmt);
+        }
+    }
 }
 
 //Funciones para cargar datos de la bd a un array
@@ -95,7 +204,7 @@ Pedido* cargarPedidos(sqlite3 *db, int *total)
         fprintf(stderr, "Error en la consulta: %s\n", sqlite3_errmsg(db));
         return NULL;
     }
-    //Calcular capacidad
+    //Calcular capacidad(filas)
     while (sqlite3_step(stmt) == SQLITE_ROW)
     {
         (*total)++;
@@ -107,12 +216,20 @@ Pedido* cargarPedidos(sqlite3 *db, int *total)
     }
     sqlite3_reset(stmt);
 
-    //Crear array en memoria
+    //Asignar memoria
     Pedido *pedidos = crearArrayPedidos(*total);
     if (!pedidos) {
         sqlite3_finalize(stmt);
+        fprintf(stderr, "Error asignando memoria para pedidos\n");
         return NULL;
     }
+
+    //Inicializar memoria a 0
+    for(int i = 0; i < *total; i++)
+    {
+        pedidos[i] = (Pedido){0};
+    }
+
     //Cargar datos
     for (int i = 0; sqlite3_step(stmt) == SQLITE_ROW; i++) {
         pedidos[i].id_pedido = sqlite3_column_int(stmt, 0);
@@ -149,7 +266,17 @@ Plato* cargarPlatos(sqlite3 *db, int *total)
 
     //Crear array en memoria
     Plato *platos = crearArrayPlatos(*total);
-    if (!platos) return NULL;
+    if (!platos) {
+        sqlite3_finalize(stmt);
+        fprintf(stderr, "Error asignando memoria para platos\n");
+        return NULL;
+    }
+
+    //Inicializar memoria a 0
+    for(int i = 0; i < *total; i++)
+    {
+        platos[i] = (Plato){0};
+    }
 
     //Cargar datos
     for (int i = 0; sqlite3_step(stmt) == SQLITE_ROW; i++)
@@ -182,14 +309,24 @@ Robot* cargarRobots(sqlite3 *db, int *total)
 
     //Crear array en memoria
     Robot *robots = crearArrayRobots(*total);
-    if (!robots) return NULL;
+    if (!robots) {
+        sqlite3_finalize(stmt);
+        fprintf(stderr, "Error asignando memoria para robots\n");
+        return NULL;
+    }
+
+    //Inicializar memoria a 0
+    for(int i = 0; i < *total; i++)
+    {
+        robots[i] = (Robot){0};
+    }
 
     //Cargar datos
     for (int i = 0; sqlite3_step(stmt) == SQLITE_ROW; i++)
     {
         robots[i].id_robot = sqlite3_column_int(stmt, 0);
         robots[i].estado = sqlite3_column_int(stmt, 1);
-        robots[i].pedido_actual = sqlite3_column_int(stmt, 3);
+        robots[i].pedido_actual = sqlite3_column_int(stmt, 2);
     }
     sqlite3_finalize(stmt);
     return robots;
@@ -246,105 +383,10 @@ int actualizarArrayPedidos(sqlite3 *db, const Pedido *pedidos, int total)
     }
 }
 
-void datosPrueba(sqlite3 *db) {
-    char *errMsg = 0;
-    int rc;
-
-    rc = sqlite3_exec(db, "BEGIN IMMEDIATE TRANSACTION;", NULL, NULL, &errMsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "BEGIN TRANSACTION failed: %s\n", errMsg);
-        sqlite3_free(errMsg);
-        return;
-    }
-
-    //Limpiamos
-    const char *cleanup[] = {
-        "DELETE FROM PedidoDetalle",
-        "DELETE FROM Pedido",
-        "DELETE FROM Robot",
-        "DELETE FROM Plato",
-        "DELETE FROM Usuario"
-    };
-
-    for (int i = 0; i < 5; i++) {
-        rc = sqlite3_exec(db, cleanup[i], NULL, NULL, &errMsg);
-        if (rc != SQLITE_OK) {
-            fprintf(stderr, "Cleanup fallado para %s: %s\n",
-                    (const char*[]){"PedidoDetalle","Pedido","Robot","Plato","Usuario"}[i],
-                    errMsg);
-            sqlite3_free(errMsg);
-            sqlite3_exec(db, "ROLLBACK;", NULL, NULL, NULL);
-            return;
-        }
-    }
-
-    //Datos usuarios
-    const char *sqlUsuarios =
-        "INSERT INTO Usuario (dni, username, password) VALUES "
-        "('12345678A', 'cliente1', 'cliente1pass'), "
-        "('87654321B', 'cliente2', 'cliente2pass'), "
-        "('11111111C', 'admin', 'adminpass');";
-
-    //Datos platos
-    const char *sqlPlatos =
-        "INSERT INTO Plato (nombre, descripcion, precio, disponible) VALUES "
-        "('Paella', 'Paella valenciana tradicional', 12.50, 1), "
-        "('Hamburguesa', 'Con queso y bacon', 8.90, 1), "
-        "('Ensalada César', 'Con pollo y aderezo especial', 7.20, 1), "
-        "('Tarta de chocolate', 'Postre casero', 4.50, 1), "
-        "('Agua mineral', 'Botella 50cl', 1.80, 1), "
-        "('Coca-Cola', 'Lata 33cl', 2.00, 0);";
-
-    //Datios robots
-    const char *sqlRobots =
-        "INSERT INTO Robot (estado, pedido_actual) VALUES "
-        "(2, -1), "  // 2 = Disponible
-        "(0, 1), "   // 0 = Ocupado
-        "(2, -1), "  // 2 = Disponible
-        "(1, -1);";  // 1 = Mantenimiento
-
-    //Datos pedidos
-    const char *sqlPedidos =
-        "INSERT INTO Pedido (id_usuario, direccion, estado) VALUES "
-        "(1, 'Calle Mayor 5, 3ºB', 2), "
-        "(2, 'Avenida Libertad 12', 1), "
-        "(1, 'Plaza España 7', 0);";
-
-    //Datos detalles de pedidos
-    const char *sqlDetalles =
-        "INSERT INTO PedidoDetalle (id_pedido, id_plato, cantidad, precio_unitario) VALUES "
-        "(1, 1, 2, 12.50), "  // 2 paellas en pedido 1
-        "(1, 5, 3, 1.80), "    // 3 aguas en pedido 1
-        "(2, 2, 1, 8.90), "    // 1 hamburguesa en pedido 2
-        "(2, 3, 1, 7.20), "    // 1 ensalada en pedido 2
-        "(3, 4, 4, 4.50);";    // 4 tartas en pedido 3
-
-    //Ejecutar
-    const char *inserciones[] = {sqlUsuarios, sqlPlatos, sqlRobots, sqlPedidos, sqlDetalles};
-    const char *nombresTablas[] = {"Usuario", "Plato", "Robot", "Pedido", "PedidoDetalle"};
-
-    for (int i = 0; i < 5; i++) {
-        if (sqlite3_exec(db, inserciones[i], NULL, NULL, &errMsg) != SQLITE_OK) {
-            fprintf(stderr, "Error insertando datos en %s: %s\n", nombresTablas[i], errMsg);
-            sqlite3_free(errMsg);
-        } else {
-            printf("Datos de prueba insertados en %s\n", nombresTablas[i]);
-        }
-    }
-
-    rc = sqlite3_exec(db, "COMMIT;", NULL, NULL, &errMsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "COMMIT failed: %s\n", errMsg);
-        sqlite3_free(errMsg);
-    } else {
-        printf("All data committed successfully!\n");
-    }
-}
-
 //Funciones para las estadisticas(SQL)
 int obtenerTotalPedidosPorDia(sqlite3 *db, const char *fecha) {
     if (!db || !fecha) {
-        fprintf(stderr, "Parámetros inválidos\n");
+        fprintf(stderr, "Parametros invalidos\n");
         return -1;
     }
 
@@ -358,9 +400,10 @@ int obtenerTotalPedidosPorDia(sqlite3 *db, const char *fecha) {
         return -1;
     }
 
+    //Vincular el parametro de fecha
     rc = sqlite3_bind_text(stmt, 1, fecha, -1, SQLITE_STATIC);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Error vinculando parámetro: %s\n", sqlite3_errmsg(db));
+        fprintf(stderr, "Error vinculando fecha: %s\n", sqlite3_errmsg(db));
         sqlite3_finalize(stmt);
         return -1;
     }
@@ -368,6 +411,7 @@ int obtenerTotalPedidosPorDia(sqlite3 *db, const char *fecha) {
     //Ejecutar
     rc = sqlite3_step(stmt);
     if (rc == SQLITE_ROW) {
+        //si tiene otra fila
         total = sqlite3_column_int(stmt, 0);
     } else if (rc != SQLITE_DONE) {
         fprintf(stderr, "Error ejecutando consulta: %s\n", sqlite3_errmsg(db));
@@ -378,7 +422,7 @@ int obtenerTotalPedidosPorDia(sqlite3 *db, const char *fecha) {
 }
 
 int obtenerZonasPopulares(sqlite3 *db, char zonas[][100], int *contadores, int numZonas) {
-    const char *sql = "SELECT direccion, COUNT(*) FROM Pedido GROUP BY direccion ORDER BY COUNT(*) DESC LIMIT ?;";
+    const char *sql = "SELECT direccion, COUNT(*) FROM Pedido GROUP BY direccion ORDER BY COUNT(*);";
     sqlite3_stmt *stmt;
     int zonasHalladas = 0;
 
@@ -387,7 +431,6 @@ int obtenerZonasPopulares(sqlite3 *db, char zonas[][100], int *contadores, int n
         return -1;
     }
 
-    sqlite3_bind_int(stmt, 1, numZonas);
     while (sqlite3_step(stmt) == SQLITE_ROW && zonasHalladas < numZonas) {
         const char *direccion = (const char *)sqlite3_column_text(stmt, 0);
         strncpy(zonas[zonasHalladas], direccion, 100);
@@ -410,7 +453,7 @@ int obtenerHoraPico(sqlite3 *db) {
     }
 
     if (sqlite3_step(stmt) == SQLITE_ROW) {
-        hora_pico = atoi((const char *)sqlite3_column_text(stmt, 0));
+        hora_pico = atoi((const char *)sqlite3_column_text(stmt, 0)); //atoi: de str a int
     }
 
     sqlite3_finalize(stmt);
@@ -418,7 +461,7 @@ int obtenerHoraPico(sqlite3 *db) {
 }
 
 int obtenerPlatosMasVendidos(sqlite3 *db, int *ids_platos, int *cantidades, int numplatos) {
-    const char *sql = "SELECT id_plato, SUM(cantidad) FROM PedidoDetalle GROUP BY id_plato ORDER BY SUM(cantidad) DESC LIMIT ?;";
+    const char *sql = "SELECT id_plato, SUM(cantidad) FROM PedidoDetalle GROUP BY id_plato ORDER BY SUM(cantidad);";
     sqlite3_stmt *stmt;
     int platos_obtenidos = 0;
 

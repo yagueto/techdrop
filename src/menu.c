@@ -97,6 +97,69 @@ void handle_menuEstadisticas()
     showMenu(menuEstadisticas);
 }
 
+//Implementacion de handlers de estadistica
+void handle_pedidosPorDia() {
+    clrscr();
+    printf("=== PEDIDOS POR DÍA ===\n\n");
+
+    char fecha[11];
+    printf("Introduce la fecha (YYYY-MM-DD): ");
+    scanf("%10s", fecha);
+    calcularPedidosPorDia(dbCon, fecha);
+    waitForEnter();
+}
+void handle_zonasPopulares() {
+    clrscr();
+    printf("=== ZONAS POPULARES ===\n\n");
+
+    calcularZonasPopulares(dbCon);
+    waitForEnter();
+}
+
+void handle_horaPico() {
+    clrscr();
+    printf("=== HORA PICO ===\n\n");
+
+    calcularHoraPico(dbCon);
+    waitForEnter();
+}
+
+void handle_platosMasVendidos() {
+    clrscr();
+    printf("=== PLATOS MAS VENDIDOS ===\n\n");
+    calcularPlatosMasVendidos(dbCon);
+    waitForEnter();
+}
+
+void handle_clientesRecurrentes() {
+    clrscr();
+    printf("=== CLIENTES RECURRENTES ===\n\n");
+    calcularClientesRecurrentes(dbCon);
+    waitForEnter();
+}
+
+void handle_valorMedioPedido() {
+    clrscr();
+    printf("=== VALOR MEDIO DE PEDIDOS ===\n\n");
+    calcularValorMedioPedido(dbCon);
+    waitForEnter();
+}
+
+void handle_pedidosPorRobot() {
+    clrscr();
+    printf("=== PEDIDOS POR ROBOT ===\n\n");
+    calcularPedidosPorRobot(dbCon);
+    waitForEnter();
+}
+
+void handle_robotsActivos() {
+    clrscr();
+    printf("=== ROBOTS ACTIVOS ===\n\n");
+    calcularRobotsActivos(dbCon);
+    waitForEnter();
+}
+
+
 void initializeMenus(sqlite3* db)
 {
     dbCon = db;
@@ -117,16 +180,14 @@ void initializeMenus(sqlite3* db)
     addOption(menuGestionCuentas, 2, "Eliminar cuenta(s)", NULL);
 
     menuEstadisticas = createMenu("Estadísticas del sistema", 9);
-    addOption(menuEstadisticas, 0, "Pedidos por día", NULL);
-    addOption(menuEstadisticas, 1, "Zonas mas popular", NULL);
-    addOption(menuEstadisticas, 2, "Hora pico de pedidos", NULL);
-    addOption(menuEstadisticas, 3, "Platos más vendidos", NULL);
-    addOption(menuEstadisticas, 4, "Clientes recurrentes", NULL);
-    addOption(menuEstadisticas, 5, "Valor promedio de pedido", NULL);
-    addOption(menuEstadisticas, 6, "Kilómetros recorridos por robot", NULL);
-    addOption(menuEstadisticas, 7, "Pedidos completados por robot", NULL);
-    addOption(menuEstadisticas, 8, "Robots activos", NULL);
-
+    addOption(menuEstadisticas, 0, "Pedidos por día", handle_pedidosPorDia);
+    addOption(menuEstadisticas, 1, "Zonas mas popular", handle_zonasPopulares);
+    addOption(menuEstadisticas, 2, "Hora pico de pedidos", handle_horaPico);
+    addOption(menuEstadisticas, 3, "Platos más vendidos", handle_platosMasVendidos);
+    addOption(menuEstadisticas, 4, "Clientes recurrentes", handle_clientesRecurrentes);
+    addOption(menuEstadisticas, 5, "Valor promedio de pedido", handle_valorMedioPedido);
+    addOption(menuEstadisticas, 6, "Pedidos completados por robot", handle_pedidosPorRobot);
+    addOption(menuEstadisticas, 7, "Robots activos", handle_robotsActivos);
 
     showMenu(menuPrincipal);
 

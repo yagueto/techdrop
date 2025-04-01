@@ -8,6 +8,7 @@
 
 int crearTablas(sqlite3* db);
 void datosPrueba(sqlite3* db);
+void verificarDatos(sqlite3 *db);
 
 //Funciones para cargar datos de la BD
 Pedido* cargarPedidos(sqlite3 *db, int *total);

@@ -39,4 +39,10 @@ Plato* crearArrayPlatos(int capacidad);
 PedidoDetalle* crearArrayPedidoDetalle(int capacidad);
 Robot* crearArrayRobots(int capacidad);
 
+//Liberar arrays
+void liberarArrayPedidos(Pedido *arrayPedidos);
+void liberarArrayPlatos(Plato *arrayPlatos);
+void liberarArrayPedidoDetalle(PedidoDetalle *arrayPedidoDetalle);
+void liberarArrayRobots(Robot *arrayRobots);
+
 #endif //ESTRUCTURAS_H
