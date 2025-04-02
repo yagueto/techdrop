@@ -12,4 +12,5 @@ typedef struct {
 } Robot;
 
 void crearRobot(Robot *robot);
+
 #endif //ROBOT_H

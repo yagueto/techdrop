@@ -47,7 +47,7 @@ int crearTablas(sqlite3* db) {
                    "direccion TEXT NOT NULL,"
                    "fecha TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,"
                    "estado INT NOT NULL CHECK(estado IN (0,1,2))," //0->En cola, 1->En camino, 2->entregado
-                   "FOREIGN KEY(id_usuario) REFERENCES Usuario(id));";
+                   "FOREIGN KEY(id_usuario) REFERENCES Usuario(id) ON DELETE CASCADE);";
 
    rc = sqlite3_exec(db, crearPedido, NULL, NULL, &zErrMsg);
    if (rc != SQLITE_OK) {
@@ -72,7 +72,7 @@ int crearTablas(sqlite3* db) {
                    "id_plato INTEGER NOT NULL,"
                    "cantidad INTEGER NOT NULL,"
                    "precio_unitario REAL NOT NULL,"
-                   "FOREIGN KEY(id_pedido) REFERENCES Pedido(id_pedido),"
+                   "FOREIGN KEY(id_pedido) REFERENCES Pedido(id_pedido) ON DELETE CASCADE,"
                    "FOREIGN KEY(id_plato) REFERENCES Plato(id));";
 
    rc = sqlite3_exec(db, crearPedidoDetalle, NULL, NULL, &zErrMsg);
@@ -148,7 +148,7 @@ int eliminarRobot(sqlite3 *db, Robot robot) {
     char *errMsg = 0;
     sqlite3_stmt *stmt;
 
-    char sql[] = "DELETE FROM Robot WHERE nombre = ?";
+    char sql[] = "DELETE FROM Robot WHERE id = ?";
 
 
     int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
@@ -157,7 +157,7 @@ int eliminarRobot(sqlite3 *db, Robot robot) {
         return result;
     }
 
-    sqlite3_bind_text(stmt, 1, robot.nombre, -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 1, robot.id_robot);
 
     result = sqlite3_step(stmt);
     if (result != SQLITE_DONE) {
@@ -195,6 +195,139 @@ int insertarRobot(sqlite3 *db, Robot robot) {
     sqlite3_finalize(stmt);
     return SQLITE_OK;
 }
+int insertarPlato(sqlite3 *db, Plato plato) {
+    sqlite3_stmt *stmt;
+    char sql[] = "INSERT INTO Plato (id, nombre, descripcion, precio,disponible) VALUES (NULL, ?, ?, ?, ?)";
+
+
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        fprintf(stderr, "Error preparing statement: %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+    sqlite3_bind_text(stmt, 1, plato.nombre, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, plato.descripcion, -1, SQLITE_STATIC);
+    sqlite3_bind_double(stmt, 3, plato.precio);
+    sqlite3_bind_int(stmt, 4, plato.disponible);
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        fprintf(stderr, "Error executing statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
+    sqlite3_finalize(stmt);
+    return SQLITE_OK;
+}
+int eliminarPlato(sqlite3 *db, Plato plato) {
+    char *errMsg = 0;
+    sqlite3_stmt *stmt;
+
+    char sql[] = "DELETE FROM Plato WHERE id = ?";
+
+
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        printf("Error preparing statement (DELETE): %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+    sqlite3_bind_int(stmt, 1, plato.id_plato);
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        printf("Error executing DELETE: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
+    sqlite3_finalize(stmt);
+    return SQLITE_OK;
+
+}
+int insertarPedido(sqlite3 *db, Pedido pedido) {
+    sqlite3_stmt *stmt;
+    char sql[] = "INSERT INTO Pedido (id_pedido, id_usuario, direccion, fecha, estado) VALUES (NULL, ?, ?, ?, ?)";
+
+
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        fprintf(stderr, "Error preparing statement: %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+    sqlite3_bind_int(stmt, 1, pedido.id_usuario);
+    sqlite3_bind_text(stmt, 2, pedido.direccion, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, pedido.fecha, -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 4, pedido.estado);
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        fprintf(stderr, "Error executing statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
+    sqlite3_finalize(stmt);
+    return SQLITE_OK;
+}
+int eliminarPedido(sqlite3 *db, Pedido pedido) {
+    char *errMsg = 0;
+    sqlite3_stmt *stmt;
+
+    char sql[] = "DELETE FROM Pedido WHERE id = ?";
+
+
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        printf("Error preparing statement (DELETE): %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+    sqlite3_bind_int(stmt, 1, pedido.id_pedido);
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        printf("Error executing DELETE: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
+    sqlite3_finalize(stmt);
+    return SQLITE_OK;
+
+}
+int insertarPedidoDetalle(sqlite3 *db, PedidoDetalle pedido_detalle) {
+    sqlite3_stmt *stmt;
+    char sql[] = "INSERT INTO PedidoDetalle (id, id_pedido, id_plato, cantidad, precio_unitario) VALUES (NULL, ?, ?, ?, ?)";
+
+
+    int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (result != SQLITE_OK) {
+        fprintf(stderr, "Error preparing statement: %s\n", sqlite3_errmsg(db));
+        return result;
+    }
+
+    sqlite3_bind_int(stmt, 1, pedido_detalle.id_pedido);
+    sqlite3_bind_int(stmt, 2, pedido_detalle.id_plato);
+    sqlite3_bind_int(stmt, 3, pedido_detalle.cantidad);
+    sqlite3_bind_double(stmt, 2, pedido_detalle.precio_unitario);
+
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        fprintf(stderr, "Error executing statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
+    sqlite3_finalize(stmt);
+    return SQLITE_OK;
+}
+
+
 void datosPrueba(sqlite3 *db) {
     char *errMsg = 0;
 
@@ -345,13 +478,14 @@ Pedido* cargarPedidos(sqlite3 *db, int *total)
     for (int i = 0; sqlite3_step(stmt) == SQLITE_ROW; i++) {
         pedidos[i].id_pedido = sqlite3_column_int(stmt, 0);
         pedidos[i].id_usuario = sqlite3_column_int(stmt, 1);
+        pedidos[i].estado = sqlite3_column_int(stmt, 4);
         strncpy(pedidos[i].direccion, (const char*)sqlite3_column_text(stmt, 2), sizeof(pedidos[i].direccion) - 1);
         strncpy(pedidos[i].fecha, (const char*)sqlite3_column_text(stmt, 3), sizeof(pedidos[i].fecha) - 1);
-        strncpy(pedidos[i].estado, (const char*)sqlite3_column_text(stmt, 4),sizeof(pedidos[i].estado) - 1);
+
         //Que acaben en nulo
         pedidos[i].direccion[sizeof(pedidos[i].direccion) - 1] = '\0';
         pedidos[i].fecha[sizeof(pedidos[i].fecha) - 1] = '\0';
-        pedidos[i].estado[sizeof(pedidos[i].estado) - 1] = '\0';
+
     }
     sqlite3_finalize(stmt);
     return pedidos;

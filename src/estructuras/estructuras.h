@@ -10,13 +10,15 @@ typedef struct {
     int id_usuario;
     char direccion[100];
     char fecha[20];
-    char estado[20];
+    int estado;
 } Pedido;
 
 typedef struct {
     int id_plato;
     char nombre[50];
+    char descripcion[50];
     float precio;
+    int disponible;
 } Plato;
 
 typedef struct {
