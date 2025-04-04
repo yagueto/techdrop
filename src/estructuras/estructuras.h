@@ -5,7 +5,7 @@
 #ifndef ESTRUCTURAS_H
 #define ESTRUCTURAS_H
 
-typedef struct {
+/*typedef struct {
     int id_pedido;
     int id_usuario;
     char direccion[100];
@@ -27,7 +27,7 @@ typedef struct {
     int id_plato;
     int cantidad;
     float precio_unitario;
-} PedidoDetalle;
+} PedidoDetalle;*/
 typedef struct {
     int id_robot;
     char nombre[20];
@@ -37,15 +37,15 @@ typedef struct {
 
 
 // Funciones para arrays
-Pedido* crearArrayPedidos(int capacidad);
-Plato* crearArrayPlatos(int capacidad);
-PedidoDetalle* crearArrayPedidoDetalle(int capacidad);
+// Pedido* crearArrayPedidos(int capacidad);
+// Plato* crearArrayPlatos(int capacidad);
+// PedidoDetalle* crearArrayPedidoDetalle(int capacidad);
 Robot* crearArrayRobots(int capacidad);
 
 //Liberar arrays
-void liberarArrayPedidos(Pedido *arrayPedidos);
-void liberarArrayPlatos(Plato *arrayPlatos);
-void liberarArrayPedidoDetalle(PedidoDetalle *arrayPedidoDetalle);
+// void liberarArrayPedidos(Pedido *arrayPedidos);
+// void liberarArrayPlatos(Plato *arrayPlatos);
+// void liberarArrayPedidoDetalle(PedidoDetalle *arrayPedidoDetalle);
 void liberarArrayRobots(Robot *arrayRobots);
 
 #endif //ESTRUCTURAS_H

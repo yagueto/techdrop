@@ -5,6 +5,7 @@
 
 #include "sqlite3.h"
 #include "estructuras/estructuras.h"
+#include "models/pedido.h"
 #ifndef BD_H
 #define BD_H
 
@@ -22,11 +23,11 @@ int insertarUsuario(sqlite3 *db,Usuario usuario);
 int eliminarUsuario(sqlite3 *db,Usuario usuario);
 int insertarRobot(sqlite3 *db,Robot robot);
 int eliminarRobot(sqlite3 *db,Robot robot);
-int insertarPlato(sqlite3 *db,Plato plato);
-int eliminarPlato(sqlite3 *db,Plato plato);
-int insertarPedido(sqlite3 *db,Pedido pedido);
-int eliminarPedido(sqlite3 *db,Pedido pedido);
-int insertarPedidoDetalle(sqlite3 *db,PedidoDetalle pedido_detalle);
+// int insertarPlato(sqlite3 *db,Plato plato);
+// int eliminarPlato(sqlite3 *db,Plato plato);
+// int insertarPedido(sqlite3 *db,Pedido pedido);
+// int eliminarPedido(sqlite3 *db,Pedido pedido);
+// int insertarPedidoDetalle(sqlite3 *db,PedidoDetalle pedido_detalle);
 
 
 int actualizarPedido(sqlite3 *db, const Pedido *pedido);

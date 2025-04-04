@@ -2,16 +2,35 @@
 #include <stdio.h>
 #include <string.h>
 #include "../utils.h"
+#include "db/bd_plato.h"
+#include "models/plato.h"
 
 void handle_listarPlatos()
 {
     clrscr();
-    printf("piribi");
+
+    PlatoResult result = get_platos();
+    Plato** platos = result.platos;
+    int count = result.count;
+    if (platos == NULL || count == 0)
+    {
+        printf("No hay platos disponibles.\n");
+        waitForEnter();
+        return;
+    }
+    for (int i = 0; i < count; ++i)
+    {
+        printf("%d - %s (%s) -> %.2f\n", platos[i]->id, platos[i]->nombre, platos[i]->descripcion, platos[i]->precio);
+    }
 
     int opcion;
     printf("Elige una opción: ");
     fflush(stdout);
     scanf("%d", &opcion);
+
+    // Clean up properly
+    free_plato_result(&result);
+
 }
 
 void handle_añadirPlato()
@@ -24,7 +43,7 @@ void handle_añadirPlato()
 
     getchar();
     printf("Introduce nombre del plato: ");
-    fgets(nombre, 100, stdin);
+    fgets(nombre, 1, stdin);
     nombre[strcspn(nombre, "\n")] = '\0'; // Quitar \n
 
     printf("\nIntroduce descripción: ");
@@ -36,7 +55,7 @@ void handle_añadirPlato()
     sscanf(raw_precio, "%f", &precio);
 
     puts("\n");
-    printf("Nombre: %s, descripción: %s, precio: %f", nombre, descripcion, precio);
+    printf("Nombre: %s, descripción: %s, precio: %.2f", nombre, descripcion, precio);
     waitForEnter();
 }
 

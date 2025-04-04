@@ -100,81 +100,80 @@ void handle_menuEstadisticas()
 }
 
 //Implementacion de handlers de estadistica
-void handle_pedidosPorDia() {
-    clrscr();
-    printf("\n=== PEDIDOS POR DÍA ===\n");
+// void handle_pedidosPorDia() {
+//     clrscr();
+//     printf("\n=== PEDIDOS POR DÍA ===\n");
+//
+//     char fecha[11];
+//     printf("Introduce la fecha (YYYY-MM-DD): ");
+//
+//     if (fgets(fecha, sizeof(fecha), stdin))
+//     {
+//         //Quitar el salto de linea
+//         fecha[strcspn(fecha, "\n")] = '\0';
+//
+//         if (strlen(fecha) == 10) {
+//             calcularPedidosPorDia(dbCon, fecha);
+//         } else {
+//             printf("\nUsa formato: YYYY-MM-DD\n");
+//         }
+//     }
+//     waitForEnter();
+// }
+// void handle_zonasPopulares(){
+//     clrscr();
+//     printf("\n=== ZONAS POPULARES ===\n");
+//
+//     calcularZonasPopulares(dbCon);
+//     waitForEnter();
+// }
+//
+// void handle_horaPico() {
+//     clrscr();
+//     printf("\n=== HORA PICO ===\n");
+//
+//     calcularHoraPico(dbCon);
+//     waitForEnter();
+// }
+//
+// void handle_platosMasVendidos() {
+//     clrscr();
+//     printf("\n=== PLATOS MAS VENDIDOS ===\n");
+//     calcularPlatosMasVendidos(dbCon);
+//     waitForEnter();
+// }
+//
+// void handle_clientesRecurrentes() {
+//     clrscr();
+//     printf("\n=== CLIENTES RECURRENTES ===\n");
+//     calcularClientesRecurrentes(dbCon);
+//     waitForEnter();
+// }
+//
+// void handle_valorMedioPedido() {
+//     clrscr();
+//     printf("\n=== VALOR MEDIO DE PEDIDOS ===\n");
+//     calcularValorMedioPedido(dbCon);
+//     waitForEnter();
+// }
+//
+// void handle_pedidosPorRobot() {
+//     clrscr();
+//     printf("\n=== PEDIDOS POR ROBOT ===\n");
+//     calcularPedidosPorRobot(dbCon);
+//     waitForEnter();
+// }
+//
+// void handle_robotsActivos() {
+//     clrscr();
+//     printf("\n=== ROBOTS ACTIVOS ===\n");
+//     calcularRobotsActivos(dbCon);
+//     waitForEnter();
+// }
 
-    char fecha[11];
-    printf("Introduce la fecha (YYYY-MM-DD): ");
 
-    if (fgets(fecha, sizeof(fecha), stdin))
-    {
-        //Quitar el salto de linea
-        fecha[strcspn(fecha, "\n")] = '\0';
-
-        if (strlen(fecha) == 10) {
-            calcularPedidosPorDia(dbCon, fecha);
-        } else {
-            printf("\nUsa formato: YYYY-MM-DD\n");
-        }
-    }
-    waitForEnter();
-}
-void handle_zonasPopulares(){
-    clrscr();
-    printf("\n=== ZONAS POPULARES ===\n");
-
-    calcularZonasPopulares(dbCon);
-    waitForEnter();
-}
-
-void handle_horaPico() {
-    clrscr();
-    printf("\n=== HORA PICO ===\n");
-
-    calcularHoraPico(dbCon);
-    waitForEnter();
-}
-
-void handle_platosMasVendidos() {
-    clrscr();
-    printf("\n=== PLATOS MAS VENDIDOS ===\n");
-    calcularPlatosMasVendidos(dbCon);
-    waitForEnter();
-}
-
-void handle_clientesRecurrentes() {
-    clrscr();
-    printf("\n=== CLIENTES RECURRENTES ===\n");
-    calcularClientesRecurrentes(dbCon);
-    waitForEnter();
-}
-
-void handle_valorMedioPedido() {
-    clrscr();
-    printf("\n=== VALOR MEDIO DE PEDIDOS ===\n");
-    calcularValorMedioPedido(dbCon);
-    waitForEnter();
-}
-
-void handle_pedidosPorRobot() {
-    clrscr();
-    printf("\n=== PEDIDOS POR ROBOT ===\n");
-    calcularPedidosPorRobot(dbCon);
-    waitForEnter();
-}
-
-void handle_robotsActivos() {
-    clrscr();
-    printf("\n=== ROBOTS ACTIVOS ===\n");
-    calcularRobotsActivos(dbCon);
-    waitForEnter();
-}
-
-
-void initializeMenus(sqlite3* db)
+void initializeMenus()
 {
-    dbCon = db;
     // Crear menús
     menuPrincipal = createMenu("Menú principal", 3);
     addOption(menuPrincipal, 0, "Gestionar menú", handle_menuPlatos);
@@ -184,7 +183,7 @@ void initializeMenus(sqlite3* db)
     menuGestionPlatos = createMenu("Gestión menú", 3);
     addOption(menuGestionPlatos, 0, "Listar platos", handle_listarPlatos);
     addOption(menuGestionPlatos, 1, "Añadir platos", handle_añadirPlato);
-    addOption(menuGestionPlatos, 2, "Eliminar plato(s)", NULL);
+    addOption(menuGestionPlatos, 2, "Eliminar plato(s)", handle_eliminarPlato);
 
     menuGestionCuentas = createMenu("Gestión cuentas", 3);
     addOption(menuGestionCuentas, 0, "Listar cuentas", NULL);
@@ -192,14 +191,14 @@ void initializeMenus(sqlite3* db)
     addOption(menuGestionCuentas, 2, "Eliminar cuenta(s)", NULL);
 
     menuEstadisticas = createMenu("Estadísticas del sistema", 8);
-    addOption(menuEstadisticas, 0, "Pedidos por día", handle_pedidosPorDia);
-    addOption(menuEstadisticas, 1, "Zonas mas popular", handle_zonasPopulares);
-    addOption(menuEstadisticas, 2, "Hora pico de pedidos", handle_horaPico);
-    addOption(menuEstadisticas, 3, "Platos más vendidos", handle_platosMasVendidos);
-    addOption(menuEstadisticas, 4, "Clientes recurrentes", handle_clientesRecurrentes);
-    addOption(menuEstadisticas, 5, "Valor promedio de pedido", handle_valorMedioPedido);
-    addOption(menuEstadisticas, 6, "Pedidos completados por robot", handle_pedidosPorRobot);
-    addOption(menuEstadisticas, 7, "Robots activos", handle_robotsActivos);
+    addOption(menuEstadisticas, 0, "Pedidos por día", NULL);
+    addOption(menuEstadisticas, 1, "Zonas mas popular", NULL);
+    addOption(menuEstadisticas, 2, "Hora pico de pedidos", NULL);
+    addOption(menuEstadisticas, 3, "Platos más vendidos", NULL);
+    addOption(menuEstadisticas, 4, "Clientes recurrentes", NULL);
+    addOption(menuEstadisticas, 5, "Valor promedio de pedido", NULL);
+    addOption(menuEstadisticas, 6, "Pedidos completados por robot", NULL);
+    addOption(menuEstadisticas, 7, "Robots activos", NULL);
 
     showMenu(menuPrincipal);
 

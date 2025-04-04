@@ -19,4 +19,12 @@ add_executable(techdrop
         src/menu.h
         src/screens/gestion_menu.c
         src/screens/gestion_menu.h
+        src/db/bd_new.c
+        src/db/bd_new.h
+        src/db/bd_plato.c
+        src/db/bd_plato.h
+        src/models/plato.c
+        src/models/plato.h
+        src/models/pedido.c
+        src/models/pedido.h
 )
