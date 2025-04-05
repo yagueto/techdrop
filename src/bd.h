@@ -19,8 +19,8 @@ Plato* cargarPlatos(sqlite3 *db, int *total);
 Robot* cargarRobots(sqlite3 *db, int *total);
 
 //insertar/eliminar
-int insertarUsuario(sqlite3 *db,Usuario usuario);
-int eliminarUsuario(sqlite3 *db,Usuario usuario);
+//int insertarUsuario(sqlite3 *db,Usuario usuario);
+//int eliminarUsuario(sqlite3 *db,Usuario usuario);
 int insertarRobot(sqlite3 *db,Robot robot);
 int eliminarRobot(sqlite3 *db,Robot robot);
 // int insertarPlato(sqlite3 *db,Plato plato);

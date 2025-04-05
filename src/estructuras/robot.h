@@ -1,7 +1,3 @@
-//
-// Created by maddi.esparta on 27/03/2025.
-//
-
 #ifndef ROBOT_H
 #define ROBOT_H
 typedef struct {

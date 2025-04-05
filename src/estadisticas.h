@@ -1,6 +1,3 @@
-//
-// Created by naia.martin on 26/03/2025.
-//
 #ifndef ESTADISTICAS_H
 #define ESTADISTICAS_H
 

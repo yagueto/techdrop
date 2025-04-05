@@ -3,10 +3,10 @@
 
 typedef struct
 {
+  char dni[10];
   char nombre[20];
   char contraseña[20];
 } Usuario;
 
-void crearUsuario(Usuario *user);
-
+void usuarioDB(Usuario *user);
 #endif //USUARIO_H

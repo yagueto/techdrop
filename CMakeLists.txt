@@ -14,11 +14,9 @@ add_executable(techdrop
         src/estructuras/estructuras.c
         src/estructuras/usuario.c
         src/estructuras/robot.c
-        src/estructuras/robot.h
         src/menu.c
-        src/menu.h
         src/screens/gestion_menu.c
-        src/screens/gestion_menu.h
+        src/screens/gestion_usuario.c
         src/db/bd_new.c
         src/db/bd_new.h
         src/db/bd_plato.c
@@ -27,4 +25,6 @@ add_executable(techdrop
         src/models/plato.h
         src/models/pedido.c
         src/models/pedido.h
+        src/db/bd_usuario.h
+        src/db/bd_usuario.c
 )

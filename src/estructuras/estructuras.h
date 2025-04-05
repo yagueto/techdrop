@@ -1,7 +1,3 @@
-//
-// Created by naia.martin on 26/03/2025.
-//
-
 #ifndef ESTRUCTURAS_H
 #define ESTRUCTURAS_H
 
