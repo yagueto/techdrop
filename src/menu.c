@@ -59,10 +59,11 @@ void showMenu(Menu* menu)
             scanf("%d", &opcion);
             clearInputBuffer();
 
+            if (opcion == 0) return;
+
             if (menu->handlers[opcion - 1] == NULL) printf("Aún no implementado\n");
         }
         while (opcion < 0 || opcion > menu->numOptions || menu->handlers[opcion - 1] == NULL);
-        if (opcion == 0) return;
         menu->handlers[opcion - 1]();
     }
     while (1);

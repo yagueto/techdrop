@@ -6,7 +6,7 @@ void crearRobot(Robot *robot) {
     int estado;
     int pedido;
     char nombre[20];
-    robot->id_robot = NULL;
+    // robot->id_robot = NULL;
     printf("Introduce el nombre del robot: ");
     fflush(stdout);
     fgets(nombre, 20, stdin);
