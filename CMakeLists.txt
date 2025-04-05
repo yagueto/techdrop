@@ -13,7 +13,7 @@ add_executable(techdrop
         src/estadisticas.c
         src/estructuras/estructuras.c
         src/estructuras/usuario.c
-        src/estructuras/robot.c
+        src/models/robot.c
         src/menu.c
         src/screens/gestion_menu.c
         src/screens/gestion_usuario.c
@@ -27,4 +27,10 @@ add_executable(techdrop
         src/models/pedido.h
         src/db/bd_usuario.h
         src/db/bd_usuario.c
+        src/db/bd_robot.c
+        src/db/bd_robot.h
+        src/screens/gestion_robot.c
+        src/screens/gestion_robot.h
+        src/db/bd_pedido.c
+        src/db/bd_pedido.h
 )

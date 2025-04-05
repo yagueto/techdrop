@@ -16,11 +16,12 @@
 // {
 //     return (PedidoDetalle*)malloc(capacidad * sizeof(PedidoDetalle));
 // }
+/*
 Robot* crearArrayRobots(int capacidad)
 {
     return (Robot*)malloc(capacidad * sizeof(Robot));
 }
-
+*/
 // void liberarArrayPedidos(Pedido *array)
 // {
 //     if (array)
@@ -42,6 +43,7 @@ Robot* crearArrayRobots(int capacidad)
 //         free(array);
 //     }
 // }
+/*
 void liberarArrayRobots(Robot *array)
 {
     if (array)
@@ -49,3 +51,4 @@ void liberarArrayRobots(Robot *array)
         free(array);
     }
 }
+*/

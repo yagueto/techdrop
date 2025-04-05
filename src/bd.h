@@ -16,13 +16,13 @@ void verificarDatos(sqlite3 *db);
 //Funciones para cargar datos de la BD
 Pedido* cargarPedidos(sqlite3 *db, int *total);
 Plato* cargarPlatos(sqlite3 *db, int *total);
-Robot* cargarRobots(sqlite3 *db, int *total);
+//Robot* cargarRobots(sqlite3 *db, int *total);
 
 //insertar/eliminar
 //int insertarUsuario(sqlite3 *db,Usuario usuario);
 //int eliminarUsuario(sqlite3 *db,Usuario usuario);
-int insertarRobot(sqlite3 *db,Robot robot);
-int eliminarRobot(sqlite3 *db,Robot robot);
+//int insertarRobot(sqlite3 *db,Robot robot);
+//int eliminarRobot(sqlite3 *db,Robot robot);
 // int insertarPlato(sqlite3 *db,Plato plato);
 // int eliminarPlato(sqlite3 *db,Plato plato);
 // int insertarPedido(sqlite3 *db,Pedido pedido);
@@ -30,7 +30,7 @@ int eliminarRobot(sqlite3 *db,Robot robot);
 // int insertarPedidoDetalle(sqlite3 *db,PedidoDetalle pedido_detalle);
 
 
-int actualizarPedido(sqlite3 *db, const Pedido *pedido);
+//int actualizarPedido(sqlite3 *db, const Pedido *pedido);
 int actualizarArrayPedidos(sqlite3 *db, const Pedido *pedidos, int total);
 
 //Funciones para calcular estadisticas

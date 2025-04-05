@@ -25,4 +25,5 @@ typedef struct
     ElementoPedido** platos; // Lista de elementos en el pedido
 } Pedido;
 
+time_t string_a_time(char* s);
 #endif //PEDIDO_H

@@ -5,11 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "screens/gestion_menu.h"
-
+#include "screens/gestion_robot.h"
 static sqlite3* dbCon = NULL;
 
 Menu* menuPrincipal;
 Menu* menuGestionPlatos;
+Menu* menuGestionRobots;
 Menu* menuGestionCuentas;
 Menu* menuEstadisticas;
 
@@ -90,10 +91,17 @@ void handle_menuPlatos()
     showMenu(menuGestionPlatos);
 }
 
+void handle_menuRobots()
+{
+    showMenu(menuGestionRobots);
+}
+
+
 void handle_menuCuentas()
 {
     showMenu(menuGestionCuentas);
 }
+
 
 void handle_menuEstadisticas()
 {
@@ -176,10 +184,12 @@ void handle_menuEstadisticas()
 void initializeMenus()
 {
     // Crear menús
-    menuPrincipal = createMenu("Menú principal", 3);
+    menuPrincipal = createMenu("Menú principal", 4);
     addOption(menuPrincipal, 0, "Gestionar menú", handle_menuPlatos);
     addOption(menuPrincipal, 1, "Gestionar cuentas", handle_menuCuentas);
-    addOption(menuPrincipal, 2, "Estadísticas", handle_menuEstadisticas);
+    addOption(menuPrincipal, 2, "Gestionar robots", handle_menuRobots);
+    addOption(menuPrincipal, 3, "Estadísticas", handle_menuEstadisticas);
+
 
     menuGestionPlatos = createMenu("Gestión menú", 3);
     addOption(menuGestionPlatos, 0, "Listar platos", handle_listarPlatos);
@@ -190,6 +200,15 @@ void initializeMenus()
     addOption(menuGestionCuentas, 0, "Listar cuentas", NULL);
     addOption(menuGestionCuentas, 1, "Añadir cuenta", NULL);
     addOption(menuGestionCuentas, 2, "Eliminar cuenta(s)", NULL);
+
+    menuGestionRobots = createMenu("Gestión robots", 4);
+    addOption(menuGestionRobots, 0, "Listar robots", NULL);
+    addOption(menuGestionRobots, 1, "Añadir robot", handle_añadirRobot);
+    addOption(menuGestionRobots, 2, "Eliminar robot(s)", handle_eliminarRobot);
+    addOption(menuGestionRobots, 3, "Modificar estado robot", handle_modificar_estadoRobot);
+
+
+
 
     menuEstadisticas = createMenu("Estadísticas del sistema", 8);
     addOption(menuEstadisticas, 0, "Pedidos por día", NULL);

@@ -1,4 +1,4 @@
-#ifndef ESTRUCTURAS_H
+//#ifndef ESTRUCTURAS_H
 #define ESTRUCTURAS_H
 
 /*typedef struct {
@@ -23,7 +23,8 @@ typedef struct {
     int id_plato;
     int cantidad;
     float precio_unitario;
-} PedidoDetalle;*/
+} PedidoDetalle;
+
 typedef struct {
     int id_robot;
     char nombre[20];
@@ -36,6 +37,7 @@ typedef struct {
 // Pedido* crearArrayPedidos(int capacidad);
 // Plato* crearArrayPlatos(int capacidad);
 // PedidoDetalle* crearArrayPedidoDetalle(int capacidad);
+/*
 Robot* crearArrayRobots(int capacidad);
 
 //Liberar arrays
@@ -45,3 +47,4 @@ Robot* crearArrayRobots(int capacidad);
 void liberarArrayRobots(Robot *arrayRobots);
 
 #endif //ESTRUCTURAS_H
+*/
