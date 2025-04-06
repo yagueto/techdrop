@@ -15,11 +15,11 @@ Usuario* obtenerUsuario(char* param, char* type)
     char* sql;
     if (strcmp(type, "dni") == 0)
     {
-        sql = "SELECT * FROM Usuario WHERE dni = ?";
+        sql = "SELECT * FROM Usuario WHERE dni = ?;";
     }
     else if (strcmp(type, "username") == 0)
     {
-        sql = "SELECT * FROM Usuario WHERE username = ?";
+        sql = "SELECT * FROM Usuario WHERE username = ?;";
     }
     else
     {
@@ -61,7 +61,7 @@ int eliminarUsuario(char* dni)
 {
     sqlite3_stmt* stmt;
 
-    char sql[] = "DELETE FROM Usuario WHERE dni = ?";
+    char sql[] = "DELETE FROM Usuario WHERE dni = ?;";
 
 
     int result = execute_query(sql, &stmt);
@@ -84,7 +84,7 @@ int eliminarUsuario(char* dni)
 int insertarUsuario(Usuario* usuario)
 {
     sqlite3_stmt* stmt;
-    char sql[] = "INSERT INTO Usuario (id, dni, username, password) VALUES (NULL, ?, ?, ?)";
+    char sql[] = "INSERT INTO Usuario (id, dni, username, password) VALUES (NULL, ?, ?, ?);";
 
 
     int result = execute_query(sql, &stmt);
@@ -106,33 +106,38 @@ int insertarUsuario(Usuario* usuario)
     return SQLITE_OK;
 }
 
-void listarUsuarios()
-{
+Usuario* listaUsuarios() {
     sqlite3_stmt* stmt;
-    char sql[] = "SELECT dni, username FROM Usuario";
+    char sql[] = "SELECT * FROM Usuario;";
     int result = execute_query(sql, &stmt);
-    if (result != SQLITE_OK)
-    {
-        printf("Error executing SELECT\n");
-        return;
+    if (result != SQLITE_OK) {
+        printf("Error ejecutando SELECT\n");
+        return NULL;
     }
 
-    printf("DNI\t\tUsername\n");
-    printf("-------------------------\n");
+    int capacity = 10;
+    int count = 0;
+    Usuario* usuarios = (Usuario*)malloc(capacity * sizeof(Usuario));
 
-    while ((result = sqlite3_step(stmt)) == SQLITE_ROW)
-    {
-        const char* dni = (const char*)sqlite3_column_text(stmt, 0);
-        const char* username = (const char*)sqlite3_column_text(stmt, 1);
-        printf("%s\t%s\n", dni, username);
+    while ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
+        if (count >= capacity) {
+            capacity *= 2;
+            usuarios = (Usuario*)realloc(usuarios, capacity * sizeof(Usuario));
+        }
+        usuarios[count].dni = strdup((const char*)sqlite3_column_text(stmt, 1));
+        usuarios[count].nombre = strdup((const char*)sqlite3_column_text(stmt, 2));
+        usuarios[count].contraseña = strdup((const char*)sqlite3_column_text(stmt, 3));
+
+        printf("Usuario %d: DNI=%s, Nombre=%s\n", count+1,
+               usuarios[count].dni, usuarios[count].nombre);
+
+        count++;
     }
 
-    if (result != SQLITE_DONE)
-    {
+    if (result != SQLITE_DONE) {
         printf("Error iterando sobre los resultados: %s\n", sqlite3_errmsg(get_db()));
     }
 
     sqlite3_finalize(stmt);
-
-    waitForEnter();
+    return usuarios;
 }
