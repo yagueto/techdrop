@@ -53,3 +53,5 @@ dkms.conf
 
 cmake-build-*/
 .idea/
+
+config.properties
