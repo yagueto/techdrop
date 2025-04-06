@@ -17,5 +17,9 @@ int main()
     init_db();
     initializeMenus(get_db());
     close_db();
+    if (color_output())
+    {
+        printf(ANSI_COLOR_RESET);
+    }
     return 0;
 }
