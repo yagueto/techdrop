@@ -18,6 +18,7 @@ void crearUsuario()
     printf("Introduce el DNI del usuario: ");
     fflush(stdout);
     fgets(dni, 10, stdin);
+    dni[strcspn(dni, "\n")] = '\0';
     clearIfNeeded(dni, 10);
     Usuario *usuario = obtenerUsuario(dni, "dni");
     if (usuario != NULL) {
@@ -33,6 +34,7 @@ void crearUsuario()
     printf("Introduce el nombre del usuario: ");
     fflush(stdout);
     fgets(nombre, 20, stdin);
+    nombre[strcspn(nombre, "\n")] = '\0';
     clearIfNeeded(nombre, 20);
     Usuario* usuario = obtenerUsuario(nombre, "username");
     if (usuario != NULL) {
@@ -48,6 +50,7 @@ void crearUsuario()
   printf("Contraseña: ");
   fflush(stdout);
   fgets(contraseña, 20, stdin);
+  contraseña[strcspn(nombre, "\n")] = '\0';
   clearIfNeeded(contraseña, 20);
 
   user->dni = strdup(dni);
