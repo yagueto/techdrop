@@ -204,7 +204,7 @@ void initializeMenus()
     addOption(menuGestionRobots, 2, "Eliminar robot(s)", handle_eliminarRobot);
     addOption(menuGestionRobots, 3, "Modificar estado robot", handle_modificar_estadoRobot);
 
-    menuEstadisticas = createMenu("Estadísticas del sistema", 6);
+    menuEstadisticas = createMenu("Estadísticas del sistema", 7);
     addOption(menuEstadisticas, 0, "Pedidos por día", handle_pedidosPorDia);
     addOption(menuEstadisticas, 1, "Zonas mas popular", handle_zonasPopulares);
     addOption(menuEstadisticas, 2, "Hora pico de pedidos", handle_horaPico);

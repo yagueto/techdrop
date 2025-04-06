@@ -82,7 +82,7 @@ Robot* get_robot(int id)
 
     if (result != SQLITE_OK)
     {
-        printf("Error preparando la consulta: %s", sqlite3_errmsg(get_db()));
+        printf("Error preparando la consulta: %s\n", sqlite3_errmsg(get_db()));
         return NULL;
     }
 
@@ -90,7 +90,7 @@ Robot* get_robot(int id)
     result = sqlite3_bind_int(stmt, 1, id);
     if (result != SQLITE_OK)
     {
-        printf("Error insertando en la bd: %s", sqlite3_errmsg(get_db()));
+        printf("Error insertando en la bd: %s\n", sqlite3_errmsg(get_db()));
         sqlite3_finalize(stmt);
         return NULL;
     }
@@ -189,7 +189,6 @@ RobotLista* get_robotLista()
     if (cantidad == 0)
     {
         sqlite3_finalize(stmt);
-        printf("No hay robots");
         return NULL;
     }
 

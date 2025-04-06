@@ -13,6 +13,7 @@ const char* ESTADOS_ROBOTS[] = {"Ocupado", "Mantenimiento", "Disponible"};
 
 void handle_añadirRobot()
 {
+    clrscr();
     char str[MAX_LINE];
     char nombre[MAX_LINE];
     int estado;
@@ -55,14 +56,14 @@ void handle_añadirRobot()
 
         if (respuesta == 0)
         {
-            printf("\nNuevo robot: %s, nuevo estado: %i", nombre, estado);
+            printf("\nNuevo robot: %s, nuevo estado: %i\n", nombre, estado);
         }
         else if (respuesta == 1)
         {
             int id = pedidoCola();
             if (id == -1)
             {
-                printf("En estos momentos no hay pedidos en cola");
+                printf("En estos momentos no hay pedidos en cola\n");
                 printf("\nNuevo robot: %s, nuevo estado: %i", nombre, estado);
             }
             else
@@ -75,14 +76,14 @@ void handle_añadirRobot()
         }
         else
         {
-            printf("Valor invalido");
+            printf("Valor invalido\n");
             waitForEnter();
             return;
         }
     }
     else
     {
-        printf("\nNuevo robot: %s, nuevo estado: %i", nombre, estado);
+        printf("\nNuevo robot: %s, nuevo estado: %i\n", nombre, estado);
     }
 
     insertarRobot(robot);
@@ -92,6 +93,7 @@ void handle_añadirRobot()
 
 void handle_eliminarRobot()
 {
+    clrscr();
     char str[MAX_LINE];
     int id;
     printf("Introduce el id del robot: ");
@@ -105,7 +107,7 @@ void handle_eliminarRobot()
 
     if (robot == NULL)
     {
-        printf("No existe un robot con este id");
+        printf("No existe un robot con este id\n");
         waitForEnter();
         return;
     }
@@ -172,6 +174,7 @@ void handle_listaRobots()
 
 void handle_modificar_estadoRobot()
 {
+    clrscr();
     char str[MAX_LINE];
     int id;
     int estado;
@@ -220,6 +223,8 @@ void handle_modificar_estadoRobot()
         printf("Estado actualizado correctamente\n");
         printf("Nuevo estado: %s\n", estado_a_texto(estado));
     }
+    waitForEnter();
     freeRobot(r);
+
 
 }

@@ -25,7 +25,7 @@ Pedido* get_pedido(int id) {
 
     if (result != SQLITE_ROW)
     {
-        printf("No existe este pedido");
+        printf("No existe este pedido\n");
         return NULL;
     }
     //falta lista de platos(crear en bd_pedidoDetalle funcion para conseguir
