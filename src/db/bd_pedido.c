@@ -1,8 +1,7 @@
 #include <stdlib.h>
-
 #include <stdio.h>
-#include "bd.h"
 #include "bd_new.h"
+#include "models/pedido.h"
 
 Pedido* get_pedido(int id) {
     sqlite3_stmt* stmt;

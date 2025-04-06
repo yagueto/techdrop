@@ -1,10 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <utils.h>
 
 #include "bd_new.h"
-#include "bd.h"
 #include <models/usuario.h>
 
 

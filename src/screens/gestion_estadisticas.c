@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <utils.h>
-#include <estadisticas.h>
-
 #include "db/bd_new.h"
 
 //Implementacion de handlers de estadisticas

@@ -2,7 +2,6 @@
 #define ESTADISTICAS_H
 
 #include "sqlite3.h"
-#include "estructuras/estructuras.h"
 
 //Funciones para las estadisticas de negocio
 void calcularPedidosPorDia(sqlite3 *db,const char *fecha);

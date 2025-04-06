@@ -1,11 +1,7 @@
 #include "estadisticas.h"
-#include "estructuras/estructuras.h"
 #include "db/bd_estadisticas.h"
-#include "utils.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <models/robot.h>
 
 //funciones para las estadisticas de negocio
 void calcularPedidosPorDia(sqlite3 *db, const char *fecha){

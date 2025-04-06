@@ -1,9 +1,6 @@
 #include <stdlib.h>
 #include "bd_plato.h"
-
 #include <stdio.h>
-
-#include "bd.h"
 #include "bd_new.h"
 
 PlatoResult get_platos()

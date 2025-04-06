@@ -9,9 +9,7 @@ add_executable(techdrop
         src/main.c
         src/utils.c
         lib/sqlite3.c
-        src/bd.c
         src/estadisticas.c
-        src/estructuras/estructuras.c
         src/models/usuario.c
         src/models/robot.c
         src/menu.c
@@ -37,4 +35,6 @@ add_executable(techdrop
         src/db/bd_estadisticas.h
         src/screens/gestion_estadisticas.h
         src/screens/gestion_estadisticas.c
+        src/config.c
+        src/config.h
 )
