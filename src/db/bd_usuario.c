@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <utils.h>
 
 #include "bd_new.h"
 #include "bd.h"
@@ -92,4 +93,31 @@ int insertarUsuario(Usuario usuario) {
 
     sqlite3_finalize(stmt);
     return SQLITE_OK;
+}
+
+void listarUsuarios() {
+    sqlite3_stmt *stmt;
+    char sql[] = "SELECT dni, username FROM Usuario";
+    int result = execute_query(sql, &stmt);
+    if (result != SQLITE_OK) {
+        printf("Error executing SELECT\n");
+        return;
+    }
+
+    printf("DNI\t\tUsername\n");
+    printf("-------------------------\n");
+
+    while ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
+        const char *dni = (const char *)sqlite3_column_text(stmt, 0);
+        const char *username = (const char *)sqlite3_column_text(stmt, 1);
+        printf("%s\t%s\n", dni, username);
+    }
+
+    if (result != SQLITE_DONE) {
+        printf("Error iterando sobre los resultados: %s\n", sqlite3_errmsg(get_db()));
+    }
+
+    sqlite3_finalize(stmt);
+
+    waitForEnter();
 }

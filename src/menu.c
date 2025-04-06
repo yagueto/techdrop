@@ -7,6 +7,8 @@
 #include "screens/gestion_menu.h"
 #include <screens/gestion_usuario.h>
 
+#include "db/bd_usuario.h"
+
 static sqlite3* dbCon = NULL;
 
 Menu* menuPrincipal;
@@ -187,7 +189,7 @@ void initializeMenus()
     addOption(menuGestionPlatos, 2, "Eliminar plato(s)", handle_eliminarPlato);
 
     menuGestionCuentas = createMenu("Gestión cuentas", 3);
-    addOption(menuGestionCuentas, 0, "Listar cuentas", NULL);
+    addOption(menuGestionCuentas, 0, "Listar cuentas", listarUsuarios);
     addOption(menuGestionCuentas, 1, "Añadir cuenta", crearUsuario);
     addOption(menuGestionCuentas, 2, "Eliminar cuenta(s)", borrarUsuario);
 
