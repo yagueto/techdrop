@@ -64,6 +64,13 @@ int eliminarUsuario(char* dni)
 
     int result = execute_query(sql, &stmt);
 
+    if (result != SQLITE_DONE)
+    {
+        printf("Error executing DELETE\n");
+        sqlite3_finalize(stmt);
+        return result;
+    }
+
     sqlite3_bind_text(stmt, 1, dni, -1, SQLITE_STATIC);
 
     result = sqlite3_step(stmt);

@@ -24,6 +24,7 @@ int init_db(void)
     if (create_db_if_not_exists())
     {
         crear_tablas();
+        generar_datos_prueba();
     }
 
     return SQLITE_OK;
@@ -138,4 +139,82 @@ int crear_tablas()
 
     printf("Tablas creadas\n");
     return 0;
+}
+
+int generar_datos_prueba() {
+    char* zErrMsg = 0;
+    sqlite3* db = get_db();
+
+    // Insertar usuarios de prueba
+    const char* usuarios =
+        "INSERT OR IGNORE INTO Usuario (dni, username, password) VALUES "
+        "('12345678A', 'usuario1', 'pass123'), "
+        "('87654321B', 'usuario2', 'pass456'), "
+        "('11111111C', 'admin', 'admin123');";
+
+    // Insertar platos de prueba
+    const char* platos =
+        "INSERT OR IGNORE INTO Plato (nombre, descripcion, precio, disponible) VALUES "
+        "('Paella', 'Arroz con mariscos y verduras', 15.99, 1), "
+        "('Pizza Margherita', 'Pizza con tomate y mozzarella', 12.50, 1), "
+        "('Hamburguesa', 'Carne de ternera con queso', 9.99, 1);";
+
+    // Insertar robots de prueba
+    const char* robots =
+        "INSERT OR IGNORE INTO Robot (nombre, estado) VALUES "
+        "('R2D2', 2), "
+        "('C3PO', 2), "
+        "('BB8', 1);";
+
+    // Insertar pedidos de prueba
+    const char* pedidos =
+        "INSERT OR IGNORE INTO Pedido (id_usuario, direccion, estado) VALUES "
+        "(1, 'Calle Mayor 1', 0), "
+        "(2, 'Plaza España 2', 1);";
+
+    // Insertar detalles de pedidos
+    const char* detalles =
+        "INSERT OR IGNORE INTO PedidoDetalle (id_pedido, id_plato, cantidad, precio_unitario) VALUES "
+        "(1, 1, 2, 15.99), "
+        "(1, 2, 1, 12.50), "
+        "(2, 3, 3, 9.99);";
+
+    // Ejecutar las inserciones
+    int rc = sqlite3_exec(db, usuarios, NULL, NULL, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        printf("Error insertando usuarios: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        return rc;
+    }
+
+    rc = sqlite3_exec(db, platos, NULL, NULL, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        printf("Error insertando platos: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        return rc;
+    }
+
+    rc = sqlite3_exec(db, robots, NULL, NULL, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        printf("Error insertando robots: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        return rc;
+    }
+
+    rc = sqlite3_exec(db, pedidos, NULL, NULL, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        printf("Error insertando pedidos: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        return rc;
+    }
+
+    rc = sqlite3_exec(db, detalles, NULL, NULL, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        printf("Error insertando detalles de pedidos: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        return rc;
+    }
+
+    printf("Datos de prueba generados correctamente\n");
+    return SQLITE_OK;
 }
