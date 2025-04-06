@@ -47,9 +47,9 @@ Usuario* obtenerUsuario(char* param, char* type)
     }
 
     Usuario* usuario = (Usuario*)malloc(sizeof(Usuario));
-    usuario->dni = strdup((const char*)sqlite3_column_text(stmt, 0));
-    usuario->nombre = strdup((const char*)sqlite3_column_text(stmt, 1));
-    usuario->contraseña = strdup((const char*)sqlite3_column_text(stmt, 2));
+    usuario->dni = strdup((const char*)sqlite3_column_text(stmt, 1));
+    usuario->nombre = strdup((const char*)sqlite3_column_text(stmt, 2));
+    usuario->contraseña = strdup((const char*)sqlite3_column_text(stmt, 3));
 
     sqlite3_finalize(stmt);
     return usuario;
