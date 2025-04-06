@@ -1,6 +1,8 @@
 #include "bd_new.h"
 #include <stdio.h>
 
+#include "config.h"
+
 static sqlite3* db = NULL;
 
 int init_db(void)
@@ -19,7 +21,10 @@ int init_db(void)
         return 1;
     }
 
-    crear_tablas();
+    if (create_db_if_not_exists())
+    {
+        crear_tablas();
+    }
 
     return SQLITE_OK;
 }
@@ -55,7 +60,6 @@ int execute_query(const char* sql, sqlite3_stmt** stmt) {
     return 0;
 }
 
-// TODO: exportar a un archivo de texto plano?
 int crear_tablas()
 {
     char* zErrMsg = 0;
