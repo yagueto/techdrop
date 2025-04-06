@@ -55,7 +55,7 @@ Usuario* obtenerUsuario(char* param, char* type)
     return usuario;
 }
 
-int eliminarUsuario(char* dni)
+int eliminarUsuario(Usuario* usuario)
 {
     sqlite3_stmt* stmt;
 
@@ -64,14 +64,14 @@ int eliminarUsuario(char* dni)
 
     int result = execute_query(sql, &stmt);
 
-    if (result != SQLITE_DONE)
+    if (result != SQLITE_OK)
     {
         printf("Error executing DELETE\n");
         sqlite3_finalize(stmt);
         return result;
     }
 
-    sqlite3_bind_text(stmt, 1, dni, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, usuario->dni, -1, SQLITE_STATIC);
 
     result = sqlite3_step(stmt);
     if (result != SQLITE_DONE)
@@ -93,7 +93,7 @@ int insertarUsuario(Usuario* usuario)
 
 
     int result = execute_query(sql, &stmt);
-    if (result != SQLITE_DONE)
+    if (result != SQLITE_OK)
     {
         fprintf(stderr, "Error executing statement\n");
         sqlite3_finalize(stmt);
@@ -103,6 +103,14 @@ int insertarUsuario(Usuario* usuario)
     sqlite3_bind_text(stmt, 1, usuario->dni, -1, SQLITE_STATIC);
     sqlite3_bind_text(stmt, 2, usuario->nombre, -1, SQLITE_STATIC);
     sqlite3_bind_text(stmt, 3, usuario->contraseña, -1, SQLITE_STATIC);
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE)
+    {
+        printf("Error executing DELETE\n");
+        sqlite3_finalize(stmt);
+        return result;
+    }
 
     sqlite3_finalize(stmt);
     return SQLITE_OK;
