@@ -56,8 +56,8 @@ void crearUsuario()
 
 void borrarUsuario() {
   int ok = 0;
-  char dni[10];
   do {
+    char dni[10];
     printf("Introduce el DNI del usuario a eliminar: ");
     fflush(stdout);
     fgets(dni, 10, stdin);

@@ -1,7 +1,6 @@
 #include <bd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "db/bd_pedido.h"
 #include <string.h>
 #include "robot.h"
 
@@ -51,8 +50,8 @@ char* estado_a_texto(int estado) {
         case 0:  return "Ocupado";
         case 1: return "Mantenimiento";
         case 2: return "Disponible";
+        default: return "Desconocido";
     }
-    return "Desconocido";
 }
 
 
