@@ -7,6 +7,7 @@
 #include <screens/gestion_usuario.h>
 #include "screens/gestion_robot.h"
 #include "db/bd_usuario.h"
+#include "screens/gestion_estadisticas.h"
 
 Menu* menuPrincipal;
 Menu* menuGestionPlatos;
@@ -203,15 +204,14 @@ void initializeMenus()
     addOption(menuGestionRobots, 2, "Eliminar robot(s)", handle_eliminarRobot);
     addOption(menuGestionRobots, 3, "Modificar estado robot", handle_modificar_estadoRobot);
 
-    menuEstadisticas = createMenu("Estadísticas del sistema", 8);
-    addOption(menuEstadisticas, 0, "Pedidos por día", NULL);
-    addOption(menuEstadisticas, 1, "Zonas mas popular", NULL);
-    addOption(menuEstadisticas, 2, "Hora pico de pedidos", NULL);
-    addOption(menuEstadisticas, 3, "Platos más vendidos", NULL);
-    addOption(menuEstadisticas, 4, "Clientes recurrentes", NULL);
-    addOption(menuEstadisticas, 5, "Valor promedio de pedido", NULL);
-    addOption(menuEstadisticas, 6, "Pedidos completados por robot", NULL);
-    addOption(menuEstadisticas, 7, "Robots activos", NULL);
+    menuEstadisticas = createMenu("Estadísticas del sistema", 6);
+    addOption(menuEstadisticas, 0, "Pedidos por día", handle_pedidosPorDia);
+    addOption(menuEstadisticas, 1, "Zonas mas popular", handle_zonasPopulares);
+    addOption(menuEstadisticas, 2, "Hora pico de pedidos", handle_horaPico);
+    addOption(menuEstadisticas, 3, "Platos más vendidos", handle_platosMasVendidos);
+    addOption(menuEstadisticas, 4, "Clientes recurrentes", handle_clientesRecurrentes);
+    addOption(menuEstadisticas, 5, "Valor promedio de pedido", handle_valorMedioPedido);
+    addOption(menuEstadisticas, 6, "Robots activos", handle_robotsActivos);
 
     showMenu(menuPrincipal);
 
