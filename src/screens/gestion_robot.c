@@ -148,22 +148,23 @@ void handle_listaRobots()
 
     int cantidad = robotLista->cantidad;
 
-
+    printf("------------------\n");
     for (int i = 0; i < cantidad; ++i)
     {
         printf("Robot ID: %d\n", robotLista->lista[i]->id);
         printf("Nombre: %s\n", robotLista->lista[i]->nombre);
         printf("Estado: %s\n", ESTADOS_ROBOTS[robotLista->lista[i]->estado]);
-        if (robotLista->lista[i]->pedido_actual == -1)
+        if (robotLista->lista[i]->pedido_actual == -1 || robotLista->lista[i]->pedido_actual == 0)
         {
-            printf("Pedido actual: ninguno\n\n");
+            printf("Pedido actual: ninguno\n");
+            printf("------------------\n");
         }
         else
         {
-            printf("Pedido actual: %d\n\n", robotLista->lista[i]->pedido_actual);
+            printf("Pedido actual: %d\n", robotLista->lista[i]->pedido_actual);
+            printf("------------------\n");
         }
     }
-
 
     free_robotLista(robotLista);
     waitForEnter();
@@ -185,7 +186,7 @@ void handle_modificar_estadoRobot()
         waitForEnter();
         return;
     }
-    printf("\nRobot: %i\n", id);
+    printf("Robot: %i\n", id);
     printf("Estado actual: %s\n", estado_a_texto(r->estado));
     printf("Nuevo estado:\n");
     printf("0 -> Ocupado\n");
