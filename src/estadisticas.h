@@ -5,7 +5,7 @@
 #include "estructuras/estructuras.h"
 
 //Funciones para las estadisticas de negocio
-void calcularPedidosPorDia(sqlite3 *db, const char *fecha);
+void calcularPedidosPorDia(sqlite3 *db,const char *fecha);
 void calcularPedidosPorMes(sqlite3 *db);
 void calcularZonasPopulares(sqlite3 *db);
 void calcularHoraPico(sqlite3 *db);
@@ -14,7 +14,6 @@ void calcularClientesRecurrentes(sqlite3 *db);
 void calcularValorMedioPedido(sqlite3 *db);
 
 //Funciones para las estadisticas de robots
-void calcularPedidosPorRobot(sqlite3 *db);
 void calcularRobotsActivos(sqlite3 *db);
 
 #endif //ESTADISTICAS_H

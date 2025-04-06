@@ -33,4 +33,8 @@ add_executable(techdrop
         src/screens/gestion_robot.h
         src/db/bd_pedido.c
         src/db/bd_pedido.h
+        src/db/bd_estadisticas.c
+        src/db/bd_estadisticas.h
+        src/screens/gestion_estadisticas.h
+        src/screens/gestion_estadisticas.c
 )
