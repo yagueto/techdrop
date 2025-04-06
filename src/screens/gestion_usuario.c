@@ -8,6 +8,7 @@
 
 void crearUsuario()
 {
+  clrscr();
   Usuario *user = (Usuario *)malloc(sizeof(Usuario));
   char dni[10];
   char nombre[20];
@@ -18,6 +19,7 @@ void crearUsuario()
     printf("Introduce el DNI del usuario: ");
     fflush(stdout);
     fgets(dni, 10, stdin);
+    dni[strcspn(dni, "\n")] = '\0';
     clearIfNeeded(dni, 10);
     Usuario *usuario = obtenerUsuario(dni, "dni");
     if (usuario != NULL) {
@@ -33,6 +35,7 @@ void crearUsuario()
     printf("Introduce el nombre del usuario: ");
     fflush(stdout);
     fgets(nombre, 20, stdin);
+    nombre[strcspn(nombre, "\n")] = '\0';
     clearIfNeeded(nombre, 20);
     Usuario* usuario = obtenerUsuario(nombre, "username");
     if (usuario != NULL) {
@@ -48,6 +51,7 @@ void crearUsuario()
   printf("Contraseña: ");
   fflush(stdout);
   fgets(contraseña, 20, stdin);
+  contraseña[strcspn(nombre, "\n")] = '\0';
   clearIfNeeded(contraseña, 20);
 
   user->dni = strdup(dni);
@@ -60,12 +64,14 @@ void crearUsuario()
 }
 
 void borrarUsuario() {
+  clrscr();
   int ok = 0;
   do {
     char dni[10];
     printf("Introduce el DNI del usuario a eliminar: ");
     fflush(stdout);
     fgets(dni, 10, stdin);
+    dni[strcspn(dni, "\n")] = '\0';
     clearIfNeeded(dni, 10);
 
     Usuario* usuario = obtenerUsuario(dni, "dni");
@@ -76,11 +82,13 @@ void borrarUsuario() {
       ok = 0;
       eliminarUsuario(usuario);
       printf("Usuario con dni %s, eliminado correctamente", dni);
+      waitForEnter();
     }
   } while (ok != 0);
 }
 
 void listarUsuarios() {
+  clrscr();
   Usuario* usuarios = listaUsuarios();
 
   if (usuarios == NULL) {

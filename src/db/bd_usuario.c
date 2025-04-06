@@ -127,10 +127,6 @@ Usuario* listaUsuarios() {
         usuarios[count].dni = strdup((const char*)sqlite3_column_text(stmt, 1));
         usuarios[count].nombre = strdup((const char*)sqlite3_column_text(stmt, 2));
         usuarios[count].contraseña = strdup((const char*)sqlite3_column_text(stmt, 3));
-
-        printf("Usuario %d: DNI=%s, Nombre=%s\n", count+1,
-               usuarios[count].dni, usuarios[count].nombre);
-
         count++;
     }
 
