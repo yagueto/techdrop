@@ -5,5 +5,6 @@
 
 void crearUsuario();
 void borrarUsuario();
+void listarUsuarios();
 
 #endif //GESTION_USUARIO_H

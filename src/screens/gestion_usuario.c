@@ -79,3 +79,31 @@ void borrarUsuario() {
     }
   } while (ok != 0);
 }
+
+void listarUsuarios() {
+  Usuario* usuarios = listaUsuarios();
+
+  if (usuarios == NULL) {
+    printf("Error obteniendo la lista de usuarios\n");
+    return;
+  }
+
+  printf("DNI\t\tUsername\n");
+  printf("-------------------------\n");
+
+  int i = 0;
+  while (usuarios[i].dni != NULL) {
+    printf("%s\t%s\n", usuarios[i].dni, usuarios[i].nombre);
+    i++;
+  }
+
+  i = 0;
+  while (usuarios[i].dni != NULL) {
+    free(usuarios[i].dni);
+    free(usuarios[i].nombre);
+    free(usuarios[i].contraseña);
+    i++;
+  }
+  free(usuarios);
+  waitForEnter();
+}
