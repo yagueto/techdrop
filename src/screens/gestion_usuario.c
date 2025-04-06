@@ -19,9 +19,11 @@ void crearUsuario()
     fflush(stdout);
     fgets(dni, 10, stdin);
     clearIfNeeded(dni, 10);
-    if (obtenerUsuario(dni, "dni") != NULL) {
+    Usuario *usuario = obtenerUsuario(dni, "dni");
+    if (usuario != NULL) {
       ok = 1;
       printf("El dni se encuentra en la base de datos\n");
+      freeUsuario(usuario);
     } else {
       ok = 0;
     }
@@ -32,9 +34,11 @@ void crearUsuario()
     fflush(stdout);
     fgets(nombre, 20, stdin);
     clearIfNeeded(nombre, 20);
-    if (obtenerUsuario(nombre, "username") != NULL) {
+    Usuario* usuario = obtenerUsuario(nombre, "username");
+    if (usuario != NULL) {
       ok = 1;
       printf("El usuario está en uso\n");
+      freeUsuario(usuario);
     } else {
       ok = 0;
     }
@@ -51,23 +55,26 @@ void crearUsuario()
   user->contraseña = strdup(contraseña);
 
   insertarUsuario(user);
+
   freeUsuario(user);
 }
 
 void borrarUsuario() {
   int ok = 0;
-  char dni[10];
   do {
+    char dni[10];
     printf("Introduce el DNI del usuario a eliminar: ");
     fflush(stdout);
     fgets(dni, 10, stdin);
     clearIfNeeded(dni, 10);
-    if (obtenerUsuario(dni, "dni") == NULL) {
+
+    Usuario* usuario = obtenerUsuario(dni, "dni");
+    if (usuario == NULL) {
       ok = 1;
       printf("No hay usuarios con ese DNI, introduce otro\n");
     } else {
       ok = 0;
-      eliminarUsuario(dni);
+      eliminarUsuario(usuario);
       printf("Usuario con dni %s, eliminado correctamente", dni);
     }
   } while (ok != 0);

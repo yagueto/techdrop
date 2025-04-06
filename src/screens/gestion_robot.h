@@ -5,7 +5,6 @@
 #ifndef GESTION_ROBOT_H
 #define GESTION_ROBOT_H
 
-
 void handle_añadirRobot();
 void handle_eliminarRobot();
 void handle_listaRobots();

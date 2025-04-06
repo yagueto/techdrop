@@ -2,7 +2,6 @@
 // Created by naia.martin on 26/03/2025.
 //
 #include "estructuras.h"
-#include <stdlib.h>
 
 // Pedido* crearArrayPedidos(int capacidad)
 // {
