@@ -135,5 +135,7 @@ Usuario* listaUsuarios() {
     }
 
     sqlite3_finalize(stmt);
+
+    usuarios[count].dni = NULL;
     return usuarios;
 }
