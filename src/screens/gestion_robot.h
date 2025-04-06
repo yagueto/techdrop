@@ -1,7 +1,3 @@
-//
-// Created by maddi.esparta on 05/04/2025.
-//
-
 #ifndef GESTION_ROBOT_H
 #define GESTION_ROBOT_H
 

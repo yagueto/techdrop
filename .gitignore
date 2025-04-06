@@ -55,3 +55,4 @@ cmake-build-*/
 .idea/
 
 config.properties
+bd.db

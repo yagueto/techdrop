@@ -1,7 +1,3 @@
-//
-// Created by naia.martin on 06/04/2025.
-//
-
 #ifndef GESTION_ESTADISTICAS_H
 #define GESTION_ESTADISTICAS_H
 

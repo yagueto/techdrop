@@ -96,6 +96,7 @@ void handle_menuCuentas()
 {
     showMenu(menuGestionCuentas);
 }
+
 void handle_menuRobots()
 {
     showMenu(menuGestionRobots);
@@ -105,79 +106,6 @@ void handle_menuEstadisticas()
 {
     showMenu(menuEstadisticas);
 }
-
-//Implementacion de handlers de estadistica
-// void handle_pedidosPorDia() {
-//     clrscr();
-//     printf("\n=== PEDIDOS POR DÍA ===\n");
-//
-//     char fecha[11];
-//     printf("Introduce la fecha (YYYY-MM-DD): ");
-//
-//     if (fgets(fecha, sizeof(fecha), stdin))
-//     {
-//         //Quitar el salto de linea
-//         fecha[strcspn(fecha, "\n")] = '\0';
-//
-//         if (strlen(fecha) == 10) {
-//             calcularPedidosPorDia(dbCon, fecha);
-//         } else {
-//             printf("\nUsa formato: YYYY-MM-DD\n");
-//         }
-//     }
-//     waitForEnter();
-// }
-// void handle_zonasPopulares(){
-//     clrscr();
-//     printf("\n=== ZONAS POPULARES ===\n");
-//
-//     calcularZonasPopulares(dbCon);
-//     waitForEnter();
-// }
-//
-// void handle_horaPico() {
-//     clrscr();
-//     printf("\n=== HORA PICO ===\n");
-//
-//     calcularHoraPico(dbCon);
-//     waitForEnter();
-// }
-//
-// void handle_platosMasVendidos() {
-//     clrscr();
-//     printf("\n=== PLATOS MAS VENDIDOS ===\n");
-//     calcularPlatosMasVendidos(dbCon);
-//     waitForEnter();
-// }
-//
-// void handle_clientesRecurrentes() {
-//     clrscr();
-//     printf("\n=== CLIENTES RECURRENTES ===\n");
-//     calcularClientesRecurrentes(dbCon);
-//     waitForEnter();
-// }
-//
-// void handle_valorMedioPedido() {
-//     clrscr();
-//     printf("\n=== VALOR MEDIO DE PEDIDOS ===\n");
-//     calcularValorMedioPedido(dbCon);
-//     waitForEnter();
-// }
-//
-// void handle_pedidosPorRobot() {
-//     clrscr();
-//     printf("\n=== PEDIDOS POR ROBOT ===\n");
-//     calcularPedidosPorRobot(dbCon);
-//     waitForEnter();
-// }
-//
-// void handle_robotsActivos() {
-//     clrscr();
-//     printf("\n=== ROBOTS ACTIVOS ===\n");
-//     calcularRobotsActivos(dbCon);
-//     waitForEnter();
-// }
-
 
 void initializeMenus()
 {

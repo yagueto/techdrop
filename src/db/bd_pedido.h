@@ -1,6 +1,3 @@
-//
-// Created by maddi.esparta on 05/04/2025.
-//
 #ifndef BD_PEDIDO_H
 #define BD_PEDIDO_H
 #include "models/pedido.h"
