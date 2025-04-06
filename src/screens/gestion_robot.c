@@ -77,7 +77,7 @@ void handle_eliminarRobot() {
     {
         eliminarRobot(robot);
         printf("Robot %s Eliminado correctamente\n", robot->nombre);
-        waitForEnter()
+        waitForEnter();
     } else
     {
         printf("Cancelado\n");

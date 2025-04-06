@@ -1,7 +1,7 @@
 //
 // Created by maddi.esparta on 26/03/2025.
 //
-#include <estructuras/usuario.h>
+#include <models/usuario.h>
 
 #include "sqlite3.h"
 #include "estructuras/estructuras.h"

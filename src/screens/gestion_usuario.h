@@ -1,8 +1,9 @@
 #ifndef GESTION_USUARIO_H
 #define GESTION_USUARIO_H
 
-#include "../estructuras/usuario.h"
+#include <models/usuario.h>
 
-void crearUsuario(Usuario *user);
+void crearUsuario();
+void borrarUsuario();
 
 #endif //GESTION_USUARIO_H
