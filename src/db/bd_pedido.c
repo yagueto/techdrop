@@ -32,8 +32,8 @@ Pedido* get_pedido(int id) {
     //falta lista de platos(crear en bd_pedidoDetalle funcion para conseguir
     const int id_pedido = sqlite3_column_int(stmt, 0);
     const int id_usuario = sqlite3_column_int(stmt, 1);
-    const char* direccion = (char*)sqlite3_column_text(stmt, 2);
-    const char* f = (char*)sqlite3_column_text(stmt, 3);
+    char* direccion = (char*)sqlite3_column_text(stmt, 2);
+    char* f = (char*)sqlite3_column_text(stmt, 3);
     const time_t fecha = string_a_time(f);
     const int estado = sqlite3_column_int(stmt, 4);
     Pedido* pedido = crearPedido(0,id_usuario, direccion, fecha, estado);
@@ -53,7 +53,7 @@ int pedidoCola() {
 
     if (sqlite3_prepare_v2(get_db(), sql, -1, &stmt, NULL) != SQLITE_OK) {
         printf( "Error preparando consulta: %s\n", sqlite3_errmsg(get_db()));
-        return NULL;
+        return -1;
     }
 
 

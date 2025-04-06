@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "menu.h"
-#include "estadisticas.h"
 #include "utils.h"
 #include <stdlib.h>
 #include <string.h>
@@ -8,8 +7,6 @@
 #include <screens/gestion_usuario.h>
 #include "screens/gestion_robot.h"
 #include "db/bd_usuario.h"
-
-static sqlite3* dbCon = NULL;
 
 Menu* menuPrincipal;
 Menu* menuGestionPlatos;

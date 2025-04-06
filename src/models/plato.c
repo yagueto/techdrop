@@ -15,7 +15,7 @@ Plato* crear_plato(
     if (plato == NULL) return NULL;
 
     plato->id = id;
-    strcpy(plato->nombre, nombre);
+    plato->nombre = strdup(nombre);
     plato->descripcion = strdup(descripcion);
     plato->precio = precio;
     plato->disponible = disponible;

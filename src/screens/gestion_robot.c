@@ -111,7 +111,7 @@ void handle_eliminarRobot() {
    puts("\n");
    if (result == 1)
    {
-       eliminarRobot(robot);
+       eliminarRobot(robot->id);
        printf("Robot %i Eliminado correctamente\n", robot->id);
    } else
    {

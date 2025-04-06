@@ -62,12 +62,14 @@ void borrarUsuario() {
     fflush(stdout);
     fgets(dni, 10, stdin);
     clearIfNeeded(dni, 10);
-    if (obtenerUsuario(dni, "dni") == NULL) {
+
+    Usuario* usuario = obtenerUsuario(dni, "dni");
+    if (usuario == NULL) {
       ok = 1;
       printf("No hay usuarios con ese DNI, introduce otro\n");
     } else {
       ok = 0;
-      eliminarUsuario(dni);
+      eliminarUsuario(usuario);
       printf("Usuario con dni %s, eliminado correctamente", dni);
     }
   } while (ok != 0);
