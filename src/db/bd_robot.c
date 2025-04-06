@@ -198,12 +198,13 @@ RobotLista* get_robotLista()
     if (robotLista == NULL)
     {
         sqlite3_finalize(stmt);
+        free_robotLista(robotLista);
         return NULL;
     }
     Robot** lista = malloc(cantidad * sizeof(Plato*));
     if (lista == NULL)
     {
-        free(robotLista);
+        free_robotLista(robotLista);
         sqlite3_finalize(stmt);
         return NULL;
     }
@@ -224,7 +225,7 @@ RobotLista* get_robotLista()
                 free(lista[j]);
             }
             free(lista);
-            free(robotLista);
+            free_robotLista(robotLista);
             sqlite3_finalize(stmt);
             return NULL;
         }
@@ -239,7 +240,6 @@ RobotLista* get_robotLista()
 
 
     sqlite3_finalize(stmt);
-
 
     return robotLista;
 }

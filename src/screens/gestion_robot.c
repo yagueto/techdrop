@@ -199,6 +199,7 @@ void handle_modificar_estadoRobot()
 
 
         waitForEnter();
+        freeRobot(r);
         return;
     }
     sscanf(str, "%i", &estado);
@@ -206,6 +207,7 @@ void handle_modificar_estadoRobot()
     {
         printf("Debes seleccionar otro estado\n");
         waitForEnter();
+        freeRobot(r);
         return;
     }
     if (actualizarEstadoRobot(r, estado) != 0)
@@ -217,4 +219,6 @@ void handle_modificar_estadoRobot()
         printf("Estado actualizado correctamente\n");
         printf("Nuevo estado: %s\n", estado_a_texto(estado));
     }
+    freeRobot(r);
+
 }

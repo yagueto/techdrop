@@ -19,9 +19,11 @@ void crearUsuario()
     fflush(stdout);
     fgets(dni, 10, stdin);
     clearIfNeeded(dni, 10);
-    if (obtenerUsuario(dni, "dni") != NULL) {
+    Usuario *usuario = obtenerUsuario(dni, "dni");
+    if (usuario != NULL) {
       ok = 1;
       printf("El dni se encuentra en la base de datos\n");
+      freeUsuario(usuario);
     } else {
       ok = 0;
     }
@@ -32,9 +34,11 @@ void crearUsuario()
     fflush(stdout);
     fgets(nombre, 20, stdin);
     clearIfNeeded(nombre, 20);
-    if (obtenerUsuario(nombre, "username") != NULL) {
+    Usuario* usuario = obtenerUsuario(nombre, "username");
+    if (usuario != NULL) {
       ok = 1;
       printf("El usuario está en uso\n");
+      freeUsuario(usuario);
     } else {
       ok = 0;
     }
@@ -51,6 +55,7 @@ void crearUsuario()
   user->contraseña = strdup(contraseña);
 
   insertarUsuario(user);
+
   freeUsuario(user);
 }
 
