@@ -17,3 +17,12 @@ time_t string_a_time(char* s) {
     tm.tm_mday = dia;
     return mktime(&tm);
 }
+Pedido* crearPedido(int id,int id_usuario,char* direccion,time_t fecha, int estado) {
+    Pedido* p = malloc(sizeof(Pedido));
+    p->id = id;
+    p->id_usuario = id_usuario;
+    p->direccion = direccion;
+    p->fecha = fecha;
+    p->estado = estado;
+    return p;
+}

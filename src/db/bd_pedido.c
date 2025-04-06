@@ -26,15 +26,17 @@ Pedido* get_pedido(int id) {
 
     if (result != SQLITE_ROW)
     {
+        printf("No existe este pedido", sqlite3_errmsg(get_db()));
         return NULL;
     }
     //falta lista de platos(crear en bd_pedidoDetalle funcion para conseguir
-    const int id_usuario = sqlite3_column_int(stmt, 0);
-    const char* direccion = (char*)sqlite3_column_text(stmt, 1);
-    const char* f = (char*)sqlite3_column_text(stmt, 2);
+    const int id_pedido = sqlite3_column_int(stmt, 0);
+    const int id_usuario = sqlite3_column_int(stmt, 1);
+    const char* direccion = (char*)sqlite3_column_text(stmt, 2);
+    const char* f = (char*)sqlite3_column_text(stmt, 3);
     const time_t fecha = string_a_time(f);
-    const int estado = sqlite3_column_int(stmt, 3);
-    Pedido* pedido = crear_plato(id, id_usuario, direccion, fecha, estado);
+    const int estado = sqlite3_column_int(stmt, 4);
+    Pedido* pedido = crearPedido(0,id_usuario, direccion, fecha, estado);
 
     result = sqlite3_finalize(stmt);
     if (result != SQLITE_OK)
@@ -46,7 +48,7 @@ Pedido* get_pedido(int id) {
 }
 int pedidoCola() {
     sqlite3_stmt* stmt;
-    char *sql = "SELECT id FROM Pedidos WHERE estado = 0 ORDER BY id ASC;";
+    char *sql = "SELECT id_pedido FROM Pedido WHERE estado = 0 ORDER BY id_pedido ASC;";
     int id = -1;
 
     if (sqlite3_prepare_v2(get_db(), sql, -1, &stmt, NULL) != SQLITE_OK) {
@@ -54,10 +56,10 @@ int pedidoCola() {
         return NULL;
     }
 
+
     if (sqlite3_step(stmt) == SQLITE_ROW) {
         id = sqlite3_column_int(stmt, 0);
     }
-
     sqlite3_finalize(stmt);
 
     return id;
@@ -69,7 +71,7 @@ int actualizarEstadoPedido(Pedido* pedido, int estado) {
 
     pedido->estado = estado;
     sqlite3_stmt *stmt;
-    char *sql = "UPDATE Pedido SET estado = ? WHERE id = ?;";
+    char *sql = "UPDATE Pedido SET estado = ? WHERE id_pedido = ?;";
 
     int result = execute_query(sql, &stmt);
     if (result != SQLITE_OK) {

@@ -18,6 +18,7 @@ typedef struct
 typedef struct
 {
     int id;
+    int id_usuario;
     // Usuario usuario; // TODO: crear usuario
     char* direccion;
     time_t fecha;
@@ -26,4 +27,5 @@ typedef struct
 } Pedido;
 
 time_t string_a_time(char* s);
+Pedido* crearPedido(int id,int id_usuario, char* direccion,time_t fecha, int estado);
 #endif //PEDIDO_H
