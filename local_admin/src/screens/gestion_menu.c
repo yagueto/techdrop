@@ -58,7 +58,7 @@ void handle_añadirPlato()
     clrscr();
     char nombre[100];
     char descripcion[200];
-    char raw_precio[50];
+    char raw_preciso[50];
     float precio;
 
     printf("Introduce nombre del plato (máx 100 caracteres): ");
