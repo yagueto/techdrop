@@ -1,40 +1,41 @@
 cmake_minimum_required(VERSION 3.30)
-project(techdrop C)
+project(local_admin C)
 
 set(CMAKE_C_STANDARD 11)
 
-include_directories(src lib)
+set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-add_executable(techdrop
-        src/main.c
-        src/utils.c
-        lib/sqlite3.c
-        src/estadisticas.c
-        src/models/usuario.c
-        src/models/robot.c
-        src/menu.c
-        src/screens/gestion_menu.c
-        src/screens/gestion_usuario.c
-        src/db/bd_new.c
-        src/db/bd_new.h
-        src/db/bd_plato.c
-        src/db/bd_plato.h
-        src/models/plato.c
-        src/models/plato.h
-        src/models/pedido.c
-        src/models/pedido.h
-        src/db/bd_usuario.h
-        src/db/bd_usuario.c
-        src/db/bd_robot.c
-        src/db/bd_robot.h
-        src/screens/gestion_robot.c
-        src/screens/gestion_robot.h
-        src/db/bd_pedido.c
-        src/db/bd_pedido.h
-        src/db/bd_estadisticas.c
-        src/db/bd_estadisticas.h
-        src/screens/gestion_estadisticas.h
-        src/screens/gestion_estadisticas.c
-        src/config.c
-        src/config.h
+set(SOURCES
+        ${SRC_DIR}/main.c
+        ${SRC_DIR}/utils.c
+        ${SRC_DIR}/estadisticas.c
+        ${SRC_DIR}/menu.c
+        ${SRC_DIR}/config.c
+
+        ${SRC_DIR}/models/usuario.c
+        ${SRC_DIR}/models/robot.c
+        ${SRC_DIR}/models/plato.c
+        ${SRC_DIR}/models/pedido.c
+
+        ${SRC_DIR}/screens/gestion_menu.c
+        ${SRC_DIR}/screens/gestion_usuario.c
+        ${SRC_DIR}/screens/gestion_robot.c
+        ${SRC_DIR}/screens/gestion_estadisticas.c
+
+        ${SRC_DIR}/db/bd_new.c
+        ${SRC_DIR}/db/bd_plato.c
+        ${SRC_DIR}/db/bd_usuario.c
+        ${SRC_DIR}/db/bd_robot.c
+        ${SRC_DIR}/db/bd_pedido.c
+        ${SRC_DIR}/db/bd_estadisticas.c
 )
+
+# Define executable
+add_executable(local_admin ${SOURCES})
+
+# Use modern target-based includes
+target_include_directories(local_admin PRIVATE
+        ${SRC_DIR}
+        ${LIB_DIR}
+)
+target_link_libraries(local_admin PRIVATE sqlite3)
