@@ -55,7 +55,7 @@ Usuario* obtenerUsuario(char* param, char* type)
     return usuario;
 }
 
-int eliminarUsuario(char* dni)
+int eliminarUsuario(Usuario* usuario)
 {
     sqlite3_stmt* stmt;
 
@@ -71,7 +71,7 @@ int eliminarUsuario(char* dni)
         return result;
     }
 
-    sqlite3_bind_text(stmt, 1, dni, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, usuario->dni, -1, SQLITE_STATIC);
 
     result = sqlite3_step(stmt);
     if (result != SQLITE_DONE)
