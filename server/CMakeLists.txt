@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(server C)
+project(server CXX)
 
 set(CMAKE_C_STANDARD 11)
 
@@ -15,6 +15,8 @@ set(SOURCES
         src/objects/Usuario.h
         src/objects/Robot.cpp
         src/objects/Robot.h
+        src/Server.cpp
+        src/Server.h
 )
 
 # Define executable
@@ -25,4 +27,4 @@ target_include_directories(server PRIVATE
         ${LIB_DIR}
 )
 
-target_link_libraries(server PRIVATE sqlite3)
+target_link_libraries(server PRIVATE sqlite3 ws2_32)
