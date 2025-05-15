@@ -7,6 +7,14 @@ set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set(SOURCES
         ${SRC_DIR}/main.cpp
+        src/objects/Pedido.cpp
+        src/objects/Pedido.h
+        src/objects/Plato.cpp
+        src/objects/Plato.h
+        src/objects/Usuario.cpp
+        src/objects/Usuario.h
+        src/objects/Robot.cpp
+        src/objects/Robot.h
 )
 
 # Define executable
