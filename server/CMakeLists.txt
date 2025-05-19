@@ -7,16 +7,10 @@ set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set(SOURCES
         ${SRC_DIR}/main.cpp
-        src/objects/Pedido.cpp
-        src/objects/Pedido.h
-        src/objects/Plato.cpp
-        src/objects/Plato.h
-        src/objects/Usuario.cpp
-        src/objects/Usuario.h
-        src/objects/Robot.cpp
-        src/objects/Robot.h
         src/Server.cpp
         src/Server.h
+        src/MessageHandler.cpp
+        src/MessageHandler.h
 )
 
 # Define executable
@@ -27,4 +21,4 @@ target_include_directories(server PRIVATE
         ${LIB_DIR}
 )
 
-target_link_libraries(server PRIVATE sqlite3 ws2_32)
+target_link_libraries(server PRIVATE sqlite3 ws2_32 common)

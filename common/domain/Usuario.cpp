@@ -9,7 +9,8 @@ Usuario::Usuario()
     this->contraseña = " ";
     this->dni = " ";
 }
-Usuario::Usuario(string dni, string nombre, string contraseña)
+Usuario::Usuario(const string &dni, const string &nombre,
+                 const string &contraseña)
 {
     this->nombre = nombre;
     this->dni = dni;

@@ -1,23 +1,27 @@
 #include "Server.h"
+#include "MessageHandler.h" // Include the new message handler
 #include <iostream>
 
 using namespace std;
 
-SOCKET listen_for_connections() {
+int server_initialize() {
   WSADATA wsaData;
+  if (int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData); iResult != 0) {
+    cout << "Error al inicializar el servidor: " << WSAGetLastError() << endl;
+    return 1;
+  }
+  cout << "Servidor inicializado" << endl;
+  return 0;
+}
+
+SOCKET listen_for_connections() {
   SOCKET connection_socket;
   SOCKET client_socket;
   sockaddr_in server{};
   sockaddr_in client{};
 
-  if (int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData); iResult != 0) {
-    cout << "Error al inicializar el servidor: " << WSAGetLastError() << endl;
-    return INVALID_SOCKET;
-  }
-  cout << "Servidor inicializado" << endl;
-
   if ((connection_socket = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
-    cout << "Error creando el socket : " << WSAGetLastError << endl;
+    cout << "Error creando el socket : " << WSAGetLastError() << endl; // Corrected: WSAGetLastError is a function
     WSACleanup();
     return INVALID_SOCKET;
   }
@@ -53,34 +57,34 @@ SOCKET listen_for_connections() {
     WSACleanup();
     return INVALID_SOCKET;
   }
-  printf("Aceptado cliente desde %s:%d\n\n", inet_ntoa(client.sin_addr),
-         client.sin_port);
-  closesocket(connection_socket); // TODO: si se hace un bucle esto no tiene que
-                                  // estar aquí
+  cout << "Aceptado cliente desde " << inet_ntoa(client.sin_addr) << ":" << ntohs(client.sin_port) << endl; // Added : and ntohs for port, and endl
+  closesocket(connection_socket); // Close listening socket, keep client socket
 
   return client_socket;
 }
 
 void server_loop(const SOCKET &client_socket) {
-  std::string sendbuff, recvbuff;
+  std::string recvbuff;
   do {
-    sendbuff.resize(512);
-    recvbuff.resize(512);
+    recvbuff.assign(512, '\0');
 
     int received = recv(client_socket, recvbuff.data(),
-                        static_cast<int>(recvbuff.size()), 0);
+                        static_cast<int>(recvbuff.capacity()), 0);
     if (received > 0) {
-      recvbuff.resize(received);
+      recvbuff.resize(received); // Resize to actual data received
+      // std::cout << "DEBUG: Received raw data: " << recvbuff << std::endl; // For debugging
     } else if (received == 0) {
-      std::cout << "Connection closed" << std::endl;
+      std::cout << "Connection closed by peer." << std::endl;
       break;
     } else {
-      std::cout << "Error: " << WSAGetLastError() << std::endl;
+      std::cout << "recv failed with error: " << WSAGetLastError() << std::endl;
       break;
     }
 
-    handle_message(recvbuff);
-
+    if (!handle_message_request(recvbuff)) { // Pass recvbuff directly
+      std::cout << "Server loop: handle_message_request signaled to close." << std::endl;
+      break;
+    }
     // sendbuff = "PONG: " + recvbuff;
     // if (send(client_socket, sendbuff.c_str(),
     // static_cast<int>(sendbuff.size()),
@@ -91,28 +95,3 @@ void server_loop(const SOCKET &client_socket) {
   } while (true);
 }
 
-void handle_message(const std::string &message) {
-  size_t first_break = message.find_first_of('\\');
-  if (first_break == std::string::npos ||
-      first_break ==
-          0) { // break character not found; invalid message; disregard
-    return;
-  }
-
-  int type_value;
-  try {
-    type_value = std::stoi(message.substr(0, first_break));
-  } catch (const std::exception &) {
-    return;
-  }
-  switch (type_value) {
-  case (LOGIN):
-    cout << "Login received" << endl;
-    break;
-  case (REGISTER):
-    cout << "Register received" << endl;
-    break;
-  default: // type not implemented
-    cout << "Recibido: " << message << endl;
-  }
-}

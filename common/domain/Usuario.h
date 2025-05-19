@@ -13,7 +13,7 @@ class Usuario {
     string contraseña;
 public:
     Usuario();
-    Usuario(string dni, string nombre, string contraseña);
+    Usuario(const string &dni, const string &nombre, const string &contraseña);
     string getDni();
     string getNombre();
     string getContraseña();
