@@ -2,10 +2,6 @@
 #define MESSAGE_HANDLER_H
 
 #include <string>
-#include <winsock2.h> // For SOCKET type, if needed by other parts of the handler
-
-// Forward declare if Protocol.h enums are used and to avoid circular dependencies if complex
-// enum MessageType;
 
 /**
  * @brief Handles a message received from the client.

@@ -7,8 +7,6 @@ set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set(SOURCES
         ${SRC_DIR}/main.cpp
-        src/Server.cpp
-        src/Server.h
         src/MessageHandler.cpp
         src/MessageHandler.h
 )
@@ -21,4 +19,4 @@ target_include_directories(server PRIVATE
         ${LIB_DIR}
 )
 
-target_link_libraries(server PRIVATE sqlite3 ws2_32 common)
+target_link_libraries(server PRIVATE sqlite3 common ws2_32)
