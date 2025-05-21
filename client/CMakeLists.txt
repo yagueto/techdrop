@@ -17,3 +17,4 @@ target_include_directories(client PRIVATE
         ${SRC_DIR}
         ${LIB_DIR}
 )
+target_link_libraries(client PRIVATE common ws2_32)
