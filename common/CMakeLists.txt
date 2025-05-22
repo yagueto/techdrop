@@ -8,6 +8,8 @@ add_library(common STATIC
         domain/Utils.h
         Protocol.h
         Socket.cpp
+        domain/Message.cpp
+        domain/Message.h
         domain/Utils.cpp
         domain/Utils.cpp
 )

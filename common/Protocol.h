@@ -1,7 +1,9 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
-#define MESSAGE_DELIMITER  '\\'
+#define MESSAGE_DELIMITER '\\'
+
+enum MESSAGE_STATUS { REQUEST, RESPONSE, INVALID_STATUS };
 
 enum MESSAGE_TYPE {
   LOGIN,
@@ -11,7 +13,8 @@ enum MESSAGE_TYPE {
   PEDIDO_STATE,
   PEDIDO_LIST,
   PEDIDO_CANCEL,
-  CLOSE
+  CLOSE,
+  INVALID_TYPE // Used when deserializing
 };
 
 #endif // PROTOCOL_H
