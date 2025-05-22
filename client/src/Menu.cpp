@@ -14,7 +14,8 @@ Menu::Menu(const string &title, const int numOptions) {
     this->title = title;
     this->numOptions = numOptions;
     this->options = new string[numOptions];
-    this->handlers = static_cast<void (**)()>(malloc(numOptions * sizeof(void(*)())));
+    typedef void (*HandlerFunction)();
+    this->handlers = new HandlerFunction[numOptions]();
 }
 
 void Menu::addOption(const int index, const string &option, void (*handler)()) {
@@ -59,7 +60,8 @@ void Menu::showMenu() {
 }
 
 Menu::~Menu() {
-
+    delete[] options;
+    delete[] handlers;
 }
 
 void Menu::initializeMenus() {

@@ -7,10 +7,10 @@ void getDate(char* buffer, int size);
 void clearInputBuffer();
 
 #ifdef _WIN32
-#include <stdlib.h>
 #define clrscr() system("cls")
 #else
-#define clrscr() printf("\e[1;1H\e[2J")
+#include <iostream>
+#define clrscr() std::cout << "\e[1;1H\e[2J";
 #endif
 
 #endif //UTILS_H
