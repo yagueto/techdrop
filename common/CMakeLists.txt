@@ -5,8 +5,11 @@ add_library(common STATIC
         domain/Plato.cpp
         domain/Robot.cpp
         domain/Usuario.cpp
+        domain/Utils.h
         Protocol.h
         Socket.cpp
+        domain/Utils.cpp
+        domain/Utils.cpp
 )
 
 target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
