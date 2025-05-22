@@ -23,6 +23,8 @@ set(SOURCES
         src/screens/Gestionar_mainMenu.h
         src/screens/Gestionar_registro.cpp
         src/screens/Gestionar_registro.h
+        src/Menu.cpp
+        src/Menu.h
 )
 
 # Define executable

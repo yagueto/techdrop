@@ -1,13 +1,11 @@
-//
-// Created by naia.martin on 21/05/2025.
-//
-
 #ifndef MENU_H
 #define MENU_H
 
 #include <string>
 #include <iostream>
+
 class Handler;
+
 using namespace std;
 
 #define OPCIONES_MAX 10
@@ -18,9 +16,10 @@ class Menu
     int numOpciones;
     Handler* handler;
     string opciones[10];
+    bool esMenuPrincipal;
 
 public:
-    Menu(string titulo, int numOpciones, Handler* handler);
+    Menu(string titulo, int numOpciones, Handler* handler, bool principal = false);
     Menu();
     virtual ~Menu();
 

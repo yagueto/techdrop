@@ -1,7 +1,3 @@
-//
-// Created by naia.martin on 21/05/2025.
-//
-
 #include "Gestionar_pedidos.h"
 #include <iostream>
 using namespace std;

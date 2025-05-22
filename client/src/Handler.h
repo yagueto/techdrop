@@ -1,11 +1,7 @@
-//
-// Created by naia.martin on 21/05/2025.
-//
-
 #ifndef HANDLER_H
 #define HANDLER_H
-#include "Menu.h"
 
+class Menu;//declaracion adelantada
 
 class Handler {
 protected:

@@ -1,9 +1,5 @@
-//
-// Created by naia.martin on 21/05/2025.
-//
-
-#ifndef GESSTIONAR_MAINMENU_H
-#define GESSTIONAR_MAINMENU_H
+#ifndef GESTIONAR_MAINMENU_H
+#define GESTIONAR_MAINMENU_H
 
 #include "Handler.h"
 
@@ -14,4 +10,4 @@ public:
 
 
 
-#endif //GESSTIONAR_MAINMENU_H
+#endif //GESTIONAR_MAINMENU_H

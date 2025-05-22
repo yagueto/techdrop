@@ -1,58 +1,44 @@
-//
-// Created by naia.martin on 21/05/2025.
-//
-
 #include "Menu.h"
 #include "Handler.h"
 #include <iostream>
+
+#include "domain/utils.h"
 #include "screens/Gestionar_mainMenu.h"
-#include "../../local_admin/src/utils.h" //para importar el clrsrc(). No se si deberia comunicar local admin con cliente asi
-#include "screens/Gestionar_mainMenu.h"
+
+
 using namespace std;
 
-Menu::Menu(string titulo, int numOpciones, Handler* handler)
-{
+Menu::Menu(string titulo, int numOpciones, Handler* handler, bool esPrincipal) {
     this->titulo = titulo;
     this->numOpciones = numOpciones;
     this->handler = handler;
-}
-Menu::Menu()
-{
-    this->titulo = "";
-    this->numOpciones = 0;
-    this->handler = nullptr;
-}
-Menu::~Menu()
-{
-
+    this->esMenuPrincipal = esPrincipal;
 }
 
-string Menu::getTitulo()
-{
+void Menu::anadirOpcion(const string &texto) {
+    if (numOpciones < OPCIONES_MAX) {
+        opciones[numOpciones++] = texto;
+    } else {
+        cout << "No se pueden añadir más opciones, se alcanzó el límite." << endl;
+    }
+}
+
+Menu::~Menu() {}
+
+string Menu::getTitulo() {
     return this->titulo;
 }
-int Menu::getNumOpciones()
-{
+
+int Menu::getNumOpciones() {
     return this->numOpciones;
 }
-void Menu::setNumOpciones(int numero)
-{
+
+void Menu::setNumOpciones(int numero) {
     this->numOpciones = numero;
 }
-Handler* Menu::getHandler()
-{
-    return this->handler;
-}
 
-void Menu::anadirOpcion(const string& string)
-{
-    if (numOpciones<OPCIONES_MAX)
-    {
-        opciones[numOpciones++] = string;
-    }else
-    {
-        cout<<"No se pueden añadir mas opciones.";
-    }
+Handler* Menu::getHandler() {
+    return this->handler;
 }
 void Menu::display()
 {
@@ -60,6 +46,7 @@ void Menu::display()
     do
     {
         clrscr();
+        // Cabecera del programa
         cout << " _            _         _                 \n"
              << "| |_ ___  ___| |__   __| |_ __ ___  _ __  \n"
              << "| __/ _ \\/ __| '_ \\ / _` | '__/ _ \\| '_ \\ \n"
@@ -74,31 +61,32 @@ void Menu::display()
         cout << "------------------------------" << endl;
         cout << "Elige una opción: ";
         cin >> opcion;
+        clearInputBuffer();
 
-        if (opcion == 0) break;
+        if (opcion == 0){
+            if (esMenuPrincipal)
+            {
+                cout << "\n¡Hasta pronto!\n";
+                exit(0);
+            }
+        } else {
+            break;
+        }
 
         if (opcion > 0 && opcion <= numOpciones) {
             handler->gestionarOpcion(opcion);
+            waitForEnter();
+            clrscr();
         } else {
-            cout << "Opción no válida." << endl;
+            cout << "Opción no valida." << endl;
+            waitForEnter();
+            clrscr();
         }
-
-        cout << "Presiona ENTER para continuar...";
-        cin.ignore();
-        cin.get();
-    } while (true);
+    }while (true);
 }
-
-void inicializarMenus()
-{
-    Gestionar_mainMenu* gestiona_mainMenu = new Gestionar_mainMenu();
-    Menu menuPrincipal("BIENVENIDO", 0, gestiona_mainMenu);
-    menuPrincipal.anadirOpcion("Log in");
-    menuPrincipal.anadirOpcion("Registrarse");
-    menuPrincipal.anadirOpcion("Salir");
-    menuPrincipal.display();
-    delete gestiona_mainMenu;
+void inicializarMenus() {
+    Menu* menu = new Menu("BIENVENIDO", 0, new Gestionar_mainMenu(), true);
+    menu->anadirOpcion("Log in");
+    menu->anadirOpcion("Registrar cuenta");
+    menu->display();
 }
-
-
-

@@ -1,8 +1,9 @@
-//
-// Created by naia.martin on 21/05/2025.
-//
-
 #include "Handler.h"
+
+#include <cstddef>
+
+#include "Menu.h"
+
 Handler::Handler()
 {
     this->menu = NULL;

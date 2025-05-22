@@ -1,11 +1,9 @@
-//
-// Created by naia.martin on 21/05/2025.
-//
-
 #include "Gestionar_inicio.h"
 
 #include "Gestionar_pedidos.h"
 #include "Gestionar_usuarios.h"
+#include "Menu.h"
+#include "domain/utils.h"
 
 void Gestionar_inicio::gestionarOpcion(int opcion)
 {
@@ -14,6 +12,7 @@ void Gestionar_inicio::gestionarOpcion(int opcion)
     case 1:
         {
             Gestionar_pedidos* gestiona_pedidos = new Gestionar_pedidos();
+            clrscr();
             Menu pedidosMenu("PEDIDOS", 0, gestiona_pedidos);
             pedidosMenu.anadirOpcion("Hacer pedido");
             pedidosMenu.anadirOpcion("Borrar pedido");
@@ -25,6 +24,7 @@ void Gestionar_inicio::gestionarOpcion(int opcion)
     case 2:
         {
             Gestionar_usuarios* gestiona_usuarios = new Gestionar_usuarios();
+            clrscr();
             Menu configMenu("CONFIGURACION USUARIO", 0, gestiona_usuarios);
             configMenu.anadirOpcion("Cambiar username");
             configMenu.anadirOpcion("Cambiar contraseña");

@@ -8,6 +8,7 @@
 
 int main() {
   inicializarMenus();
+
   if (!Socket::initializeWinSock()) {
     std::cerr << "¡Error inicializando el cliente!" << std::endl;
     return 1;
