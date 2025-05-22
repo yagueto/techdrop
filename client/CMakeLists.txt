@@ -7,6 +7,8 @@ set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set(SOURCES
         ${SRC_DIR}/main.cpp
+        src/Menu.cpp
+        src/Menu.h
 )
 
 # Define executable
