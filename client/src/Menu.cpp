@@ -1,32 +1,50 @@
-//
-// Created by asier.amigorena on 22/05/2025.
-//
-
 #include "Menu.h"
+#include "Handler.h"
 #include <iostream>
 
 #include "domain/utils.h"
+#include "screens/Gestionar_mainMenu.h"
 
 
 using namespace std;
 
-Menu::Menu(const string &title, const int numOptions) {
-    this->title = title;
-    this->numOptions = numOptions;
-    this->options = new string[numOptions];
-    typedef void (*HandlerFunction)();
-    this->handlers = new HandlerFunction[numOptions]();
+Menu::Menu(string titulo, int numOpciones, Handler* handler, bool esPrincipal) {
+    this->titulo = titulo;
+    this->numOpciones = numOpciones;
+    this->handler = handler;
+    this->esMenuPrincipal = esPrincipal;
 }
 
-void Menu::addOption(const int index, const string &option, void (*handler)()) {
-    this->options[index] = option;
-    this->handlers[index] = handler;
+void Menu::anadirOpcion(const string &texto) {
+    if (numOpciones < OPCIONES_MAX) {
+        opciones[numOpciones++] = texto;
+    } else {
+        cout << "No se pueden añadir más opciones, se alcanzó el límite." << endl;
+    }
 }
 
-void Menu::showMenu() {
+Menu::~Menu() {}
+
+string Menu::getTitulo() {
+    return this->titulo;
+}
+
+int Menu::getNumOpciones() {
+    return this->numOpciones;
+}
+
+void Menu::setNumOpciones(int numero) {
+    this->numOpciones = numero;
+}
+
+Handler* Menu::getHandler() {
+    return this->handler;
+}
+void Menu::display()
+{
+    int opcion = -1;
     do
     {
-        system("clear"); // Limpiar pantalla antes de dibujar menú
         clrscr();
         // Cabecera del programa
         cout << " _            _         _                 \n"
@@ -35,41 +53,40 @@ void Menu::showMenu() {
              << "| ||  __/ (__| | | | (_| | | | (_) | |_) |\n"
              << " \\__\\___|\\___| |_|_|\\__,_|_|  \\___/| .__/ \n"
              << "                                   |_|    \n" << endl;
-        cout << "-----" << this->title << "----\n" << endl;
-        for (int i = 0; i < this->numOptions; ++i)
-        {
-            printf("%d: %s\n", i + 1, this->options[i]);
+        cout << "-----" << this->titulo << "----\n" << endl;
+        for (int i = 0; i < numOpciones; ++i) {
+            cout << (i + 1) << ". " << opciones[i] << endl;
         }
-        printf("0: Volver\n");
-        int opcion;
-        do
+        cout << "0. Volver" << endl;
+        cout << "------------------------------" << endl;
+        cout << "Elige una opción: ";
+        cin >> opcion;
+        clearInputBuffer();
+
+        if (opcion == 0){
+            if (esMenuPrincipal)
             {
-            printf("Elige una opción: ");
-            fflush(stdout);
-            scanf("%d", &opcion);
-            clearInputBuffer();
-
-            if (opcion == 0) return;
-
-            if (this->handlers[opcion - 1] == NULL) printf("Aún no implementado\n");
+                cout << "\n¡Hasta pronto!\n";
+                exit(0);
             }
-        while (opcion < 0 || opcion > this->numOptions || this->handlers[opcion - 1] == NULL);
-        this->handlers[opcion - 1]();
+        } else {
+            break;
         }
-    while (1);
-}
 
-Menu::~Menu() {
-    delete[] options;
-    delete[] handlers;
+        if (opcion > 0 && opcion <= numOpciones) {
+            handler->gestionarOpcion(opcion);
+            waitForEnter();
+            clrscr();
+        } else {
+            cout << "Opción no valida." << endl;
+            waitForEnter();
+            clrscr();
+        }
+    }while (true);
 }
-
-void Menu::initializeMenus() {
-    Menu *menuPrincipal = new Menu("Menú principal", 4);
-    /*
-    addOption(menuPrincipal, 0, "Gestionar menú", handle_menuPlatos);
-    addOption(menuPrincipal, 1, "Gestionar cuentas", handle_menuCuentas);
-    addOption(menuPrincipal, 2, "Gestionar robots", handle_menuRobots);
-    addOption(menuPrincipal, 3, "Estadísticas", handle_menuEstadisticas);
-    */
+void inicializarMenus() {
+    Menu* menu = new Menu("BIENVENIDO", 0, new Gestionar_mainMenu(), true);
+    menu->anadirOpcion("Log in");
+    menu->anadirOpcion("Registrar cuenta");
+    menu->display();
 }

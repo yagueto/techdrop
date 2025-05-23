@@ -9,6 +9,22 @@ set(SOURCES
         ${SRC_DIR}/main.cpp
         src/Menu.cpp
         src/Menu.h
+        src/Handler.cpp
+        src/Handler.h
+        src/screens/Gestionar_logIn.cpp
+        src/screens/Gestionar_logIn.h
+        src/screens/Gestionar_inicio.cpp
+        src/screens/Gestionar_inicio.h
+        src/screens/Gestionar_pedidos.cpp
+        src/screens/Gestionar_pedidos.h
+        src/screens/Gestionar_usuarios.cpp
+        src/screens/Gestionar_usuarios.h
+        src/screens/Gestionar_mainMenu.cpp
+        src/screens/Gestionar_mainMenu.h
+        src/screens/Gestionar_registro.cpp
+        src/screens/Gestionar_registro.h
+        src/Menu.cpp
+        src/Menu.h
 )
 
 # Define executable

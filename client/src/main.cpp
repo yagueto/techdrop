@@ -1,10 +1,14 @@
 #include "Socket.h"
 #include <iostream>
 
+#include "Menu.h"
+
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 8000
 
 int main() {
+  inicializarMenus();
+
   if (!Socket::initializeWinSock()) {
     std::cerr << "¡Error inicializando el cliente!" << std::endl;
     return 1;
