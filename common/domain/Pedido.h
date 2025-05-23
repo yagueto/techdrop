@@ -15,18 +15,21 @@ class Pedido {
   string direccion;
   time_t fecha;
   int estado;
-  map<Plato, int> mapa_pedido;
+  map<int, int> mapa_pedido;
 
 public:
   Pedido();
-  Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
-         int estado);
+  Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha, int estado);
   int getIdPedido();
   int getIdUsuario();
   string getDireccion();
   time_t getFecha();
   int getEstado();
-  map<Plato, int> getMapa();
+  void agregarPlato(int id_plato, int cantidad);
+  map<int, int> getMapa();
+
+  string serialize() const;
+  static Pedido deserialize(const string& str);
 };
 
 #endif // PEDIDO_H

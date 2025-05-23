@@ -17,6 +17,9 @@ public:
     string getDni();
     string getNombre();
     string getContraseña();
+
+    string serialize() const;
+    static Usuario deserialize(const string &str);
 };
 
 

@@ -20,6 +20,9 @@ public:
     string getDescp();
     float getPrecio();
     int getDisponibilidad();
+
+    string serialize() const;
+    static Plato deserialize(const string &str);
 };
 
 
