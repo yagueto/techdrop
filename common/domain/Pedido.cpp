@@ -31,24 +31,39 @@ void Pedido::agregarPlato(int id_plato, int cantidad) {
     }
 
 }
-string Pedido::serialize() const {
-    string serialized_pedido;
-    serialized_pedido += to_string(this->id_pedido) + MESSAGE_DELIMITER;
-    serialized_pedido += to_string(this->id_usuario) + MESSAGE_DELIMITER;
-    serialized_pedido += this->direccion + MESSAGE_DELIMITER;
+void Pedido::serializar(Message &m) {
+    m.add_param(to_string(this->id_pedido));
+    m.add_param(to_string(this->id_usuario));
+    m.add_param(this->direccion);
 
     tm * ptm = localtime(&this->fecha);
     char buffer[32];
     strftime(buffer, 32, "%Y-%m-%d %H:%M:%S", ptm);
-    serialized_pedido += string(buffer) + MESSAGE_DELIMITER;
-    serialized_pedido += to_string(this->estado) + MESSAGE_DELIMITER;
+    m.add_param(buffer);
+    m.add_param(to_string(this->estado));
 
-    for (auto const& [id_plato,cantidad] : this->mapa_pedido) {
-        serialized_pedido += to_string(id_plato) + MESSAGE_DELIMITER;
-        serialized_pedido += to_string(cantidad) + MESSAGE_DELIMITER;
+    if (!this->mapa_pedido.empty()) {
+        for (const auto &i : this->mapa_pedido) {
+            m.add_param(to_string(i.first));
+            m.add_param(to_string(i.second));
+        }
     }
-    return serialized_pedido;
 }
+static Pedido Deserializar(const Message &m) {
+    auto params = m.get_params();
+    if (params.size() >=5 ) {
+        Pedido pedido(stoi(params[0]),stoi(params[1]),
+                params[2],stol(params[3]),stoi(params[4]));
+
+        for (int i=5; i<params.size(); i+=2) {
+            pedido.agregarPlato(stoi(params[i]),stol(params[i+1]));
+        }
+        return pedido;
+    }
+    return Pedido();
+
+}
+
 static Pedido deserialize(const string& str) {
     int pos;
     int sig_pos;

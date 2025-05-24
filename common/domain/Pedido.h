@@ -5,6 +5,7 @@
 #include "Plato.h"
 #include <iostream>
 #include <map>
+#include "Message.h"
 
 using namespace std;
 
@@ -28,8 +29,8 @@ public:
   void agregarPlato(int id_plato, int cantidad);
   map<int, int> getMapa();
 
-  string serialize() const;
-  static Pedido deserialize(const string& str);
+  void serializar(Message &m);
+  static Pedido Deserializar(const Message &m);
 };
 
 #endif // PEDIDO_H

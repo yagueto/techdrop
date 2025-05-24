@@ -28,31 +28,16 @@ string Usuario::getContraseña()
     return this->contraseña;
 }
 
-string Usuario::serialize() const {
-    string serialized_usuario;
-    serialized_usuario+= this->nombre;
-    serialized_usuario+= MESSAGE_DELIMITER;
-    serialized_usuario+= this->contraseña;
-    serialized_usuario+= MESSAGE_DELIMITER;
-    serialized_usuario+= this->dni;
-    serialized_usuario+= MESSAGE_DELIMITER;
-    return serialized_usuario;
+void Usuario::serializar(Message &m) {
+    m.add_param(dni);
+    m.add_param(nombre);
+    m.add_param(contraseña);
+
 }
-static Usuario deserialize(const string &str) {
-    int pos=0;
-    int sig_pos;
-
-    sig_pos = str.find(MESSAGE_DELIMITER, pos);
-    if (sig_pos == string::npos) return Usuario();
-    string dni = str.substr(pos, sig_pos - pos);
-    pos = sig_pos + 1;
-
-    sig_pos = str.find(MESSAGE_DELIMITER, pos);
-    if (sig_pos == string::npos) return Usuario();
-    string nombre = str.substr(pos, sig_pos - pos);
-    pos = sig_pos + 1;
-
-    string contraseña = str.substr(pos);
-
-    return Usuario(dni,nombre,contraseña);
+static Usuario Deserializar(const Message &m) {
+    auto params=m.get_params();
+    if (params.size() == 3) {
+        return Usuario(params[0], params[1], params[2]);
+    }
+    return Usuario();
 }

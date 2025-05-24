@@ -1,8 +1,8 @@
 
 #ifndef PLATO_H
 #define PLATO_H
-#include "string.h"
-#include <iostream>
+
+#include "Message.h"
 using namespace std;
 
 
@@ -21,8 +21,8 @@ public:
     float getPrecio();
     int getDisponibilidad();
 
-    string serialize() const;
-    static Plato deserialize(const string &str);
+    void serializar(Message &m);
+    static Plato Deserializar(const Message &m);
 };
 
 

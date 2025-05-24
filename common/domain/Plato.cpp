@@ -22,41 +22,18 @@ string Plato::getDescp() { return this->descripcion; }
 float Plato::getPrecio() { return this->precio; }
 int Plato::getDisponibilidad() { return this->disponible; }
 
-string Plato::serialize() const {
-    string serialized_plato;
-    serialized_plato += to_string(this->id) + MESSAGE_DELIMITER;
-    serialized_plato += this->nombre + MESSAGE_DELIMITER;
-    serialized_plato += this->descripcion + MESSAGE_DELIMITER;
-    serialized_plato += to_string(this->precio) + MESSAGE_DELIMITER;
-    serialized_plato += to_string(this->disponible)+ MESSAGE_DELIMITER;
-
-    return serialized_plato;
+void Plato::serializar(Message &m) {
+    m.add_param(to_string(this->id));
+    m.add_param(this->nombre);
+    m.add_param(this->descripcion);
+    m.add_param(to_string(this->precio));
+    m.add_param(to_string(this->disponible));
 }
-static Plato deserialize(const string &str) {
-    int pos=0;
-    int sig_pos;
-
-    sig_pos = str.find(MESSAGE_DELIMITER, pos);
-    if (sig_pos == string::npos) return Plato();
-    int id= stoi(str.substr(pos, sig_pos - pos));
-    pos=sig_pos + 1;
-
-    sig_pos = str.find(MESSAGE_DELIMITER, pos);
-    if (sig_pos == string::npos) return Plato();
-    string nombre = str.substr(pos, sig_pos - pos);
-    pos=sig_pos + 1;
-
-    sig_pos = str.find(MESSAGE_DELIMITER, pos);
-    if (sig_pos == string::npos) return Plato();
-    string descripcion = str.substr(pos, sig_pos - pos);
-    pos=sig_pos + 1;
-
-    sig_pos = str.find(MESSAGE_DELIMITER, pos);
-    if (sig_pos == string::npos) return Plato();
-    float precio = stof(str.substr(pos, sig_pos - pos));
-    pos=sig_pos + 1;
-
-    int disponible = stoi(str.substr(pos));
-
-    return Plato(id,nombre,descripcion,precio,disponible);
+static Plato Deserializar(const Message &m) {
+    auto params=m.get_params();
+    if (params.size() == 5) {
+        return Plato(stoi(params[0]), params[1],
+            params[2],stof( params[3]),stoi(params[4]));
+    }
+    return Plato();
 }
