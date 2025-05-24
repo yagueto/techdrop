@@ -1,7 +1,7 @@
 //
 // Created by naia.martin on 15/05/2025.
 //
-
+#include "Message.h"
 #ifndef USUARIO_H
 #define USUARIO_H
 #include <iostream>
@@ -18,8 +18,9 @@ public:
     string getNombre();
     string getContraseña();
 
-    string serialize() const;
-    static Usuario deserialize(const string &str);
+    void serializar(Message &m) const;
+    static Usuario Deserializar(const Message &m);
+
 };
 
 
