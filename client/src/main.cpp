@@ -7,7 +7,6 @@
 #define SERVER_PORT 8000
 
 int main() {
-  inicializarMenus();
 
   if (!Socket::initializeWinSock()) {
     std::cerr << "¡Error inicializando el cliente!" << std::endl;
@@ -31,6 +30,7 @@ int main() {
     std::cout << "Mensaje enviado correctamente" << std::endl;
   }
 
+  inicializarMenus();
   socket.close();
 
   return 0;

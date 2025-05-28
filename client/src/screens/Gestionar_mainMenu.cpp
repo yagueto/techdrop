@@ -27,9 +27,6 @@ void Gestionar_mainMenu::gestionarOpcion(int opcion)
             delete gestiona_registro;
             break;
         }
-    case 3:
-        cout << "Saliendo del programa..."<<endl;
-        exit(0);
     default:
         cout<<"Opcion no valida."<<endl;
     }
