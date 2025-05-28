@@ -4,7 +4,7 @@
 Plato::Plato() {
   this->descripcion = " ";
   this->disponible = 0;
-  this->id = NULL;
+  this->id = 0;
   this->nombre = " ";
   this->precio = 0;
 }

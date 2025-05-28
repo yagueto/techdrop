@@ -58,4 +58,7 @@ Message Message::deserialize(const std::string &message) {
 
 std::vector<std::string> Message::get_params() const { return this->params; }
 
+MESSAGE_STATUS Message::get_status() const { return this->message_status; }
+MESSAGE_TYPE Message::get_type() const { return this->message_type; }
+
 Message::~Message() = default;

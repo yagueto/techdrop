@@ -7,9 +7,9 @@
 Pedido::Pedido() {
   this->direccion = " ";
   this->estado = 0;
-  this->fecha = NULL;
-  this->id_pedido = NULL;
-  this->id_usuario = NULL;
+  this->fecha = 0;
+  this->id_pedido = 0;
+  this->id_usuario = 0;
 }
 Pedido::Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
                int estado) {
