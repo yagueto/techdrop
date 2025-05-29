@@ -1,12 +1,15 @@
 #include "MessageHandler.h"
+
+#include "Logger.h"
 #include "Protocol.h"
 
 #include <iostream>
 #include <string>
 
 Message handle_message_request(const std::string &message) {
-  const size_t first_break = message.find_first_of(MESSAGE_DELIMITER);
-  if (first_break == std::string::npos || first_break == 0) {
+  Logger::get_logger().write(std::string() + "RECIBIDO: " + message);
+  if (const size_t first_break = message.find_first_of(MESSAGE_DELIMITER);
+      first_break == std::string::npos || first_break == 0) {
     std::cerr << "Warning: Invalid message format. Delimiter missing or at "
                  "start. Message: \""
               << message << "\"." << std::endl;
@@ -22,12 +25,12 @@ Message handle_message_request(const std::string &message) {
     std::cout << "MessageHandler: Login received." << std::endl;
     response = Message(LOGIN, RESPONSE);
     response.add_param("200");
-    return response;
+    break;
   case REGISTER:
     std::cout << "MessageHandler: Register received." << std::endl;
     response = Message(REGISTER, RESPONSE);
     response.add_param("200");
-    return response;
+    break;
   case CLOSE:
     std::cout << "MessageHandler: Close connection request received."
               << std::endl;
@@ -38,6 +41,7 @@ Message handle_message_request(const std::string &message) {
     // std::cout << "Full message: " << message << std::endl;
     break;
   }
-  return {INVALID_TYPE,
-          INVALID_STATUS}; // Continue server loop, message is ignored
+  Logger::get_logger().write(std::string() +
+                             "RESPUESTA: " + response.serialize());
+  return response; // Continue server loop, message is ignored
 }
