@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <functional>
 
 class Handler;
 
@@ -13,25 +14,26 @@ using namespace std;
 class Menu
 {
     string titulo;
+    string opciones[OPCIONES_MAX];
+    function<void()> acciones[OPCIONES_MAX];
     int numOpciones;
-    Handler* handler;
-    string opciones[10];
     bool esMenuPrincipal;
 
 public:
-    Menu(string titulo, int numOpciones, Handler* handler, bool principal = false);
-    Menu();
+    Menu(string titulo, bool principal = false);
     virtual ~Menu();
 
-    string getTitulo();
-    int getNumOpciones();
-    void setNumOpciones(int numero);
-    Handler* getHandler();
+    void anadirOpcion(const string& texto, function<void()> accion);
+    void display();;
 
-    void anadirOpcion(const string& string);
-    void display();
 };
 
 void inicializarMenus();
+void crearMenuPrincipal();
+void crearMenuLogin();
+void crearMenuInicio();
+void crearMenuPedidos();
+void crearMenuRegistro();
+void crearMenuUsuario();
 
 #endif //MENU_H
