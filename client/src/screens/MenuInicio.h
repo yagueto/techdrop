@@ -2,13 +2,10 @@
 #define MENUINICIO_H
 #include "Menu.h"
 
-
-class MenuInicio : public Menu{
+class MenuInicio : public Menu {
 public:
-    MenuInicio();
-    void gestionarOpcion(int opcion) override;
+  MenuInicio(const Socket &socket);
+  void gestionarOpcion(int opcion) override;
 };
 
-
-
-#endif //MENUINICIO_H
+#endif // MENUINICIO_H

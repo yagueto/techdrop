@@ -2,8 +2,6 @@
 #define LOGGER_H
 #include <fstream>
 
-#define LOG_PATH "server.log" // TODO: mover al config cuando esté implementado
-
 class Logger {
   std::ofstream log_file;
   Logger();

@@ -1,14 +1,11 @@
 #include "Socket.h"
-#include <iostream>
 #include "screens/MenuPrincipal.h"
+#include <iostream>
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 8000
 
 int main() {
-  MenuPrincipal menu;
-  menu.display();
-
   if (!Socket::initializeWinSock()) {
     std::cerr << "¡Error inicializando el cliente!" << std::endl;
     return 1;
@@ -30,6 +27,8 @@ int main() {
   } else {
     std::cout << "Mensaje enviado correctamente" << std::endl;
   }
+  MenuPrincipal menu(socket);
+  menu.display();
 
   auto ignore = socket.receive_message();
   socket.close();

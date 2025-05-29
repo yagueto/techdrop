@@ -4,11 +4,10 @@
 #define MENUPRINCIPAL_H
 #include "Menu.h"
 
-
-class MenuPrincipal : public Menu{
+class MenuPrincipal : public Menu {
 public:
-    MenuPrincipal();
-    void gestionarOpcion(int opcion) override;
+  explicit MenuPrincipal(const Socket &socket);
+  void gestionarOpcion(int opcion) override;
 };
 
-#endif //MENUPRINCIPAL_H
+#endif // MENUPRINCIPAL_H

@@ -1,29 +1,32 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <string>
-#include <iostream>
+#include "Socket.h"
+
 #include <functional>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
 #define OPCIONES_MAX 10
 
-class Menu
-{
-    string titulo;
-    string opciones[OPCIONES_MAX];
-    int numOpciones;
-    bool esMenuPrincipal;
+class Menu {
+  string titulo;
+  string opciones[OPCIONES_MAX];
+  int numOpciones;
+  bool esMenuPrincipal;
+
+protected:
+  Socket server_socket;
 
 public:
-    Menu(string titulo, bool principal = false);
-    virtual ~Menu();
+  Menu(const Socket &server_socket, string titulo, bool principal = false);
+  virtual ~Menu();
 
-    void anadirOpcion(const string& texto);
-    virtual void gestionarOpcion(int opcion) = 0;
-    void display();
-
+  void anadirOpcion(const string &texto);
+  virtual void gestionarOpcion(int opcion) = 0;
+  void display();
 };
 
-#endif //MENU_H
+#endif // MENU_H

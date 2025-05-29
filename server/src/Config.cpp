@@ -35,7 +35,7 @@ void Config::load_config() {
                 db_path = line;
                 break;
             case 1:
-                color_output = stoi(line);
+                log_path = line;
                 break;
             case 2:
                 create_db_if_not_exists = stoi(line);
@@ -53,7 +53,7 @@ int Config::create_config_file() {
     if (!config_file.is_open()) {
         return 1;
     }
-    config_file << "../bd.db\n1\n1\n";
+    config_file << "../bd.db\n../server.log\n1\n";
     config_file.close();
     return 0;
 }
@@ -63,8 +63,8 @@ string Config::get_db_path() {
     return db_path;
 }
 
-int Config::get_color_output() const {
-    return color_output;
+string Config::get_log_path() {
+    return log_path;
 }
 
 int Config::get_create_db_if_not_exists() const {
