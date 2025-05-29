@@ -1,59 +1,44 @@
 #include "Menu.h"
-#include "Handler.h"
 #include <iostream>
 
 #include "domain/utils.h"
-#include "screens/Gestionar_mainMenu.h"
 
 
 using namespace std;
 
-Menu::Menu(string titulo, int numOpciones, Handler* handler, bool esPrincipal) {
+Menu::Menu(string titulo, bool esPrincipal) {
     this->titulo = titulo;
-    this->numOpciones = numOpciones;
-    this->handler = handler;
     this->esMenuPrincipal = esPrincipal;
+    this->numOpciones = 0;
 }
 
-void Menu::anadirOpcion(const string &texto) {
+void Menu::anadirOpcion(const string &texto, function<void()> accion) {
     if (numOpciones < OPCIONES_MAX) {
-        opciones[numOpciones++] = texto;
+        opciones[numOpciones] = texto;
+        acciones[numOpciones] = accion;
+        numOpciones++;
     } else {
-        cout << "No se pueden añadir más opciones, se alcanzó el límite." << endl;
+        cout << "No se pueden añadir mas opciones." << endl;
     }
 }
 
-Menu::~Menu() {}
-
-string Menu::getTitulo() {
-    return this->titulo;
-}
-
-int Menu::getNumOpciones() {
-    return this->numOpciones;
-}
-
-void Menu::setNumOpciones(int numero) {
-    this->numOpciones = numero;
-}
-
-Handler* Menu::getHandler() {
-    return this->handler;
-}
-void Menu::display()
+Menu::~Menu()
 {
+
+}
+
+void Menu::display() {
     int opcion = -1;
-    do
-    {
+    do {
         clrscr();
-        // Cabecera del programa
         cout << " _            _         _                 \n"
              << "| |_ ___  ___| |__   __| |_ __ ___  _ __  \n"
              << "| __/ _ \\/ __| '_ \\ / _` | '__/ _ \\| '_ \\ \n"
              << "| ||  __/ (__| | | | (_| | | | (_) | |_) |\n"
              << " \\__\\___|\\___| |_|_|\\__,_|_|  \\___/| .__/ \n"
              << "                                   |_|    \n" << endl;
-        cout << "-----" << this->titulo << "----\n" << endl;
+        cout << "----- " << this->titulo << " -----\n" << endl;
+
         for (int i = 0; i < numOpciones; ++i) {
             cout << (i + 1) << ". " << opciones[i] << endl;
         }
@@ -63,30 +48,123 @@ void Menu::display()
         cin >> opcion;
         clearInputBuffer();
 
-        if (opcion == 0){
-            if (esMenuPrincipal)
-            {
+        if (opcion == 0) {
+            if (esMenuPrincipal) {
                 cout << "\n¡Hasta pronto!\n";
                 exit(0);
+            } else {
+                break;
             }
-        } else {
-            break;
         }
 
         if (opcion > 0 && opcion <= numOpciones) {
-            handler->gestionarOpcion(opcion);
+            acciones[opcion - 1]();
             waitForEnter();
-            clrscr();
         } else {
-            cout << "Opción no valida." << endl;
+            cout << "Opción no válida." << endl;
             waitForEnter();
-            clrscr();
         }
-    }while (true);
+    } while (true);
 }
-void inicializarMenus() {
-    Menu* menu = new Menu("BIENVENIDO", 0, new Gestionar_mainMenu(), true);
-    menu->anadirOpcion("Log in");
-    menu->anadirOpcion("Registrar cuenta");
-    menu->display();
+
+void crearMenuPrincipal() {
+    Menu menu("BIENVENIDO", true);
+    menu.anadirOpcion("Log in", []() {
+        crearMenuLogin();
+    });
+    menu.anadirOpcion("Registrar cuenta", []() {
+        crearMenuRegistro();
+    });
+    menu.display();
+}
+
+void crearMenuLogin() {
+    clrscr();
+    string username, password;
+
+    cout << "Username: ";
+    cin >> username;
+    clearInputBuffer();
+    cout << "Password: ";
+    cin >> password;
+    clearInputBuffer();
+
+    if (username == "user" && password == "pass") {
+        cout << "Login exitoso." << endl;
+        waitForEnter();
+        crearMenuInicio();
+    } else {
+        cout << "Credenciales no válidas." << endl;
+        waitForEnter();
+    }
+}
+
+void crearMenuInicio() {
+    Menu menu("INICIO");
+
+    menu.anadirOpcion("Gestionar pedidos", []() {
+        crearMenuPedidos();
+    });
+
+    menu.anadirOpcion("Configuración usuario", []() {
+        crearMenuUsuario();
+    });
+
+    menu.display();
+}
+
+void crearMenuPedidos() {
+    Menu menu("PEDIDOS");
+
+    menu.anadirOpcion("Hacer pedido", []() {
+        cout << "Hace pedido" << endl;
+    });
+
+    menu.anadirOpcion("Borrar pedido", []() {
+        cout << "Borra pedido" << endl;
+    });
+
+    menu.anadirOpcion("Ver todos los pedidos", []() {
+        cout << "Muestra historial de pedidos" << endl;
+    });
+
+    menu.display();
+}
+
+void crearMenuUsuario() {
+    Menu menu("CONFIGURACION USUARIO");
+
+    menu.anadirOpcion("Cambiar username", []() {
+        cout << "Cambiar username" << endl;
+    });
+
+    menu.anadirOpcion("Cambiar contraseña", []() {
+        cout << "Cambiar contraseña" << endl;
+    });
+
+    menu.anadirOpcion("Borrar cuenta", []() {
+        cout << "Borrar cuenta" << endl;
+    });
+
+    menu.display();
+}
+
+void crearMenuRegistro() {
+    string dni, username, password;
+
+    cout << "DNI: ";
+    cin >> dni;
+    clearInputBuffer();
+
+    cout << "Username: ";
+    cin >> username;
+    clearInputBuffer();
+
+    cout << "Password: ";
+    cin >> password;
+    clearInputBuffer();
+
+    // aqui la logica bd
+    cout << "Usuario registrado con éxito." << endl;
+    waitForEnter();
 }
