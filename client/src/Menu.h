@@ -24,7 +24,7 @@ public:
     virtual ~Menu();
 
     void anadirOpcion(const string& texto, function<void()> accion);
-    void display();;
+    void display() const;;
 
 };
 

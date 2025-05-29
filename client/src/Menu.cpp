@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include <iostream>
+#include <utility>
 
 #include "domain/utils.h"
 
@@ -7,7 +8,7 @@
 using namespace std;
 
 Menu::Menu(string titulo, bool esPrincipal) {
-    this->titulo = titulo;
+    this->titulo = move(titulo); //para evitar copias innecesarias
     this->esMenuPrincipal = esPrincipal;
     this->numOpciones = 0;
 }
@@ -15,19 +16,17 @@ Menu::Menu(string titulo, bool esPrincipal) {
 void Menu::anadirOpcion(const string &texto, function<void()> accion) {
     if (numOpciones < OPCIONES_MAX) {
         opciones[numOpciones] = texto;
-        acciones[numOpciones] = accion;
+        acciones[numOpciones] = move(accion);
         numOpciones++;
     } else {
         cout << "No se pueden añadir mas opciones." << endl;
     }
 }
 
-Menu::~Menu()
+Menu::~Menu()= default;
+
+void Menu::display() const
 {
-
-}
-
-void Menu::display() {
     int opcion = -1;
     do {
         clrscr();
@@ -59,9 +58,11 @@ void Menu::display() {
 
         if (opcion > 0 && opcion <= numOpciones) {
             acciones[opcion - 1]();
+            clrscr();
             waitForEnter();
         } else {
             cout << "Opción no válida." << endl;
+            clrscr();
             waitForEnter();
         }
     } while (true);
@@ -91,10 +92,12 @@ void crearMenuLogin() {
 
     if (username == "user" && password == "pass") {
         cout << "Login exitoso." << endl;
+        clrscr();
         waitForEnter();
         crearMenuInicio();
     } else {
         cout << "Credenciales no válidas." << endl;
+        clrscr();
         waitForEnter();
     }
 }
@@ -166,5 +169,6 @@ void crearMenuRegistro() {
 
     // aqui la logica bd
     cout << "Usuario registrado con éxito." << endl;
+    clrscr();
     waitForEnter();
 }
