@@ -15,10 +15,8 @@ bd::bd():   db(NULL) {}
 bd::~bd() {
     cerrar_conexion();
 }
-bd* bd::get_instance() {
-    if (!instance) {
-        instance = new bd();
-    }
+bd& bd::get_instance() {
+    static bd instance;
     return instance;
 }
 
@@ -34,9 +32,7 @@ void bd::abrir_conexion(const std::string&ruta) { //config.getPath
         std::cout << "Base de datos abierta correctamente." << std::endl;
     }
 }
-sqlite3 *bd::get_db() {
-    return db;
-}
+
 void bd::cerrar_conexion() {
     if (db) {
         sqlite3_close(db);

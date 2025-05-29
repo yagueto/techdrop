@@ -16,9 +16,8 @@ private:
     ~bd();
 
 public:
-    static bd* get_instance();
+    static bd &get_instance();
     void abrir_conexion(const std::string&ruta = "../bd.db");
-    sqlite3 *get_db();
     void cerrar_conexion();
 
 
