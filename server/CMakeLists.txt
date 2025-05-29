@@ -9,8 +9,10 @@ set(SOURCES
         ${SRC_DIR}/main.cpp
         src/MessageHandler.cpp
         src/MessageHandler.h
-        src/db/bd.cpp
-        src/db/bd.h
+        src/Config.cpp
+        src/Config.h
+        src/Logger.cpp
+        src/Logger.h
 )
 
 # Define executable

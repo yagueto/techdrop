@@ -1,5 +1,7 @@
+#include "Logger.h"
 #include "MessageHandler.h"
 #include "Socket.h"
+#include "Config.h"
 #include <iostream>
 
 void handle_socket_exception() {
@@ -7,6 +9,7 @@ void handle_socket_exception() {
 }
 
 int main() {
+  Config& config = Config::get_config();
   if (!Socket::initializeWinSock()) {
     handle_socket_exception();
     return 1;
@@ -32,6 +35,10 @@ int main() {
 
     std::cout << "Aceptado cliente desde " << inet_ntoa(sockaddr_in.sin_addr)
               << ":" << ntohs(sockaddr_in.sin_port) << std::endl;
+
+    Logger::get_logger().write(
+        std::string() + "ACCEPTED CLIENT: " + inet_ntoa(sockaddr_in.sin_addr));
+
     while (true) {
       Socket::MessageResult result = socket.receive_message();
       if (result.status == Socket::MessageResult::CONNECTION_CLOSED ||
@@ -54,5 +61,6 @@ int main() {
     // break;
   }
   socket.close();
+  Logger::get_logger().close();
   return 0;
 }

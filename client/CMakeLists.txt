@@ -9,6 +9,14 @@ set(SOURCES
         ${SRC_DIR}/main.cpp
         src/Menu.cpp
         src/Menu.h
+        src/screens/MenuPrincipal.cpp
+        src/screens/MenuPrincipal.h
+        src/screens/MenuInicio.cpp
+        src/screens/MenuInicio.h
+        src/screens/MenuPedidos.cpp
+        src/screens/MenuPedidos.h
+        src/screens/MenuUsuario.cpp
+        src/screens/MenuUsuario.h
 
 )
 
