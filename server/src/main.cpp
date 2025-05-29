@@ -1,6 +1,7 @@
 #include "Logger.h"
 #include "MessageHandler.h"
 #include "Socket.h"
+#include "Config.h"
 #include <iostream>
 
 void handle_socket_exception() {
@@ -8,6 +9,7 @@ void handle_socket_exception() {
 }
 
 int main() {
+  Config& config = Config::get_config();
   if (!Socket::initializeWinSock()) {
     handle_socket_exception();
     return 1;
