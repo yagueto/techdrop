@@ -13,6 +13,8 @@ set(SOURCES
         src/Config.h
         src/Logger.cpp
         src/Logger.h
+        src/db/bd.h
+        src/db/bd.cpp
 )
 
 # Define executable
@@ -21,6 +23,7 @@ add_executable(server ${SOURCES})
 target_include_directories(server PRIVATE
         ${SRC_DIR}
         ${LIB_DIR}
+
 )
 
 target_link_libraries(server PRIVATE sqlite3 common ws2_32)

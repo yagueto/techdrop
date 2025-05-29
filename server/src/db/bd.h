@@ -4,8 +4,8 @@
 
 #ifndef BD_H
 #define BD_H
-#include <sqlite3.h>
 #include <string>
+#include "sqlite3.h"
 
 class bd {
 private:
