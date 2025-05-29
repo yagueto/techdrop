@@ -15,6 +15,9 @@ public:
   [[nodiscard]] std::string serialize() const;
   static Message deserialize(const std::string &message);
   [[nodiscard]] std::vector<std::string> get_params() const;
+
+  MESSAGE_TYPE get_type() const;
+  MESSAGE_STATUS get_status() const;
   ~Message();
 };
 

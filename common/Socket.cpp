@@ -8,9 +8,7 @@ Socket::Socket() {
   this->conn_socket = INVALID_SOCKET;
 };
 
-Socket::~Socket() {
-  this->close();
-}
+Socket::~Socket() { this->close(); }
 
 bool Socket::create(const MODE mode) {
   SOCKET s;
@@ -29,7 +27,7 @@ bool Socket::create(const MODE mode) {
 }
 
 void Socket::setup_address(const std::string &ipAddress, int port,
-                             sockaddr_in &addr) {
+                           sockaddr_in &addr) {
   addr.sin_addr.s_addr = inet_addr(ipAddress.c_str());
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
@@ -74,7 +72,7 @@ bool Socket::accept_connection(sockaddr_in &clientAddr) {
 }
 
 bool Socket::connect_to_server(const std::string &ipAddress,
-                                 const int port) const {
+                               const int port) const {
   sockaddr_in serverAddr{};
 
   setup_address(ipAddress, port, serverAddr);
@@ -120,4 +118,22 @@ SOCKET Socket::get_raw_socket() const { return this->conn_socket; }
 int Socket::send_message(const std::string &message) const {
   return send(this->conn_socket, message.c_str(),
               static_cast<int>(message.size()), 0);
+}
+
+Socket::MessageResult Socket::receive_message() const {
+  std::string recvbuff;
+  recvbuff.assign(512, '\0');
+
+  const int received = recv(get_raw_socket(), recvbuff.data(),
+                            static_cast<int>(recvbuff.capacity()), 0);
+  if (received > 0) {
+    recvbuff.resize(received);
+    std::cout << "DEBUG: Received raw data: " << recvbuff << std::endl;
+    return {MessageResult::SUCESS, recvbuff, 0};
+  }
+  if (received == 0) {
+    std::cout << "Connection closed by peer." << std::endl;
+    return {MessageResult::CONNECTION_CLOSED};
+  }
+  return {MessageResult::RECV_ERROR, "", WSAGetLastError()};
 }

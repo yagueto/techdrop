@@ -17,15 +17,24 @@ public:
                             sockaddr_in &addr);
   bool create(MODE mode);
   bool bind_socket();
-  bool listen_on_socket() const;
+  [[nodiscard]] bool listen_on_socket() const;
   bool accept_connection(sockaddr_in &clientAddr);
-  bool connect_to_server(const std::string &ipAddress, int port) const;
+  [[nodiscard]] bool connect_to_server(const std::string &ipAddress,
+                                       int port) const;
   static bool initializeWinSock();
   void close();
-  bool is_valid() const;
+  [[nodiscard]] bool is_valid() const;
   static void cleanupWinSock();
   [[nodiscard]] SOCKET get_raw_socket() const;
   int send_message(const std::string &message) const;
+
+  struct MessageResult {
+    enum Status { SUCESS, CONNECTION_CLOSED, RECV_ERROR };
+    Status status;
+    std::string message;
+    int error_code;
+  };
+  [[nodiscard]] MessageResult receive_message() const;
 };
 
 #endif // SOCKET_H

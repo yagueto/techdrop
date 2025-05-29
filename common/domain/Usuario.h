@@ -18,7 +18,7 @@ public:
     string getNombre();
     string getContraseña();
 
-    void serializar(Message &m);
+    void serializar(Message &m) const;
     static Usuario Deserializar(const Message &m);
 
 };

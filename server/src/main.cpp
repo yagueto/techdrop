@@ -33,26 +33,25 @@ int main() {
     std::cout << "Aceptado cliente desde " << inet_ntoa(sockaddr_in.sin_addr)
               << ":" << ntohs(sockaddr_in.sin_port) << std::endl;
     while (true) {
-      std::string recvbuff;
-      recvbuff.assign(512, '\0');
-
-      int received = recv(socket.get_raw_socket(), recvbuff.data(),
-                          static_cast<int>(recvbuff.capacity()), 0);
-      if (received > 0) {
-        recvbuff.resize(received);
-        std::cout << "DEBUG: Received raw data: " << recvbuff << std::endl;
-        handle_message_request(recvbuff);
-      } else if (received == 0) {
-        std::cout << "Connection closed by peer." << std::endl;
-        break;
-      } else {
-        std::cout << "recv failed with error: " << WSAGetLastError()
-                  << std::endl;
+      Socket::MessageResult result = socket.receive_message();
+      if (result.status == Socket::MessageResult::CONNECTION_CLOSED ||
+          result.status == Socket::MessageResult::RECV_ERROR) {
         break;
       }
+      Message response = handle_message_request(result.message);
+
+      if (response.get_type() == INVALID_TYPE ||
+          response.get_status() == INVALID_STATUS) {
+        continue; // ignore the message
+      }
+      if (response.get_type() == CLOSE) {
+        break; // close connection
+      }
+
+      socket.send_message(response.serialize());
     }
     closesocket(socket.get_raw_socket());
-    //break;
+    // break;
   }
   socket.close();
   return 0;
