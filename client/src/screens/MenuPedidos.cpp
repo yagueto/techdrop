@@ -2,7 +2,7 @@
 
 #include "domain/utils.h"
 
-MenuPedidos::MenuPedidos() : Menu("PEDIDOS")
+MenuPedidos::MenuPedidos(const Socket & socket) : Menu(socket, "PEDIDOS")
 {
     anadirOpcion("Hacer pedido");
     anadirOpcion("Borrar pedido");
