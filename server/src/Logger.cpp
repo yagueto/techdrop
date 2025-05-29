@@ -1,4 +1,5 @@
 #include "Logger.h"
+#include "Config.h"
 #include <ctime>
 
 Logger::Logger() = default;
@@ -8,7 +9,7 @@ Logger &Logger::get_logger() {
   return logger;
 }
 
-void Logger::open() { log_file.open(LOG_PATH); }
+void Logger::open() { log_file.open(Config::get_config().get_log_path()); }
 
 Logger::~Logger() { close(); }
 

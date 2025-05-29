@@ -9,7 +9,6 @@ void handle_socket_exception() {
 }
 
 int main() {
-  Config& config = Config::get_config();
   if (!Socket::initializeWinSock()) {
     handle_socket_exception();
     return 1;

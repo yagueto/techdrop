@@ -13,17 +13,17 @@ class Config {
     fstream config_file;
     static const string path;
     string db_path;
-    int color_output = 1;
+    string log_path;
     int create_db_if_not_exists = 1;
     Config();
 public:
     Config(const Config &) = delete;
     Config &operator=(const Config &) = delete;
-    Config static &get_config();
+    static Config &get_config();
     void load_config();
     int create_config_file();
-    string get_db_path();
-    int get_color_output() const;
+    static string get_db_path();
+    static string get_log_path();
     int get_create_db_if_not_exists() const;
 };
 
