@@ -7,11 +7,11 @@
 #include <domain/Pedido.h>
 #include <domain/Usuario.h>
 
-#include "bd.h"
+#include "BD.h"
 
 
 class PedidoDAO {
-    static bd &db;
+    static BD &db;
     PedidoDAO();
 public:
     static void insert(Pedido &pedido);
