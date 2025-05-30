@@ -98,8 +98,7 @@ void UserDAO::update(Usuario &usuario) {
   }
 
   sqlite3_bind_text(stmt, 1, usuario.getNombre().c_str(), -1, SQLITE_STATIC);
-  sqlite3_bind_text(stmt, 2, usuario.getContraseña().c_str(), -1,
-                    SQLITE_STATIC);
+  sqlite3_bind_text(stmt, 2, usuario.getContraseña().c_str(), -1, SQLITE_STATIC);
   sqlite3_bind_text(stmt, 3, usuario.getDni().c_str(), -1, SQLITE_STATIC);
 
   result = sqlite3_step(stmt);
@@ -153,6 +152,7 @@ Usuario UserDAO::select_username(std::string &username)
   }
   sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
   if ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
+    usuario.setDni(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
     usuario.setNombre(
         reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
     return usuario;
