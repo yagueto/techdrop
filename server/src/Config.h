@@ -22,8 +22,8 @@ public:
     static Config &get_config();
     void load_config();
     int create_config_file();
-    static string get_db_path();
-    static string get_log_path();
+    string get_db_path();
+    string get_log_path();
     int get_create_db_if_not_exists() const;
 };
 

@@ -2,8 +2,9 @@
 #include "sqlite3.h"
 #include "bd.h"
 
+bd &UserDAO::db = bd::get_instance();
+
 UserDAO::UserDAO() {
-    UserDAO::db = bd::get_instance();
 }
 
 void UserDAO::insert(Usuario &usuario) {
@@ -71,12 +72,12 @@ Usuario* UserDAO::select(Usuario &usuario) {
         return nullptr;
     }
 
-    Usuario* usuario = nullptr;
+    Usuario* user = nullptr;
     if ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
         std::string dni = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
         std::string nombre = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
         std::string contraseña = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-        usuario = new Usuario(dni, nombre, contraseña);
+        user = new Usuario(dni, nombre, contraseña);
     }
 
     if (result != SQLITE_ROW && result != SQLITE_DONE) {
@@ -84,7 +85,7 @@ Usuario* UserDAO::select(Usuario &usuario) {
     }
 
     sqlite3_finalize(stmt);
-    return usuario;
+    return user;
 }
 
 void UserDAO::update(Usuario &usuario) {
@@ -103,7 +104,7 @@ void UserDAO::update(Usuario &usuario) {
 
     result = sqlite3_step(stmt);
     if (result != SQLITE_DONE) {
-        printf("Error actualizando usuario: %s\n", sqlite3_errmsg(db));
+        cout << "Error actualizando usuario" << endl;
         sqlite3_finalize(stmt);
         return;
     }

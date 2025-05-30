@@ -4,6 +4,8 @@
 
 #include "PedidoDAO.h"
 
+bd &PedidoDAO::db = bd::get_instance();
+
 PedidoDAO::PedidoDAO() {
     PedidoDAO::db = bd::get_instance();
 }

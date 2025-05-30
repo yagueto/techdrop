@@ -32,13 +32,13 @@ void Config::load_config() {
     while (getline(config_file, line)) {
         switch (pos) {
             case 0:
-                db_path = line;
+                this->db_path = line;
                 break;
             case 1:
-                log_path = line;
+                this->log_path = line;
                 break;
             case 2:
-                create_db_if_not_exists = stoi(line);
+                this->create_db_if_not_exists = stoi(line);
                 break;
             default:
                 break;
@@ -59,11 +59,11 @@ int Config::create_config_file() {
 }
 
 
-string Config::get_db_path() {
+string Config::get_db_path(){
     return db_path;
 }
 
-string Config::get_log_path() {
+string Config::get_log_path(){
     return log_path;
 }
 
