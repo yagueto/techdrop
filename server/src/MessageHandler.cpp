@@ -91,6 +91,8 @@ Message handle_message_request(const std::string &message) {
             response = Message(PEDIDO_LIST, RESPONSE);
             Usuario usuario = Usuario::Deserializar(received);
             for (const Pedido &pedido: PedidoDAO::historial(usuario)) {
+                //TODO: borrar esto
+                cout << pedido.getIdPedido() << endl;
                 pedido.serializar(response);
             }
             response.add_param("200");
