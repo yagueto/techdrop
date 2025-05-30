@@ -1,13 +1,14 @@
 #include "UserDAO.h"
 #include "BD.h"
 #include "sqlite3.h"
+#include <iostream>
 
 BD &UserDAO::db = BD::get_instance();
 
 UserDAO::UserDAO() = default;
 
 void UserDAO::insert(Usuario &usuario) {
-  const string sql = "INSERT INTO Usuario (id, dni, username, password) VALUES "
+  const std::string sql = "INSERT INTO Usuario (id, dni, username, password) VALUES "
                      "(NULL, ?, ?, ?);";
 
   sqlite3_stmt *stmt = db.preparar_consulta(sql);
@@ -37,7 +38,7 @@ void UserDAO::insert(Usuario &usuario) {
 void UserDAO::del(Usuario &usuario) {
   sqlite3_stmt *stmt;
 
-  string sql = "DELETE FROM Usuario WHERE dni = ?;";
+  std::string sql = "DELETE FROM Usuario WHERE dni = ?;";
 
   int result = db.execute_query(sql, &stmt);
 
@@ -79,7 +80,7 @@ bool UserDAO::select(Usuario &usuario) {
   }
 
   if (result != SQLITE_ROW && result != SQLITE_DONE) {
-    cout << "Error iterando sobre los resultados" << endl;
+    std::cout << "Error iterando sobre los resultados" << std::endl;
   }
 
   sqlite3_finalize(stmt);
@@ -93,18 +94,17 @@ void UserDAO::update(Usuario &usuario) {
 
   int result = db.execute_query(sql, &stmt);
   if (result != SQLITE_OK) {
-    cout << "Error preparando consulta" << endl;
+    std::cout << "Error preparando consulta" << std::endl;
     return;
   }
 
   sqlite3_bind_text(stmt, 1, usuario.getNombre().c_str(), -1, SQLITE_STATIC);
-  sqlite3_bind_text(stmt, 2, usuario.getContraseña().c_str(), -1,
-                    SQLITE_STATIC);
+  sqlite3_bind_text(stmt, 2, usuario.getContraseña().c_str(), -1, SQLITE_STATIC);
   sqlite3_bind_text(stmt, 3, usuario.getDni().c_str(), -1, SQLITE_STATIC);
 
   result = sqlite3_step(stmt);
   if (result != SQLITE_DONE) {
-    cout << "Error actualizando usuario" << endl;
+    std::cout << "Error actualizando usuario" << std::endl;
     sqlite3_finalize(stmt);
     return;
   }
@@ -130,9 +130,42 @@ bool UserDAO::user_exists(const std::string &user,
   }
 
   if (result != SQLITE_ROW && result != SQLITE_DONE) {
-    cout << "Error iterando sobre los resultados" << endl;
+    std::cout << "Error iterando sobre los resultados" << std::endl;
   }
 
   sqlite3_finalize(stmt);
   return false;
+}
+
+Usuario UserDAO::select_username(std::string &username)
+{
+  Usuario usuario;
+  sqlite3_stmt *stmt;
+
+  std::string sql = "SELECT dni, username, password FROM Usuario WHERE username = ?;";
+
+  int result = db.execute_query(sql, &stmt);
+
+  if (result != SQLITE_OK) {
+    printf("Error executing SELECT\n");
+    sqlite3_finalize(stmt);
+
+  }
+  sqlite3_bind_text(stmt, 1, username.c_str(), -1, SQLITE_STATIC);
+  if ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
+    usuario.setDni(reinterpret_cast<const char *>(sqlite3_column_text(stmt, 0)));
+    usuario.setNombre(
+        reinterpret_cast<const char *>(sqlite3_column_text(stmt, 1)));
+    return usuario;
+  }
+
+  result = sqlite3_step(stmt);
+  if (result != SQLITE_DONE) {
+    printf("Error executing SELECT\n");
+    sqlite3_finalize(stmt);
+  }
+
+  sqlite3_finalize(stmt);
+
+  return usuario;
 }

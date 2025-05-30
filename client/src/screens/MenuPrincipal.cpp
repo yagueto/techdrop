@@ -1,5 +1,6 @@
 #include "MenuPrincipal.h"
 
+#include "Globals.h"
 #include "MenuInicio.h"
 #include "domain/Message.h"
 #include "domain/Usuario.h"
@@ -41,6 +42,9 @@ void MenuPrincipal::gestionarOpcion(const int opcion) {
     if (const Message result_message = Message::deserialize(message);
         result_message.get_params().front() == "200") {
       cout << "Login exitoso." << endl;
+      Globals::usuario_actual.setNombre(username);
+      Globals::usuario_actual.setContraseña(password);
+      Globals::usuario_actual.setDni(result_message.get_params().at(1));
       clrscr();
       waitForEnter();
       MenuInicio inicio(server_socket);

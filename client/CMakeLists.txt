@@ -19,6 +19,7 @@ set(SOURCES
         src/screens/MenuUsuario.h
         src/road_status.cpp
         src/road_status.h
+        src/Globals.h
 
 
 )

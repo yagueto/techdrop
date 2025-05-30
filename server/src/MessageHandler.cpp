@@ -27,35 +27,72 @@ Message handle_message_request(const std::string &message) {
     const Message received(Message::deserialize(message));
     Message response(INVALID_TYPE, INVALID_STATUS);
 
-    switch (received.get_type()) {
-        case LOGIN: {
-            std::cout << "MessageHandler: Login received." << std::endl;
-            response = Message(LOGIN, RESPONSE);
-            const bool exists = UserDAO::user_exists(received.get_params().at(0),
-                                                     received.get_params().at(1));
-            if (exists) {
-                response.add_param("200"); // login correcto
-            } else {
-                response.add_param("401"); // unauthorised (usuario no existe)
-            }
-        }
-        break;
-        case REGISTER: {
-            std::cout << "MessageHandler: Register received." << std::endl;
-            response = Message(REGISTER, RESPONSE);
+  switch (received.get_type()) {
+  case LOGIN: {
+    std::cout << "MessageHandler: Login received." << std::endl;
+    response = Message(LOGIN, RESPONSE);
+    const bool exists = UserDAO::user_exists(received.get_params().at(0),
+                                             received.get_params().at(1));
+    if (exists) {
+      response.add_param("200"); // login correcto
+      response.add_param(
+          UserDAO::select_username(received.get_params().at(0)).getDni());
+    } else {
+      response.add_param("401"); // unauthorised (usuario no existe)
+    }
+  } break;
+  case REGISTER: {
+    std::cout << "MessageHandler: Register received." << std::endl;
+    response = Message(REGISTER, RESPONSE);
 
-            if (Usuario usuario(received.get_params().at(0), "", "");
-                UserDAO::select(usuario)) {
-                response.add_param("401"); // user already exists
-                response.add_param("El usuario ya existe");
-                break;
-            }
-            Usuario usuario(received.get_params().at(0), received.get_params().at(1),
-                            received.get_params().at(2));
-            UserDAO::insert(usuario);
-            response.add_param("200");
-        }
-        break;
+    if (Usuario usuario(received.get_params().at(0), "", "");
+        UserDAO::select(usuario)) {
+      response.add_param("401"); // user already exists
+      response.add_param("El usuario ya existe");
+      break;
+    }
+    Usuario usuario(received.get_params().at(0), received.get_params().at(1),
+                    received.get_params().at(2));
+    UserDAO::insert(usuario);
+    response.add_param("200");
+  } break;
+  case CLOSE:
+    std::cout << "MessageHandler: Close connection request received."
+              << std::endl;
+    break;
+
+  case UPDATE_USERNAME: {
+    response = Message(UPDATE_USERNAME, RESPONSE);
+    const std::string dni = received.get_params().at(0);
+    Usuario u(dni, "", "");
+    UserDAO::select(u);
+    u.setNombre(received.get_params().at(1));
+    UserDAO::update(u);
+    response.add_param("200");
+    std::cout << "Update hecho exitosamente.";
+    break;
+  }
+
+  case UPDATE_PASSWORD: {
+    response = Message(UPDATE_PASSWORD, RESPONSE);
+    const std::string dni = received.get_params().at(0);
+    const std::string password_nueva = received.get_params().at(1);
+
+    Usuario u(dni, "", "");
+    UserDAO::select(u);
+    u.setContraseña(password_nueva);
+    UserDAO::update(u);
+    response.add_param("200");
+    break;
+  }
+  case DELETE_USER: {
+    response = Message(DELETE_USER, RESPONSE);
+    const std::string dni = received.get_params().at(0);
+    Usuario u(dni, "", "");
+    UserDAO::del(u);
+    response.add_param("200");
+    break;
+  }
         case PEDIDO_MENU: {
             std::cout << "MessageHandler: Pedido menu request received." << std::endl;
             for (const Plato &plato: PlatoDAO::getPlatos()) {
@@ -106,17 +143,14 @@ Message handle_message_request(const std::string &message) {
             response.add_param("200");
         }
         break;
-        case CLOSE:
-            std::cout << "MessageHandler: Close connection request received."
-                    << std::endl;
-            break;
-        default:
-            std::cout << "MessageHandler: Unknown message type (" << received.get_type()
-                    << ") received." << std::endl;
-        // std::cout << "Full message: " << message << std::endl;
-            break;
-    }
-    Logger::get_logger().write(std::string() +
-                               "RESPUESTA: " + response.serialize());
-    return response; // Continue server loop, message is ignored
+
+  default:
+    std::cout << "MessageHandler: Unknown message type (" << received.get_type()
+              << ") received." << std::endl;
+    // std::cout << "Full message: " << message << std::endl;
+    break;
+  }
+  Logger::get_logger().write(std::string() +
+                             "RESPUESTA: " + response.serialize());
+  return response; // Continue server loop, message is ignored
 }

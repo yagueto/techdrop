@@ -1,4 +1,6 @@
 #include "MenuInicio.h"
+
+#include "Globals.h"
 #include "MenuPedidos.h"
 #include "MenuUsuario.h"
 
