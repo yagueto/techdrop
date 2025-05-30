@@ -1,6 +1,8 @@
 #include "MenuPrincipal.h"
 
 #include "MenuInicio.h"
+#include "domain/Message.h"
+#include "domain/Usuario.h"
 #include "domain/utils.h"
 
 MenuPrincipal::MenuPrincipal(const Socket &socket)
@@ -24,7 +26,20 @@ void MenuPrincipal::gestionarOpcion(const int opcion) {
     cin >> password;
     clearInputBuffer();
 
-    if (username == "user" && password == "pass") {
+    Message login_message(LOGIN, REQUEST);
+    login_message.add_param(username);
+    login_message.add_param(password);
+    if (server_socket.send_message(login_message.serialize()) < 0) {
+      break;
+    }
+    auto [status, message, error_code] = server_socket.receive_message();
+    if (status != Socket::MessageResult::SUCESS) {
+      cout << "Error en la comunicación con el servidor: " << error_code
+           << " - " << status;
+    }
+
+    if (const Message result_message = Message::deserialize(message);
+        result_message.get_params().front() == "200") {
       cout << "Login exitoso." << endl;
       clrscr();
       waitForEnter();
@@ -48,7 +63,27 @@ void MenuPrincipal::gestionarOpcion(const int opcion) {
     cin >> password;
     clearInputBuffer();
 
-    cout << "Usuario registrado" << endl;
+    Usuario usuario(dni, username, password);
+    Message register_request(REGISTER, REQUEST);
+    usuario.serializar(register_request);
+
+    if (server_socket.send_message(register_request.serialize()) < 0) {
+      break;
+    }
+
+    Socket::MessageResult result = server_socket.receive_message();
+    if (result.status != Socket::MessageResult::SUCESS) {
+      cout << "Error en la comunicación con el servidor: " << result.error_code
+           << " - " << result.status;
+    }
+
+    if (Message result_message = Message::deserialize(result.message);
+        result_message.get_params().front() == "200") {
+      cout << "Usuario registrado" << endl;
+    } else {
+      cout << "No se ha podido registrar: "
+           << result_message.get_params().at(1);
+    }
   } break;
   default:
     cout << "Opcion no valida." << endl;

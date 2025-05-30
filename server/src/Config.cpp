@@ -1,7 +1,3 @@
-//
-// Created by asier.amigorena on 29/05/2025.
-//
-
 #include "Config.h"
 #include <string>
 #include <iostream>

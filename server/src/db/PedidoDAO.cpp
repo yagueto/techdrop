@@ -1,8 +1,6 @@
-//
-// Created by termi on 30/05/2025.
-//
-
 #include "PedidoDAO.h"
+
+#include "sqlite3.h"
 
 bd &PedidoDAO::db = bd::get_instance();
 

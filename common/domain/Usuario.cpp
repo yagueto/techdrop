@@ -23,8 +23,7 @@ void Usuario::serializar(Message &m) const {
   m.add_param(contraseña);
 }
 Usuario Usuario::Deserializar(const Message &m) {
-  auto params = m.get_params();
-  if (params.size() == 3) {
+  if (vector<string> params = m.get_params(); params.size() == 3) {
     return {params[0], params[1], params[2]};
   }
   return {};

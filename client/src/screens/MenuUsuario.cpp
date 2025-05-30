@@ -1,7 +1,7 @@
 #include "MenuUsuario.h"
 
-MenuUsuario::MenuUsuario(const Socket & socket) : Menu(socket, "CONFIGURACION USUARIO")
-{
+MenuUsuario::MenuUsuario(const Socket &socket)
+    : Menu(socket, "CONFIGURACION USUARIO") {
     anadirOpcion("Cambiar username");
     anadirOpcion("Cambiar contraseña");
     anadirOpcion("Borrar cuenta");

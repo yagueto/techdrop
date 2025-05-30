@@ -5,8 +5,8 @@
 
 class MenuUsuario : public Menu{
 public:
-    MenuUsuario(const Socket & socket);
-    void gestionarOpcion(int opcion) override;
+  MenuUsuario(const Socket &socket);
+  void gestionarOpcion(int opcion) override;
 };
 
 
