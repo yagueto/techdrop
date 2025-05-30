@@ -26,6 +26,7 @@ public:
     int execute_query(std::string sql, sqlite3_stmt** stmt);
     sqlite3_stmt* preparar_consulta(const std::string&sql) const;
     int crear_tablas();
+    sqlite3* get_db();
 };
 
 

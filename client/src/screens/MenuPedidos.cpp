@@ -7,6 +7,34 @@
 #include "Globals.h"
 #include "domain/utils.h"
 
+#include <ctime>
+
+// Helper function to format time_t
+std::string format_time_for_display(time_t raw_time) {
+  std::tm *ptm = std::localtime(&raw_time);
+  if (ptm == nullptr) {
+    return "Invalid time";
+  }
+  char buffer[32];
+  // Format: YYYY-MM-DD HH:MM:SS
+  std::strftime(buffer, 32, "%Y-%m-%d %H:%M:%S", ptm);
+  return buffer;
+}
+
+// Helper function to convert estado to string (optional)
+std::string estado_to_string(int estado) {
+  switch (estado) {
+  case 0:
+    return "En cola";
+  case 1:
+    return "En camino";
+  case 2:
+    return "Entregado";
+  default:
+    return "Desconocido";
+  }
+}
+
 MenuPedidos::MenuPedidos(const Socket &socket) : Menu(socket, "PEDIDOS") {
   anadirOpcion("Hacer pedido");
   anadirOpcion("Borrar pedido");
@@ -202,7 +230,7 @@ void MenuPedidos::gestionarOpcion(int opcion) {
   case 3: {
     clrscr();
     Message pedidos_req(PEDIDO_LIST, REQUEST);
-    pedidos_req.add_param(to_string(id));
+    Globals::usuario_actual.serializar(pedidos_req);
 
     if (server_socket.send_message(pedidos_req.serialize()) < 0) {
       cout << "Error al solicitar pedidos." << endl;
@@ -234,9 +262,10 @@ void MenuPedidos::gestionarOpcion(int opcion) {
     }
     cout << "Tus pedidos:\n ";
     for (const auto &pedido : pedidos) {
-      cout << "ID: " << pedido.getIdPedido() << "- Fecha: " << pedido.getFecha()
-           << "- Estado: " << pedido.getEstado()
-           << "\nDireccion: " << pedido.getDireccion() << "\n\n";
+      cout << "ID: " << pedido.getIdPedido() << endl
+           << "- Fecha: " << format_time_for_display(pedido.getFecha()) << endl
+           << "- Estado: " << estado_to_string(pedido.getEstado()) << endl
+           << "- Direccion: " << pedido.getDireccion() << "\n\n";
     }
   } break;
   default:

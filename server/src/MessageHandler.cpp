@@ -101,8 +101,8 @@ Message handle_message_request(const std::string &message) {
             std::cout << "MessageHandler: Pedido menu request received." << std::endl;
           response = Message(PEDIDO_MENU, RESPONSE);
           response.add_param("200");
-          for (const Plato &plato: PlatoDAO::getPlatos()) {
-                plato.serializar(response);
+          for (const Plato &plato : PlatoDAO::getPlatos()) {
+            plato.serializar(response);
             }
         }
         break;
@@ -131,10 +131,10 @@ Message handle_message_request(const std::string &message) {
             std::cout << "MessageHandler: Pedido list request received." << std::endl;
             response = Message(PEDIDO_LIST, RESPONSE);
             Usuario usuario = Usuario::Deserializar(received);
+            response.add_param("200");
             for (const Pedido &pedido: PedidoDAO::historial(usuario)) {
                 pedido.serializar(response);
             }
-            response.add_param("200");
         }
         break;
         case PEDIDO_CANCEL: {

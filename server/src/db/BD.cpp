@@ -140,3 +140,5 @@ int BD::crear_tablas() {
     printf("Tablas creadas\n");
     return 0;
 }
+
+sqlite3 *BD::get_db() { return this->db; }
