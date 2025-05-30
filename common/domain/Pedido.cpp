@@ -29,7 +29,7 @@ Pedido::Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
   this->mapa_pedido = std::move(mapa);
 }
 int Pedido::getIdPedido() const { return this->id_pedido; }
-void Pedido::setIdPedido(int id_pedido) { this->id_pedido =  id_pedido;}
+void Pedido::setIdPedido(int id_pedido) { this->id_pedido = id_pedido; }
 
 int Pedido::getIdUsuario() const { return this->id_usuario; }
 string Pedido::getDireccion() const { return this->direccion; }

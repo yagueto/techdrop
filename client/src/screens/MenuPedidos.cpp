@@ -170,7 +170,7 @@ void MenuPedidos::gestionarOpcion(int opcion) {
       cout << "No tienes pedidos" << endl;
       waitForEnter();
       break;
-        }
+    }
     vector<Pedido> pedidos;
     for (size_t i = 1; i + 4 < parametros.size(); i += 5) {
       Message mes(PEDIDO_LIST, RESPONSE);

@@ -25,8 +25,8 @@ public:
     Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
          int estado, map<int,int> mapa_pedido);
   int getIdPedido() const;
-  void setIdPedido(int id_pedido);
-  int getIdUsuario() const;
+    void setIdPedido(int id_pedido);
+    int getIdUsuario() const;
   string getDireccion() const;
   time_t getFecha() const;
   int getEstado() const;
