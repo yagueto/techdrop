@@ -33,8 +33,8 @@ public:
     void agregarPlato(int id_plato, int cantidad);
     map<int, int> getMapa();
 
-  void serializar(Message &m) const;
-  static Pedido deserializar(const Message &m);
+    void serializar(Message &m) const;
+    static Pedido deserializar(const Message &m);
 };
 
 #endif // PEDIDO_H
