@@ -104,13 +104,14 @@ Robot* RobotDAO::select(const Robot& robot)
         return nullptr;
     }
 
-    Robot* usuario = nullptr;
+    Robot* r = nullptr;
     if ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
         int id = sqlite3_column_int(stmt, 0);
         std::string nombre = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
         int estado = sqlite3_column_int(stmt, 2);
         int pedido_actual = sqlite3_column_int(stmt, 3);
-        usuario = new Robot(id, nombre, estado, pedido_actual);
+        r = new Robot(id, nombre, estado, pedido_actual);
+
     }
 
     if (result != SQLITE_ROW && result != SQLITE_DONE) {
@@ -118,7 +119,7 @@ Robot* RobotDAO::select(const Robot& robot)
     }
 
     sqlite3_finalize(stmt);
-    return usuario;
+    return r;
 }
 
 
