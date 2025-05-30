@@ -1,8 +1,8 @@
 #include "RobotDAO.h"
 #include "sqlite3.h"
-#include "bd.h"
+#include "BD.h"
 
-bd &RobotDAO::db = bd::get_instance();
+BD &RobotDAO::db = BD::get_instance();
 
 
 void RobotDAO::insert(const Robot& robot)

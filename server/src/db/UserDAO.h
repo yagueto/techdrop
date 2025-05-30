@@ -2,10 +2,10 @@
 #define USERDAO_H
 #include <sqlite3.h>
 #include <domain/Usuario.h>
-#include "bd.h"
+#include "BD.h"
 
 class UserDAO {
-    static bd &db;
+    static BD &db;
     UserDAO();
 public:
     static void insert(Usuario &usuario);

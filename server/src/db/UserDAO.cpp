@@ -1,8 +1,9 @@
 #include "UserDAO.h"
-#include "bd.h"
+#include "BD.h"
 #include "sqlite3.h"
 #include <iostream>
-bd &UserDAO::db = bd::get_instance();
+
+BD &UserDAO::db = BD::get_instance();
 
 UserDAO::UserDAO() = default;
 

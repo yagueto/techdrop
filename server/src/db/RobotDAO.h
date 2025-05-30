@@ -2,10 +2,10 @@
 #define ROBOTDAO_H
 #include <domain/Robot.h>
 
-#include "bd.h"
+#include "BD.h"
 
 class RobotDAO {
-  static bd &db;
+  static BD &db;
   RobotDAO();
 
 private:

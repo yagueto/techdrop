@@ -8,19 +8,24 @@
 #include <iostream>
 #include <string>
 
-Message handle_message_request(const std::string &message) {
-  Logger::get_logger().write(std::string() + "RECIBIDO: " + message);
-  if (const size_t first_break = message.find_first_of(MESSAGE_DELIMITER);
-      first_break == std::string::npos || first_break == 0) {
-    std::cerr << "Warning: Invalid message format. Delimiter missing or at "
-                 "start. Message: \""
-              << message << "\"." << std::endl;
-    return {INVALID_TYPE,
-            INVALID_STATUS}; // Continue server loop, message is ignored
-  }
+#include "db/PedidoDAO.h"
+#include "db/PlatoDAO.h"
 
-  const Message received(Message::deserialize(message));
-  Message response(INVALID_TYPE, INVALID_STATUS);
+Message handle_message_request(const std::string &message) {
+    Logger::get_logger().write(std::string() + "RECIBIDO: " + message);
+    if (const size_t first_break = message.find_first_of(MESSAGE_DELIMITER);
+        first_break == std::string::npos || first_break == 0) {
+        std::cerr << "Warning: Invalid message format. Delimiter missing or at "
+                "start. Message: \""
+                << message << "\"." << std::endl;
+        return {
+            INVALID_TYPE,
+            INVALID_STATUS
+        }; // Continue server loop, message is ignored
+    }
+
+    const Message received(Message::deserialize(message));
+    Message response(INVALID_TYPE, INVALID_STATUS);
 
   switch (received.get_type()) {
   case LOGIN: {
@@ -88,6 +93,56 @@ Message handle_message_request(const std::string &message) {
     response.add_param("200");
     break;
   }
+        case PEDIDO_MENU: {
+            std::cout << "MessageHandler: Pedido menu request received." << std::endl;
+            for (const Plato &plato: PlatoDAO::getPlatos()) {
+                plato.serializar(response);
+            }
+            response = Message(PEDIDO_MENU, RESPONSE);
+            response.add_param("200");
+        }
+        break;
+        case PEDIDO_CREATE: {
+            std::cout << "MessageHandler: Pedido create request received." << std::endl;
+            response = Message(PEDIDO_CREATE, RESPONSE);
+            Pedido pedido = Pedido::deserializar(received);
+            PedidoDAO::insert(pedido);
+            response.add_param("200");
+        }
+        break;
+        case PEDIDO_STATE: {
+            std::cout << "MessageHandler: Pedido state request received." << std::endl;
+            response = Message(PEDIDO_STATE, RESPONSE);
+            Pedido pedido = Pedido::deserializar(received);
+            Pedido *pedido_db = PedidoDAO::select(pedido);
+            if (pedido_db) {
+                response.add_param(std::to_string(pedido_db->getEstado()));
+                response.add_param("200"); // Pedido encontrado
+            } else {
+                response.add_param("404"); // Pedido no encontrado
+            }
+        }
+        break;
+        case PEDIDO_LIST: {
+            std::cout << "MessageHandler: Pedido list request received." << std::endl;
+            response = Message(PEDIDO_LIST, RESPONSE);
+            Usuario usuario = Usuario::Deserializar(received);
+            for (const Pedido &pedido: PedidoDAO::historial(usuario)) {
+                //TODO: borrar esto
+                cout << pedido.getIdPedido() << endl;
+                pedido.serializar(response);
+            }
+            response.add_param("200");
+        }
+        break;
+        case PEDIDO_CANCEL: {
+            std::cout << "MessageHandler: Pedido cancel request received." << std::endl;
+            response = Message(PEDIDO_CANCEL, RESPONSE);
+            Pedido pedido = Pedido::deserializar(received);
+            PedidoDAO::del(pedido);
+            response.add_param("200");
+        }
+        break;
 
   default:
     std::cout << "MessageHandler: Unknown message type (" << received.get_type()
