@@ -15,6 +15,8 @@ set(SOURCES
         src/Logger.h
         src/db/bd.h
         src/db/bd.cpp
+        src/db/UserDAO.cpp
+        src/db/UserDAO.h
 )
 
 # Define executable
