@@ -8,21 +8,18 @@
 
 #include "bd.h"
 
-
-
 class RobotDAO {
-    static bd &db;
-    RobotDAO();
+  static bd &db;
+  RobotDAO();
+
 private:
-    static void insert(const Robot& &robot);
+  static void insert(const Robot &robot);
 
-    static void update(const Robot& &robot);
+  static void update(const Robot &robot);
 
-    static void del(const Robot &robot);
+  static void del(const Robot &robot);
 
-    static Robot* select(const Robot& &robot);
+  static Robot *select(const Robot &robot);
 };
 
-
-
-#endif //ROBOTDAO_H
+#endif // ROBOTDAO_H
