@@ -28,18 +28,11 @@ Message handle_message_request(const std::string &message)
     {
       std::cout << "MessageHandler: Login received." << std::endl;
       response = Message(LOGIN, RESPONSE);
-
-      std::string username = received.get_params().at(0);
-      std::string password = received.get_params().at(1);
-
-      if (UserDAO::user_exists(username, password))
-      {
-        Usuario user = UserDAO::select_username(username);
-        response.add_param("200"); // OK
-        response.add_param(user.getDni());
-      }
-      else
-      {
+      const bool exists = UserDAO::user_exists(received.get_params().at(0),
+                                               received.get_params().at(1));
+      if (exists) {
+        response.add_param("200"); // login correcto
+      } else {
         response.add_param("401"); // unauthorised (usuario no existe)
       }
   } break;
