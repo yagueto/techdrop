@@ -12,6 +12,8 @@ public:
     static void del(Usuario &usuario);
     static void update(Usuario &usuario);
     static Usuario select(Usuario &usuario);
+    static bool user_exists(const std::string &user,
+                            const std::string &password);
 };
 
 

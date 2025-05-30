@@ -2,6 +2,8 @@
 
 #include "Logger.h"
 #include "Protocol.h"
+#include "db/UserDAO.h"
+#include "domain/Usuario.h"
 
 #include <iostream>
 #include <string>
@@ -21,16 +23,22 @@ Message handle_message_request(const std::string &message) {
   Message response(INVALID_TYPE, INVALID_STATUS);
 
   switch (received.get_type()) {
-  case LOGIN:
+  case LOGIN: {
     std::cout << "MessageHandler: Login received." << std::endl;
     response = Message(LOGIN, RESPONSE);
-    response.add_param("200");
-    break;
-  case REGISTER:
+    const bool exists = UserDAO::user_exists(received.get_params().at(0),
+                                             received.get_params().at(1));
+    if (exists) {
+      response.add_param("200"); // login correcto
+    } else {
+      response.add_param("401"); // unauthorised (usuario no existe)
+    }
+  } break;
+  case REGISTER: {
     std::cout << "MessageHandler: Register received." << std::endl;
     response = Message(REGISTER, RESPONSE);
     response.add_param("200");
-    break;
+  } break;
   case CLOSE:
     std::cout << "MessageHandler: Close connection request received."
               << std::endl;
