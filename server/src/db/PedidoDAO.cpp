@@ -153,70 +153,84 @@ Pedido *PedidoDAO::select(Pedido &pedido_input) {
 
 std::vector<Pedido> PedidoDAO::historial(Usuario &usuario) {
     sqlite3_stmt *stmt;
-    // It's generally better to use explicit JOIN syntax
-    std::string sql =
-            "SELECT p.id_pedido, p.id_usuario, p.direccion, p.fecha, p.estado "
-            "FROM Pedido p JOIN Usuario u ON p.id_usuario = u.id WHERE u.dni = ?;";
+  // It's generally better to use explicit JOIN syntax
+  std::string sql =
+        "SELECT p.id_pedido, p.id_usuario, p.direccion, p.fecha, p.estado "
+        "FROM Pedido p JOIN Usuario u ON p.id_usuario = u.id WHERE u.dni = ?;";
 
     // It's good practice to ensure the DB connection is open.
-    // db.abrir_conexion(); // If your BD class requires explicit opening per operation.
+    // db.abrir_conexion(); // If your BD class requires explicit opening per
+    // operation.
 
     int result = db.execute_query(sql, &stmt);
-    if (result != SQLITE_OK) { // Assuming execute_query returns SQLITE_OK (0) on success
-        std::cerr << "Error preparing the Pedido historial query: " << sqlite3_errmsg(db.get_db()) << std::endl;
-        return {};
+    if (result !=
+        SQLITE_OK) { // Assuming execute_query returns SQLITE_OK (0) on success
+      std::cerr << "Error preparing the Pedido historial query: "
+                << sqlite3_errmsg(db.get_db()) << std::endl;
+      return {};
     }
 
     sqlite3_bind_text(stmt, 1, usuario.getDni().c_str(), -1, SQLITE_STATIC);
 
-    std::vector<Pedido> pedidos_list; // Renamed to avoid confusion if 'pedidos' is a member
+    std::vector<Pedido>
+        pedidos_list; // Renamed to avoid confusion if 'pedidos' is a member
     int result_step;
     while ((result_step = sqlite3_step(stmt)) == SQLITE_ROW) {
         int id_pedido = sqlite3_column_int(stmt, 0);
-        int id_usuario_db = sqlite3_column_int(stmt, 1); // Renamed to avoid conflict with function param
+      int id_usuario_db = sqlite3_column_int(
+          stmt, 1); // Renamed to avoid conflict with function param
         std::string direccion = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 2));
 
-        // Assuming fecha is stored as a string representation of time_t (Unix timestamp)
-        // Or if it's a numeric Unix timestamp, use sqlite3_column_int64
-        time_t fecha;
-        const char* fecha_text = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 3));
-        if (fecha_text) {
-            try {
-                fecha = std::stoll(fecha_text); // Use stoll for time_t if it's a string of a number
-            } catch (const std::exception& e) {
-                std::cerr << "Error converting fecha string to time_t: " << fecha_text << " - " << e.what() << std::endl;
-                fecha = 0; // Default or error value
-            }
-        } else {
-            fecha = 0; // Default or error value
+      // Assuming fecha is stored as a string representation of time_t (Unix
+      // timestamp) Or if it's a numeric Unix timestamp, use
+      // sqlite3_column_int64
+      time_t fecha;
+      const char *fecha_text =
+          reinterpret_cast<const char *>(sqlite3_column_text(stmt, 3));
+      if (fecha_text) {
+        try {
+          fecha = std::stoll(
+              fecha_text); // Use stoll for time_t if it's a string of a number
+        } catch (const std::exception &e) {
+          std::cerr << "Error converting fecha string to time_t: " << fecha_text
+                    << " - " << e.what() << std::endl;
+          fecha = 0; // Default or error value
+        }
+      } else {
+        fecha = 0; // Default or error value
         }
 
         int estado = sqlite3_column_int(stmt, 4);
 
-        // Create Pedido object. Ensure your Pedido constructor can be called like this,
-        // or that you have a constructor that takes these params and initializes an empty map,
-        // which you then fill.
-        Pedido current_pedido(id_pedido, id_usuario_db, direccion, fecha, estado);
+        // Create Pedido object. Ensure your Pedido constructor can be called
+        // like this, or that you have a constructor that takes these params and
+        // initializes an empty map, which you then fill.
+        Pedido current_pedido(id_pedido, id_usuario_db, direccion, fecha,
+                              estado);
 
         // Fetch PedidoDetalle for current_pedido
         sqlite3_stmt *stmt_det;
-        std::string sql_det = "SELECT id_plato, cantidad FROM PedidoDetalle WHERE id_pedido = ?;";
+        std::string sql_det =
+            "SELECT id_plato, cantidad FROM PedidoDetalle WHERE id_pedido = ?;";
         if (db.execute_query(sql_det, &stmt_det) == SQLITE_OK) {
-            sqlite3_bind_int(stmt_det, 1, id_pedido);
-            while (sqlite3_step(stmt_det) == SQLITE_ROW) {
-                int id_plato = sqlite3_column_int(stmt_det, 0);
-                int cantidad = sqlite3_column_int(stmt_det, 1);
-                current_pedido.agregarPlato(id_plato, cantidad); // Assumes Pedido class has agregarPlato
-            }
-            sqlite3_finalize(stmt_det);
+          sqlite3_bind_int(stmt_det, 1, id_pedido);
+          while (sqlite3_step(stmt_det) == SQLITE_ROW) {
+            int id_plato = sqlite3_column_int(stmt_det, 0);
+            int cantidad = sqlite3_column_int(stmt_det, 1);
+            current_pedido.agregarPlato(
+                id_plato, cantidad); // Assumes Pedido class has agregarPlato
+          }
+          sqlite3_finalize(stmt_det);
         } else {
-            std::cerr << "Error preparing PedidoDetalle query for pedido ID " << id_pedido << ": " << sqlite3_errmsg(db.get_db()) << std::endl;
+          std::cerr << "Error preparing PedidoDetalle query for pedido ID "
+                    << id_pedido << ": " << sqlite3_errmsg(db.get_db())
+                    << std::endl;
         }
         pedidos_list.push_back(current_pedido);
     }
 
     if (result_step != SQLITE_DONE) {
-        std::cerr << "Error iterating over Pedido historial results: " << sqlite3_errmsg(db.get_db()) << std::endl;
+      std::cerr << "Error iterating over Pedido historial results: " << sqlite3_errmsg(db.get_db()) << std::endl;
     }
 
     sqlite3_finalize(stmt);

@@ -103,7 +103,7 @@ Message handle_message_request(const std::string &message) {
           response.add_param("200");
           for (const Plato &plato : PlatoDAO::getPlatos()) {
             plato.serializar(response);
-            }
+          }
         }
         break;
         case PEDIDO_CREATE: {
@@ -140,7 +140,9 @@ Message handle_message_request(const std::string &message) {
         case PEDIDO_CANCEL: {
             std::cout << "MessageHandler: Pedido cancel request received." << std::endl;
             response = Message(PEDIDO_CANCEL, RESPONSE);
-            Pedido pedido = Pedido::deserializar(received);
+            Pedido pedido;
+            pedido.setIdPedido(stoi(received.get_params().at(0)));
+            PedidoDAO::select(pedido);
             PedidoDAO::del(pedido);
             response.add_param("200");
         }

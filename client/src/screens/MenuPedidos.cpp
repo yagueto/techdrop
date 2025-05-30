@@ -148,42 +148,43 @@ void MenuPedidos::gestionarOpcion(int opcion) {
   } break;
   case 2: {
     clrscr();
-    Message pedidos_request(PEDIDO_LIST, REQUEST);
-    pedidos_request.add_param(to_string(id));
+    Message pedidos_req(PEDIDO_LIST, REQUEST);
+    Globals::usuario_actual.serializar(pedidos_req);
 
-    if (server_socket.send_message(pedidos_request.serialize()) < 0) {
+    if (server_socket.send_message(pedidos_req.serialize()) < 0) {
       cout << "Error al solicitar pedidos." << endl;
       waitForEnter();
       break;
     }
-    auto [status_p, message_p, error_code_p] = server_socket.receive_message();
-    if (status_p != Socket::MessageResult::SUCESS) {
-      cout << "Error en la comunicación con el servidor: " << error_code_p
-           << " - " << status_p;
+    auto [status, message, error_code] = server_socket.receive_message();
+    if (status != Socket::MessageResult::SUCESS) {
+      cout << "Error en la comunicación con el servidor: " << error_code
+           << " - " << status;
       waitForEnter();
       break;
     }
-    const Message pedidos_respuesta = Message::deserialize(message_p);
+    const Message pedidos_respuesta = Message::deserialize(message);
     auto parametros = pedidos_respuesta.get_params();
     if (pedidos_respuesta.get_params().front() != "200" ||
         pedidos_respuesta.get_params().empty()) {
-      cout << "No tienes pedidos para borrar" << endl;
+      cout << "No tienes pedidos" << endl;
       waitForEnter();
       break;
-    }
+        }
     vector<Pedido> pedidos;
     for (size_t i = 1; i + 4 < parametros.size(); i += 5) {
-      Message m(PEDIDO_LIST, RESPONSE);
+      Message mes(PEDIDO_LIST, RESPONSE);
       for (int j = 0; j < 5; j++) {
-        m.add_param(parametros[i + j]);
+        mes.add_param(parametros[i + j]);
       }
-      pedidos.push_back(Pedido::deserializar(m));
+      pedidos.push_back(Pedido::deserializar(mes));
     }
     cout << "Tus pedidos:\n ";
     for (const auto &pedido : pedidos) {
-      cout << "ID: " << pedido.getIdPedido() << "- Fecha: " << pedido.getFecha()
-           << "- Estado: " << pedido.getEstado()
-           << "\nDireccion: " << pedido.getDireccion() << "\n\n";
+      cout << "ID: " << pedido.getIdPedido() << endl
+           << "- Fecha: " << format_time_for_display(pedido.getFecha()) << endl
+           << "- Estado: " << estado_to_string(pedido.getEstado()) << endl
+           << "- Direccion: " << pedido.getDireccion() << "\n\n";
     }
     int iD;
     cout << "Introduce el id del pedido a borrar(0 para cancelar): ";
