@@ -24,7 +24,7 @@ public:
          int estado);
   int getIdPedido() const;
   int getIdUsuario() const;
-  string getDireccion();
+  string getDireccion() const;
   time_t getFecha() const;
   int getEstado() const;
   void agregarPlato(int id_plato, int cantidad);

@@ -1,28 +1,232 @@
 #include "MenuPedidos.h"
 
+#include <map>
+#include <domain/Pedido.h>
+#include <domain/Plato.h>
+
 #include "domain/utils.h"
 
 MenuPedidos::MenuPedidos(const Socket &socket) : Menu(socket, "PEDIDOS") {
     anadirOpcion("Hacer pedido");
     anadirOpcion("Borrar pedido");
-    anadirOpcion("Ver todos los pedidos");
+    anadirOpcion("Ver todos los pedidos"); //pasar Usuario
 }
 
-void MenuPedidos::gestionarOpcion(int opcion)
-{
+void MenuPedidos::gestionarOpcion(int opcion) {
     switch (opcion)
     {
-    case 1:
-        cout <<"Hace pedido" << endl;
-        break;
-    case 2:
-        cout <<"Borra pedido" << endl;
-        break;
-    case 3:
-        cout <<"Muestra historial de pedidos" << endl;
-        break;
-    default:
+        case 1: {
+            clrscr();
+
+            Message pedidos_message(PEDIDO_MENU, REQUEST);
+            if (server_socket.send_message(pedidos_message.serialize())<0) {
+                break;
+            }
+            auto[status,message,error_code] = server_socket.receive_message();
+            if (status != Socket::MessageResult::SUCESS) {
+                cout << "Error en la comunicación con el servidor: " << error_code
+            << " - " << status;
+                return;
+            }
+            const Message result_message = Message::deserialize(message);
+            auto params = result_message.get_params();
+            if (result_message.get_params().front() != "200") {
+                cout << "No hay platos disponibles."<<endl;
+                waitForEnter();
+                return;
+            }
+            vector<Plato> platos;
+            for (size_t i = 1; i+4 < params.size(); i +=5) {
+                Message m(PEDIDO_MENU, RESPONSE);
+                for (int j=0; j <5; j++) {
+                    m.add_param(params[i+j]);
+
+                }
+                platos.push_back(Plato::Deserializar(m));
+            }
+
+            cout << "Platos disponibles: \n" ;
+            for (const auto &plato : platos) {
+                cout << plato.getId() << ":" << plato.getNombre() << "," << "-" << plato.getPrecio() << "€\n";
+            }
+            map<int,int> platosSeleccionados;
+
+            cout << "Ingrese el IDs de los platos que quieras pedir (0 para terminar)\n: " <<endl;
+            while (true) {
+                int id,cant;
+                cout << "ID plato: ";
+                cin >> id;
+                clearInputBuffer();
+
+                if (id == 0) break;
+
+                cout << "\nCantidad: ";
+                cin >> cant;
+
+                auto it = find_if(platos.begin(), platos.end(), [id](const Plato &plato) {
+                    return plato.getId() == id;
+                });
+                if (it != platos.end()) {
+                    auto t = platosSeleccionados.find(id);
+                    if (t !=  platosSeleccionados.end()) {
+                        t->second += cant;
+                    }else{
+                        platosSeleccionados.insert({id,cant});
+                        cout << "Añadido: " << it->getNombre() << "," << cant << endl;
+                    }
+                }else {
+                    cout <<"ID no valido"<<endl;
+                }
+            }
+            if (platosSeleccionados.empty()) {
+                cout << "No se han seleccionado platos" << endl;
+                waitForEnter();
+                break;
+            }
+
+            string direccion;
+            cout<< "Introduce direccion de entrega: ";
+            cin >> direccion;
+
+            time_t fecha = time(nullptr);
+            int estado = 0; //default en cola ponemos
+            Message pedido_create(PEDIDO_CREATE, REQUEST);
+            Pedido p(0, id,direccion,fecha,estado,platosSeleccionados);
+
+            if (server_socket.send_message(pedido_create.serialize())<0) {
+                cout << "Error al enviar pedido" <<endl;
+                waitForEnter();
+                break;
+            }
+            auto [status_pedido,message_pedido, error_code_pedido] = server_socket.receive_message();
+            if (status_pedido != Socket::MessageResult::SUCESS) {
+                cout << "Error en la comunicación con el servidor: " << error_code_pedido
+                << " - " << status_pedido;
+            }
+            const Message pedido_respuesta = Message::deserialize(message_pedido);
+            if (pedido_respuesta.get_params().front() == "200") {
+                cout << "Pedido creado exitosamente" <<endl;
+            }else {
+                cout <<"Error en la creacion del pedido"<< endl;
+            }
+            waitForEnter();
+
+        }break;
+        case 2: {
+            clrscr();
+            Message pedidos_request(PEDIDO_LIST, REQUEST);
+            pedidos_request.add_param(to_string(id));
+
+            if (server_socket.send_message(pedidos_request.serialize())<0) {
+                cout << "Error al solicitar pedidos."<<endl;
+                waitForEnter();
+                break;
+            }
+            auto[status_p,message_p,error_code_p] = server_socket.receive_message();
+            if (status_p != Socket::MessageResult::SUCESS) {
+                cout << "Error en la comunicación con el servidor: " << error_code_p
+              << " - " << status_p;
+                waitForEnter();
+                break;
+            }
+            const Message pedidos_respuesta = Message::deserialize(message_p);
+            auto parametros = pedidos_respuesta.get_params();
+            if (pedidos_respuesta.get_params().front() != "200"|| pedidos_respuesta.get_params().empty()) {
+                cout << "No tienes pedidos para borrar" <<endl;
+                waitForEnter();
+                break;
+            }
+            vector<Pedido>pedidos;
+            for (size_t i = 1; i+4 < parametros.size(); i +=5) {
+                Message m(PEDIDO_LIST,RESPONSE);
+                for (int j=0; j <5; j++) {
+                    m.add_param(parametros[i+j]);
+                }
+                pedidos.push_back(Pedido::deserializar(m));
+            }
+            cout << "Tus pedidos:\n ";
+            for (const auto &pedido : pedidos) {
+                cout << "ID: " << pedido.getIdPedido() << "- Fecha: " <<pedido.getFecha() << "- Estado: " << pedido.getEstado()<< "\nDireccion: " << pedido.getDireccion() << "\n\n";
+            }
+            int id;
+            cout<< "Introduce el id del pedido a borrar(0 para cancelar): ";
+            cin >> id;
+            clearInputBuffer();
+            if (id ==0)break;
+            bool valido = false;
+            for (const auto& ped : pedidos) {
+                if (ped.getIdPedido() == id) {
+                    valido = true;
+                    break;
+                }
+            }
+            if (!valido) {
+                cout << "ID no valido"<<endl;
+                waitForEnter();
+                break;
+            }
+            Message borrar_request(PEDIDO_CANCEL, REQUEST);
+            borrar_request.add_param(to_string(id));
+            if (server_socket.send_message(borrar_request.serialize())<0) {
+                cout <<"Error al enviar solicitud de borrado"<<endl;
+                waitForEnter();
+                break;
+            }
+
+            auto[borrar_status,borrar_mssg,borrar_error_code] = server_socket.receive_message();
+            if (borrar_status != Socket::MessageResult::SUCESS) {
+                cout << "Error en la comunicación con el servidor: " << borrar_error_code
+              << " - " << borrar_status;
+                waitForEnter();
+                break;
+            }
+            const Message borrar_respuesta = Message::deserialize(borrar_mssg);
+            if (borrar_respuesta.get_params().front() == "200") {
+                cout << "Pedido borrado exitosamente" << endl;
+            }else {
+                cout <<"Error borrando pedido" <<endl;
+            }
+            waitForEnter();
+        }break;
+        case 3: {
+            clrscr();
+            Message pedidos_req(PEDIDO_LIST, REQUEST);
+            pedidos_req.add_param(to_string(id_usuairo));
+
+            if (server_socket.send_message(pedidos_req.serialize())<0) {
+                cout << "Error al solicitar pedidos."<<endl;
+                waitForEnter();
+                break;
+            }
+            auto[status,message,error_code] = server_socket.receive_message();
+            if (status != Socket::MessageResult::SUCESS) {
+                cout << "Error en la comunicación con el servidor: " << error_code
+              << " - " << status;
+                waitForEnter();
+                break;
+            }
+            const Message pedidos_respuesta = Message::deserialize(message);
+            auto parametros = pedidos_respuesta.get_params();
+            if (pedidos_respuesta.get_params().front() != "200"|| pedidos_respuesta.get_params().empty()) {
+                cout << "No tienes pedidos" <<endl;
+                waitForEnter();
+                break;
+            }
+            vector<Pedido>pedidos;
+            for (size_t i = 1; i+4 < parametros.size(); i +=5) {
+                Message mes(PEDIDO_LIST,RESPONSE);
+                for (int j=0; j <5; j++) {
+                    mes.add_param(parametros[i+j]);
+                }
+                pedidos.push_back(Pedido::deserializar(mes));
+            }
+            cout << "Tus pedidos:\n ";
+            for (const auto &pedido : pedidos) {
+                cout << "ID: " << pedido.getIdPedido() << "- Fecha: " <<pedido.getFecha() << "- Estado: " << pedido.getEstado()<< "\nDireccion: " << pedido.getDireccion() << "\n\n";
+            }
+        }break;
+        default:
         cout <<"Opcion no valida." << endl;
+        }
     }
-}
 

@@ -2,8 +2,9 @@
 // Created by maddi.esparta on 29/05/2025.
 //
 
-#include "bd.h"
+#include "BD.h"
 #include <iostream>
+#include <sqlite3.h>
 
 
 BD *BD::instance = nullptr;

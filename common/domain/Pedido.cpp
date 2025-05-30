@@ -21,7 +21,7 @@ Pedido::Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
 }
 int Pedido::getIdPedido() const { return this->id_pedido; }
 int Pedido::getIdUsuario() const { return this->id_usuario; }
-string Pedido::getDireccion() { return this->direccion; }
+string Pedido::getDireccion() const { return this->direccion; }
 time_t Pedido::getFecha() const { return this->fecha; }
 int Pedido::getEstado() const { return this->estado; }
 map<int, int> Pedido::getMapa() { return this->mapa_pedido; }

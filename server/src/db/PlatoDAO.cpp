@@ -2,6 +2,7 @@
 #include "PlatoDAO.h"
 
 #include <iostream>
+#include <sqlite3.h>
 
 BD &PlatoDAO:: db = BD::get_instance();
 
