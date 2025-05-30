@@ -7,7 +7,6 @@
 bd &PedidoDAO::db = bd::get_instance();
 
 PedidoDAO::PedidoDAO() {
-    PedidoDAO::db = bd::get_instance();
 }
 
 void PedidoDAO::insert(Pedido &pedido) {
