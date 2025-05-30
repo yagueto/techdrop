@@ -1,7 +1,3 @@
-//
-// Created by naia.martin on 29/05/2025.
-//
-
 #ifndef ROBOTDAO_H
 #define ROBOTDAO_H
 #include <domain/Robot.h>
