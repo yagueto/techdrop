@@ -97,7 +97,7 @@ void MenuPedidos::gestionarOpcion(int opcion) {
     int estado = 0; // default en cola ponemos
     Message pedido_create(PEDIDO_CREATE, REQUEST);
     Pedido p(0, id, direccion, fecha, estado, platosSeleccionados);
-
+    p.serializar(pedido_create);
     if (server_socket.send_message(pedido_create.serialize()) < 0) {
       cout << "Error al enviar pedido" << endl;
       waitForEnter();

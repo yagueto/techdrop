@@ -99,9 +99,9 @@ Message handle_message_request(const std::string &message) {
         }
         case PEDIDO_MENU: {
             std::cout << "MessageHandler: Pedido menu request received." << std::endl;
-            response = Message(PEDIDO_MENU, RESPONSE);
-            response.add_param("200");
-            for (const Plato &plato: PlatoDAO::getPlatos()) {
+          response = Message(PEDIDO_MENU, RESPONSE);
+          response.add_param("200");
+          for (const Plato &plato: PlatoDAO::getPlatos()) {
                 plato.serializar(response);
             }
         }
