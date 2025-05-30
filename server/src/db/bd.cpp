@@ -41,15 +41,13 @@ void bd::cerrar_conexion() {
     }
 }
 
-
-int bd::execute_query(const std::string&sql) {
-   char* zErrMsg = 0;
-    int rc=sqlite3_exec(db, sql.c_str(), NULL, NULL, &zErrMsg);
+int bd::execute_query(const std::string sql, sqlite3_stmt** stmt) {
+    int rc = sqlite3_prepare_v2(db, sql, -1, stmt, NULL);
     if (rc != SQLITE_OK) {
-        std::cout << "Error SQL: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
+        fprintf(stderr, "Error en consulta: %s\n", sqlite3_errmsg(db));
+        return -1;
     }
-    return rc;
+    return 0;
 }
 sqlite3_stmt* bd::preparar_consulta(const std::string&sql) {
     sqlite3_stmt* stmt = NULL;
