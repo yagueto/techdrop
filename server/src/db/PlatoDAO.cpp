@@ -12,10 +12,9 @@ void PlatoDAO::insert(const Plato &plato) {
 
     sqlite3_stmt* stmt = db.preparar_consulta(sql);
 
-    int result = db.execute_query(sql, &stmt);
-    if (result != SQLITE_OK)
+    if (!stmt)
     {
-        fprintf(stderr, "Error executing statement\n");
+        std::cout << "Error preparando la consulta" << std::endl;
         sqlite3_finalize(stmt);
         return;
     }
@@ -25,7 +24,7 @@ void PlatoDAO::insert(const Plato &plato) {
     sqlite3_bind_double(stmt,3,plato.getPrecio());
     sqlite3_bind_int(stmt,4,plato.getDisponibilidad());
 
-    result = sqlite3_step(stmt);
+    int result = sqlite3_step(stmt);
     if (result != SQLITE_DONE)
     {
         printf("Error executing DELETE\n");
@@ -36,30 +35,27 @@ void PlatoDAO::insert(const Plato &plato) {
     sqlite3_finalize(stmt);
 }
 void PlatoDAO::del(const Plato &plato) {
-    sqlite3_stmt* stmt;
+
 
     string sql = "DELETE FROM Plato WHERE ID = ?;";
+    sqlite3_stmt* stmt = db.preparar_consulta(sql);
 
-    int result = db.execute_query(sql, &stmt);
-
-    if (result != SQLITE_OK)
+    if (!stmt)
     {
-        printf("Error executing DELETE\n");
+        std::cout << "Error executing DELETE" <<endl;
         sqlite3_finalize(stmt);
         return;
     }
 
     sqlite3_bind_int(stmt, 1, plato.getId());
 
-    result = sqlite3_step(stmt);
+    int result = sqlite3_step(stmt);
     if (result != SQLITE_DONE)
     {
-        printf("Error executing DELETE\n");
+        std::cout <<"Error executing DELETE"<<endl;
         sqlite3_finalize(stmt);
         return;
     }
-
-
     sqlite3_finalize(stmt);
 }
 std::vector<Plato> PlatoDAO::getPlatos() {

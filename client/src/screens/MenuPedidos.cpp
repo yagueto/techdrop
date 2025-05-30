@@ -25,3 +25,4 @@ void MenuPedidos::gestionarOpcion(int opcion)
         cout <<"Opcion no valida." << endl;
     }
 }
+
