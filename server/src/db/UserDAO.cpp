@@ -86,3 +86,27 @@ Usuario* UserDAO::select(Usuario &usuario) {
     sqlite3_finalize(stmt);
     return usuario;
 }
+
+void UserDAO::update(Usuario &usuario) {
+    sqlite3_stmt* stmt;
+    std::string sql = "UPDATE Usuario SET username = ?, password = ? WHERE dni = ?;";
+
+    int result = db.execute_query(sql, &stmt);
+    if (result != SQLITE_OK) {
+        cout << "Error preparando consulta" << endl;
+        return;
+    }
+
+    sqlite3_bind_text(stmt, 1, usuario.getNombre().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, usuario.getContraseña().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 3, usuario.getDni().c_str(), -1, SQLITE_STATIC);
+
+    result = sqlite3_step(stmt);
+    if (result != SQLITE_DONE) {
+        printf("Error actualizando usuario: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return;
+    }
+
+    sqlite3_finalize(stmt);
+}
