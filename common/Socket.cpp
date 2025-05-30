@@ -128,7 +128,7 @@ Socket::MessageResult Socket::receive_message() const {
                             static_cast<int>(recvbuff.capacity()), 0);
   if (received > 0) {
     recvbuff.resize(received);
-    std::cout << "DEBUG: Received raw data: " << recvbuff << std::endl;
+    // std::cout << "DEBUG: Received raw data: " << recvbuff << std::endl;
     return {MessageResult::SUCESS, recvbuff, 0};
   }
   if (received == 0) {
