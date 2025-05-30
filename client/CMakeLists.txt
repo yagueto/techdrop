@@ -17,6 +17,7 @@ set(SOURCES
         src/screens/MenuPedidos.h
         src/screens/MenuUsuario.cpp
         src/screens/MenuUsuario.h
+        src/Globals.h
 
 
 )
