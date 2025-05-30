@@ -15,6 +15,7 @@ public:
     static bool user_exists(const std::string &user,
                             const std::string &password);
     static Usuario select_username(std::string &username);
+    static int getId(string dni);
 };
 
 

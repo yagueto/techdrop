@@ -5,6 +5,7 @@
 
 
 class Usuario {
+    int id;
     std::string dni;
     std::string nombre;
     std::string contraseña;
@@ -14,10 +15,13 @@ public:
     std::string getDni();
     std::string getNombre();
     std::string getContraseña();
+    int getId();
 
     void setDni(const std::string &dni);
     void setNombre(const std::string &nombre);
     void setContraseña(const std::string &contraseña);
+
+    void setId(int id);
 
     void serializar(Message &m) const;
     static Usuario Deserializar(const Message &m);

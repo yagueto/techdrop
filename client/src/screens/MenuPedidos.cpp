@@ -4,6 +4,7 @@
 #include <domain/Pedido.h>
 #include <domain/Plato.h>
 
+#include "Globals.h"
 #include "domain/utils.h"
 
 MenuPedidos::MenuPedidos(const Socket &socket) : Menu(socket, "PEDIDOS") {
@@ -13,6 +14,8 @@ MenuPedidos::MenuPedidos(const Socket &socket) : Menu(socket, "PEDIDOS") {
 }
 
 void MenuPedidos::gestionarOpcion(int opcion) {
+    int id = Globals::usuario_actual.getId();
+
     switch (opcion)
     {
         case 1: {
@@ -53,25 +56,25 @@ void MenuPedidos::gestionarOpcion(int opcion) {
 
             cout << "Ingrese el IDs de los platos que quieras pedir (0 para terminar)\n: " <<endl;
             while (true) {
-                int id,cant;
+                int Id,cant;
                 cout << "ID plato: ";
-                cin >> id;
+                cin >> Id;
                 clearInputBuffer();
 
-                if (id == 0) break;
+                if (Id == 0) break;
 
                 cout << "\nCantidad: ";
                 cin >> cant;
 
-                auto it = find_if(platos.begin(), platos.end(), [id](const Plato &plato) {
-                    return plato.getId() == id;
+                auto it = find_if(platos.begin(), platos.end(), [Id](const Plato &plato) {
+                    return plato.getId() == Id;
                 });
                 if (it != platos.end()) {
-                    auto t = platosSeleccionados.find(id);
+                    auto t = platosSeleccionados.find(Id);
                     if (t !=  platosSeleccionados.end()) {
                         t->second += cant;
                     }else{
-                        platosSeleccionados.insert({id,cant});
+                        platosSeleccionados.insert({Id,cant});
                         cout << "Añadido: " << it->getNombre() << "," << cant << endl;
                     }
                 }else {
@@ -148,14 +151,14 @@ void MenuPedidos::gestionarOpcion(int opcion) {
             for (const auto &pedido : pedidos) {
                 cout << "ID: " << pedido.getIdPedido() << "- Fecha: " <<pedido.getFecha() << "- Estado: " << pedido.getEstado()<< "\nDireccion: " << pedido.getDireccion() << "\n\n";
             }
-            int id;
+            int iD;
             cout<< "Introduce el id del pedido a borrar(0 para cancelar): ";
-            cin >> id;
+            cin >> iD;
             clearInputBuffer();
-            if (id ==0)break;
+            if (iD ==0)break;
             bool valido = false;
             for (const auto& ped : pedidos) {
-                if (ped.getIdPedido() == id) {
+                if (ped.getIdPedido() == iD) {
                     valido = true;
                     break;
                 }
@@ -166,7 +169,7 @@ void MenuPedidos::gestionarOpcion(int opcion) {
                 break;
             }
             Message borrar_request(PEDIDO_CANCEL, REQUEST);
-            borrar_request.add_param(to_string(id));
+            borrar_request.add_param(to_string(iD));
             if (server_socket.send_message(borrar_request.serialize())<0) {
                 cout <<"Error al enviar solicitud de borrado"<<endl;
                 waitForEnter();
@@ -191,7 +194,7 @@ void MenuPedidos::gestionarOpcion(int opcion) {
         case 3: {
             clrscr();
             Message pedidos_req(PEDIDO_LIST, REQUEST);
-            pedidos_req.add_param(to_string(id_usuairo));
+            pedidos_req.add_param(to_string(id));
 
             if (server_socket.send_message(pedidos_req.serialize())<0) {
                 cout << "Error al solicitar pedidos."<<endl;

@@ -2,7 +2,9 @@
 #include "Usuario.h"
 #include "Protocol.h"
 using namespace std;
+
 Usuario::Usuario() {
+
   this->nombre = " ";
   this->contraseña = " ";
   this->dni = " ";
@@ -39,4 +41,10 @@ Usuario Usuario::Deserializar(const Message &m) {
     return {params[0], params[1], params[2]};
   }
   return {};
+}
+int Usuario::getId() {
+  return this->id;
+}
+void Usuario::setId(int id) {
+  this->id = id;
 }

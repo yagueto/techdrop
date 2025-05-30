@@ -42,6 +42,7 @@ void MenuPrincipal::gestionarOpcion(const int opcion) {
     if (const Message result_message = Message::deserialize(message);
         result_message.get_params().front() == "200") {
       cout << "Login exitoso." << endl;
+      Globals::usuario_actual.setId(atoi(result_message.get_params().at(2).c_str()));
       Globals::usuario_actual.setNombre(username);
       Globals::usuario_actual.setContraseña(password);
       Globals::usuario_actual.setDni(result_message.get_params().at(1));

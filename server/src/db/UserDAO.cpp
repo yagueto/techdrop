@@ -169,3 +169,23 @@ Usuario UserDAO::select_username(std::string &username)
 
   return usuario;
 }
+int UserDAO::getId(string dni) {
+  sqlite3_stmt *stmt;
+  std::string sql = "SELECT id FROM Usuario WHERE dni=?";
+  int result = db.execute_query(sql, &stmt);
+  if (result != SQLITE_OK) {
+    printf("Error ejecutando SELECT\n");
+    return false;
+  }
+  sqlite3_bind_text(stmt, 1, dni.c_str(), -1, SQLITE_STATIC);
+  if ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
+    return sqlite3_column_int(stmt, 0);
+  }
+
+  if (result != SQLITE_ROW && result != SQLITE_DONE) {
+    std::cout << "Error iterando sobre los resultados" << std::endl;
+  }
+
+  sqlite3_finalize(stmt);
+  return -1;
+}

@@ -19,6 +19,15 @@ Pedido::Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
   this->fecha = fecha;
   this->estado = estado;
 }
+Pedido::Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
+               int estado, map<int,int> mapa) {
+  this->id_pedido = id_pedido;
+  this->id_usuario = id_usuario;
+  this->direccion = std::move(direccion);
+  this->fecha = fecha;
+  this->estado = estado;
+  this->mapa_pedido = std::move(mapa);
+}
 int Pedido::getIdPedido() const { return this->id_pedido; }
 int Pedido::getIdUsuario() const { return this->id_usuario; }
 string Pedido::getDireccion() const { return this->direccion; }
