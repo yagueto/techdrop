@@ -18,6 +18,10 @@ public:
     string getNombre();
     string getContraseña();
 
+    void setDni(const string &dni);
+    void setNombre(const string &nombre);
+    void setContraseña(const string &contraseña);
+
     void serializar(Message &m) const;
     static Usuario Deserializar(const Message &m);
 

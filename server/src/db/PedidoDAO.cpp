@@ -4,8 +4,7 @@
 
 bd &PedidoDAO::db = bd::get_instance();
 
-PedidoDAO::PedidoDAO() {
-}
+PedidoDAO::PedidoDAO() = default;
 
 void PedidoDAO::insert(Pedido &pedido) {
     sqlite3_stmt* stmt;

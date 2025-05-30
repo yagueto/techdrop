@@ -11,7 +11,7 @@ public:
     static void insert(Usuario &usuario);
     static void del(Usuario &usuario);
     static void update(Usuario &usuario);
-    static Usuario* select(Usuario &usuario);
+    static Usuario select(Usuario &usuario);
 };
 
 

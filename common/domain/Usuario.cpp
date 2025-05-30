@@ -17,6 +17,18 @@ string Usuario::getDni() { return this->dni; }
 string Usuario::getNombre() { return this->nombre; }
 string Usuario::getContraseña() { return this->contraseña; }
 
+void Usuario::setDni(const string &dni) {
+  this->dni = dni;
+}
+
+void Usuario::setNombre(const string &nombre) {
+  this->nombre = nombre;
+}
+
+void Usuario::setContraseña(const string &contraseña) {
+  this->contraseña = contraseña;
+}
+
 void Usuario::serializar(Message &m) const {
   m.add_param(dni);
   m.add_param(nombre);

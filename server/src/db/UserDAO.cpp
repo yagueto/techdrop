@@ -4,8 +4,7 @@
 
 bd &UserDAO::db = bd::get_instance();
 
-UserDAO::UserDAO() {
-}
+UserDAO::UserDAO() = default;
 
 void UserDAO::insert(Usuario &usuario) {
     string sql = "INSERT INTO Usuario (id, dni, username, password) VALUES (NULL, ?, ?, ?);";
@@ -63,21 +62,20 @@ void UserDAO::del(Usuario &usuario) {
     sqlite3_finalize(stmt);
 }
 
-Usuario* UserDAO::select(Usuario &usuario) {
+Usuario UserDAO::select(Usuario &usuario) {
     sqlite3_stmt* stmt;
-    std::string sql = "SELECT dni, username, password FROM Usuario LIMIT 1;";
+    Usuario user = Usuario();
+    std::string sql = "SELECT dni, username, password FROM Usuario WHERE dni=?";
     int result = db.execute_query(sql, &stmt);
     if (result != SQLITE_OK) {
         printf("Error ejecutando SELECT\n");
-        return nullptr;
+        return user;
     }
-
-    Usuario* user = nullptr;
+    sqlite3_bind_text(stmt, 1, usuario.getDni().c_str(), -1, SQLITE_STATIC);
     if ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
-        std::string dni = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
-        std::string nombre = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-        std::string contraseña = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-        user = new Usuario(dni, nombre, contraseña);
+        user.setDni(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
+        user.setNombre(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
+        user.setContraseña(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2)));
     }
 
     if (result != SQLITE_ROW && result != SQLITE_DONE) {
