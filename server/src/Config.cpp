@@ -49,7 +49,7 @@ int Config::create_config_file() {
     if (!config_file.is_open()) {
         return 1;
     }
-    config_file << "../bd.db\n../server.log\n1\n";
+    config_file << "../../bd.db\n../../server.log\n1\n";
     config_file.close();
     return 0;
 }

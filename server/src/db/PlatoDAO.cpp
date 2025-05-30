@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-bd &PlatoDAO:: db = bd::get_instance();
+BD &PlatoDAO:: db = BD::get_instance();
 
 PlatoDAO::PlatoDAO() = default;
 

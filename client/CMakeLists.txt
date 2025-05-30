@@ -17,6 +17,8 @@ set(SOURCES
         src/screens/MenuPedidos.h
         src/screens/MenuUsuario.cpp
         src/screens/MenuUsuario.h
+        src/road_status.cpp
+        src/road_status.h
 
 
 )
@@ -29,4 +31,4 @@ target_include_directories(client PRIVATE
         ${SRC_DIR}
         ${LIB_DIR}
 )
-target_link_libraries(client PRIVATE common ws2_32)
+target_link_libraries(client PRIVATE common ws2_32 rapidxml)

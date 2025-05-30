@@ -2,12 +2,12 @@
 
 #include "sqlite3.h"
 
-bd &PedidoDAO::db = bd::get_instance();
+BD &PedidoDAO::db = BD::get_instance();
 
 PedidoDAO::PedidoDAO() = default;
 
 void PedidoDAO::insert(Pedido &pedido) {
-    sqlite3_stmt* stmt;
+    sqlite3_stmt *stmt;
     std::string sql = "INSERT INTO Pedido (id_usuario, direccion, fecha, estado) VALUES (?, ?, ?, ?);";
     int result = db.execute_query(sql, &stmt);
     if (result != 0) {
@@ -28,7 +28,7 @@ void PedidoDAO::insert(Pedido &pedido) {
 }
 
 void PedidoDAO::del(Pedido &pedido) {
-    sqlite3_stmt* stmt;
+    sqlite3_stmt *stmt;
     std::string sql = "DELETE FROM Pedido WHERE id_pedido = ?;";
     int result = db.execute_query(sql, &stmt);
     if (result != 0) {
@@ -45,8 +45,8 @@ void PedidoDAO::del(Pedido &pedido) {
     sqlite3_finalize(stmt);
 }
 
-Pedido * PedidoDAO::select(Pedido &pedido) {
-    sqlite3_stmt* stmt;
+Pedido *PedidoDAO::select(Pedido &pedido) {
+    sqlite3_stmt *stmt;
     std::string sql = "SELECT id_pedido, id_usuario, direccion, fecha, estado FROM Pedido WHERE id_pedido = ?;";
     int result = db.execute_query(sql, &stmt);
     if (result != 0) {
@@ -57,12 +57,12 @@ Pedido * PedidoDAO::select(Pedido &pedido) {
     sqlite3_bind_int(stmt, 1, pedido.getIdPedido());
 
     result = sqlite3_step(stmt);
-    Pedido* p = nullptr;
+    Pedido *p = nullptr;
     if (result == SQLITE_ROW) {
         int id_pedido = sqlite3_column_int(stmt, 0);
         int id_usuario = sqlite3_column_int(stmt, 1);
-        std::string direccion = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-        std::string fecha_str = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+        std::string direccion = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 2));
+        std::string fecha_str = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 3));
         time_t fecha = std::stol(fecha_str);
         int estado = sqlite3_column_int(stmt, 4);
 
@@ -73,4 +73,36 @@ Pedido * PedidoDAO::select(Pedido &pedido) {
 
     sqlite3_finalize(stmt);
     return p;
+}
+
+std::vector<Pedido> PedidoDAO::historial(Usuario &usuario) {
+    sqlite3_stmt *stmt;
+    std::string sql =
+            "SELECT id_pedido, id_usuario, direccion, fecha, estado FROM Pedido p, Usuario u WHERE p.id_usuario = u.id AND u.dni=?;";
+    int result = db.execute_query(sql, &stmt);
+    if (result != SQLITE_OK) {
+        std::cout << "Error preparando la consulta" << std::endl;
+        return {};
+    }
+
+    sqlite3_bind_text(stmt, 1, usuario.getDni().c_str(), -1, SQLITE_STATIC);
+
+    std::vector<Pedido> pedidos;
+    while ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
+        int id_pedido = sqlite3_column_int(stmt, 0);
+        int id_usuario = sqlite3_column_int(stmt, 1);
+        std::string direccion = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 2));
+        std::string fecha_str = reinterpret_cast<const char *>(sqlite3_column_text(stmt, 3));
+        time_t fecha = std::stol(fecha_str);
+        int estado = sqlite3_column_int(stmt, 4);
+
+        pedidos.emplace_back(id_pedido, id_usuario, direccion, fecha, estado);
+    }
+
+    if (result != SQLITE_DONE) {
+        std::cout << "Error iterando sobre los resultados" << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
+    return pedidos;
 }

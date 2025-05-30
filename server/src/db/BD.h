@@ -9,22 +9,23 @@
 #include "Config.h"
 #include "sqlite3.h"
 
-class bd {
+class BD {
 private:
-    static bd* instance;
+    static BD* instance;
     sqlite3 *db;
 
-    bd();
-    ~bd();
+    BD();
+    ~BD();
 
 public:
-    static bd &get_instance();
+    static BD &get_instance();
     void abrir_conexion(const std::string&ruta = Config::get_config().get_db_path());
     void cerrar_conexion();
 
-    int execute_query(std::string sql, sqlite3_stmt** stmt);
-    sqlite3_stmt* preparar_consulta(const std::string&sql);
 
+    int execute_query(std::string sql, sqlite3_stmt** stmt);
+    sqlite3_stmt* preparar_consulta(const std::string&sql) const;
+    int crear_tablas();
 };
 
 
