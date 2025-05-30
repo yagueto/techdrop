@@ -21,6 +21,8 @@ set(SOURCES
         src/db/UserDAO.h
         src/db/PedidoDAO.cpp
         src/db/PedidoDAO.h
+        src/db/PlatoDAO.cpp
+        src/db/PlatoDAO.h
 )
 
 # Define executable

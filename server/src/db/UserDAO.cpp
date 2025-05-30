@@ -87,7 +87,7 @@ Usuario UserDAO::select(Usuario &usuario) {
 }
 
 void UserDAO::update(Usuario &usuario) {
-    sqlite3_stmt* stmt;
+    sqlite3_stmt* stmt = nullptr;
     std::string sql = "UPDATE Usuario SET username = ?, password = ? WHERE dni = ?;";
 
     int result = db.execute_query(sql, &stmt);

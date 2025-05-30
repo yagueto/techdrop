@@ -96,7 +96,7 @@ void RobotDAO::del(const Robot &robot) {
 
 Robot* RobotDAO::select(const Robot& robot)
 {
-    sqlite3_stmt* stmt;
+    sqlite3_stmt* stmt = nullptr;
     std::string sql = "SELECT id, nombre, estado, pedido_actual FROM Robot LIMIT 1;";
     int result = db.execute_query(sql, &stmt);
     if (result != SQLITE_OK) {

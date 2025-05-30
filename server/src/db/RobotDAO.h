@@ -7,17 +7,20 @@
 #include <domain/Robot.h>
 
 #include "bd.h"
-#include "sqlite3.h"
+
 
 
 class RobotDAO {
     static bd &db;
     RobotDAO();
 private:
-    void insert(const Robot& &robot);
-    void update(const Robot& &robot);
-    void del(const Robot &robot);
-    Robot* select(const Robot& &robot);
+    static void insert(const Robot& &robot);
+
+    static void update(const Robot& &robot);
+
+    static void del(const Robot &robot);
+
+    static Robot* select(const Robot& &robot);
 };
 
 
