@@ -5,11 +5,11 @@
 #ifndef PLATODAO_H
 #define PLATODAO_H
 
-#include "bd.h"
+#include "BD.h"
 #include "domain/Plato.h"
 
 class PlatoDAO {
-    static bd &db;
+    static BD &db;
     PlatoDAO();
 public:
     static void insert(const Plato &plato);

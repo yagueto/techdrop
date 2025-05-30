@@ -2,7 +2,7 @@
 
 #include "sqlite3.h"
 
-bd &PedidoDAO::db = bd::get_instance();
+BD &PedidoDAO::db = BD::get_instance();
 
 PedidoDAO::PedidoDAO() = default;
 
@@ -78,14 +78,14 @@ Pedido *PedidoDAO::select(Pedido &pedido) {
 std::vector<Pedido> PedidoDAO::historial(Usuario &usuario) {
     sqlite3_stmt *stmt;
     std::string sql =
-            "SELECT id_pedido, id_usuario, direccion, fecha, estado FROM Pedido WHERE id_usuario=4;";
+            "SELECT id_pedido, id_usuario, direccion, fecha, estado FROM Pedido p, Usuario u WHERE p.id_usuario = u.id AND u.dni=?;";
     int result = db.execute_query(sql, &stmt);
     if (result != SQLITE_OK) {
         std::cout << "Error preparando la consulta" << std::endl;
         return {};
     }
 
-    //sqlite3_bind_text(stmt, 1, usuario.getDni().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, usuario.getDni().c_str(), -1, SQLITE_STATIC);
 
     std::vector<Pedido> pedidos;
     while ((result = sqlite3_step(stmt)) == SQLITE_ROW) {
