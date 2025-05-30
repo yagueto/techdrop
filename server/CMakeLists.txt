@@ -13,8 +13,6 @@ set(SOURCES
         src/Config.h
         src/Logger.cpp
         src/Logger.h
-        src/db/bd.h
-        src/db/bd.cpp
         src/db/RobotDAO.cpp
         src/db/RobotDAO.h
         src/db/UserDAO.cpp
