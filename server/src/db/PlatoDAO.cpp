@@ -21,9 +21,9 @@ void PlatoDAO::insert(const Plato &plato) {
     }
 
     sqlite3_bind_text(stmt,1,plato.getNombre().c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt,1,plato.getDescp().c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_double(stmt,1,plato.getPrecio());
-    sqlite3_bind_int(stmt,1,plato.getDisponibilidad());
+    sqlite3_bind_text(stmt,2,plato.getDescp().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_double(stmt,3,plato.getPrecio());
+    sqlite3_bind_int(stmt,4,plato.getDisponibilidad());
 
     result = sqlite3_step(stmt);
     if (result != SQLITE_DONE)
