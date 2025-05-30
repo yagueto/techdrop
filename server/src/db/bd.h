@@ -5,6 +5,8 @@
 #ifndef BD_H
 #define BD_H
 #include <string>
+
+#include "Config.h"
 #include "sqlite3.h"
 
 class bd {
@@ -17,7 +19,7 @@ private:
 
 public:
     static bd &get_instance();
-    void abrir_conexion(const std::string&ruta = "../bd.db");
+    void abrir_conexion(const std::string&ruta = Config::get_config().get_db_path());
     void cerrar_conexion();
 
 
