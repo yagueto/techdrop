@@ -71,18 +71,18 @@ void MenuPrincipal::gestionarOpcion(const int opcion) {
       break;
     }
 
-    Socket::MessageResult result = server_socket.receive_message();
-    if (result.status != Socket::MessageResult::SUCESS) {
-      cout << "Error en la comunicación con el servidor: " << result.error_code
-           << " - " << result.status;
+    auto [status, message, error_code] = server_socket.receive_message();
+    if (status != Socket::MessageResult::SUCESS) {
+      cout << "Error en la comunicación con el servidor: " << error_code
+           << " - " << status;
     }
 
-    if (Message result_message = Message::deserialize(result.message);
+    if (Message result_message = Message::deserialize(message);
         result_message.get_params().front() == "200") {
       cout << "Usuario registrado" << endl;
     } else {
-      cout << "No se ha podido registrar: "
-           << result_message.get_params().at(1);
+      cout << "No se ha podido registrar: " << result_message.get_params().at(1)
+           << endl;
     }
   } break;
   default:

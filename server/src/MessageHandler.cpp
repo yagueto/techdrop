@@ -37,6 +37,16 @@ Message handle_message_request(const std::string &message) {
   case REGISTER: {
     std::cout << "MessageHandler: Register received." << std::endl;
     response = Message(REGISTER, RESPONSE);
+
+    if (Usuario usuario(received.get_params().at(0), "", "");
+        UserDAO::select(usuario)) {
+      response.add_param("401"); // user already exists
+      response.add_param("El usuario ya existe");
+      break;
+    }
+    Usuario usuario(received.get_params().at(0), received.get_params().at(1),
+                    received.get_params().at(2));
+    UserDAO::insert(usuario);
     response.add_param("200");
   } break;
   case CLOSE:

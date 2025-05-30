@@ -21,8 +21,8 @@ public:
     void cerrar_conexion();
 
 
-    int execute_query(const std::string sql, sqlite3_stmt** stmt);
-    sqlite3_stmt* preparar_consulta(const std::string&sql);
+    int execute_query(std::string sql, sqlite3_stmt** stmt);
+    sqlite3_stmt* preparar_consulta(const std::string&sql) const;
 
 };
 
