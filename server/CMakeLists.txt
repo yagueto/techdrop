@@ -17,6 +17,8 @@ set(SOURCES
         src/db/bd.cpp
         src/db/RobotDAO.cpp
         src/db/RobotDAO.h
+        src/db/UserDAO.cpp
+        src/db/UserDAO.h
 )
 
 # Define executable
