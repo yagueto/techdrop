@@ -34,6 +34,7 @@ void MenuUsuario::gestionarOpcion(const int opcion)
             mensaje.add_param(usuario.getDni());
             mensaje.add_param(password_nueva);
             server_socket.send_message(mensaje.serialize());
+            cout << server_socket.receive_message().message << endl;
             break;
         }
 

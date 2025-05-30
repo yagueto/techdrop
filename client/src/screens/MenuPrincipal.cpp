@@ -44,6 +44,7 @@ void MenuPrincipal::gestionarOpcion(const int opcion) {
       cout << "Login exitoso." << endl;
       Globals::usuario_actual.setNombre(username);
       Globals::usuario_actual.setContraseña(password);
+      Globals::usuario_actual.setDni(result_message.get_params().at(1));
       clrscr();
       waitForEnter();
       MenuInicio inicio(server_socket);

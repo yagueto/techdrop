@@ -32,6 +32,7 @@ Message handle_message_request(const std::string &message)
                                                received.get_params().at(1));
       if (exists) {
         response.add_param("200"); // login correcto
+        response.add_param(UserDAO::select_username(received.get_params().at(0)).getDni());
       } else {
         response.add_param("401"); // unauthorised (usuario no existe)
       }
@@ -64,6 +65,7 @@ Message handle_message_request(const std::string &message)
       Usuario u(dni, username_nuevo, "");
       UserDAO::update(u);
       response.add_param("200");
+      std::cout << "Update hecho exitosamente.";
       break;
     }
 

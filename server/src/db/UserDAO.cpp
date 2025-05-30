@@ -142,7 +142,7 @@ Usuario UserDAO::select_username(std::string &username)
   Usuario usuario;
   sqlite3_stmt *stmt;
 
-  std::string sql = "SELECT dni, nombre, contraseña FROM Usuario WHERE nombre = ?;";
+  std::string sql = "SELECT dni, username, password FROM Usuario WHERE username = ?;";
 
   int result = db.execute_query(sql, &stmt);
 
@@ -160,7 +160,7 @@ Usuario UserDAO::select_username(std::string &username)
 
   result = sqlite3_step(stmt);
   if (result != SQLITE_DONE) {
-    printf("Error executing DELETE\n");
+    printf("Error executing SELECT\n");
     sqlite3_finalize(stmt);
   }
 
