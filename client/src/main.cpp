@@ -1,3 +1,4 @@
+#include "Globals.h"
 #include "Socket.h"
 #include "road_status.h"
 #include "screens/MenuPrincipal.h"
@@ -7,6 +8,7 @@
 #define SERVER_PORT 8000
 
 int main() {
+  Globals::status = get_road_status();
   if (!Socket::initializeWinSock()) {
     std::cerr << "¡Error inicializando el cliente!" << std::endl;
     return 1;
