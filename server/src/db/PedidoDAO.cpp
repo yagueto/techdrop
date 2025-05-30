@@ -176,7 +176,7 @@ std::vector<Pedido> PedidoDAO::historial(Usuario &usuario) {
         pedidos_list; // Renamed to avoid confusion if 'pedidos' is a member
     int result_step;
     while ((result_step = sqlite3_step(stmt)) == SQLITE_ROW) {
-        int id_pedido = sqlite3_column_int(stmt, 0);
+      int id_pedido = sqlite3_column_int(stmt, 0);
       int id_usuario_db = sqlite3_column_int(
             stmt, 1); // Renamed to avoid conflict with function param
         std::string direccion =
