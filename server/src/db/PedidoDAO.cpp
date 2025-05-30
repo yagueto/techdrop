@@ -155,10 +155,10 @@ std::vector<Pedido> PedidoDAO::historial(Usuario &usuario) {
     sqlite3_stmt *stmt;
   // It's generally better to use explicit JOIN syntax
   std::string sql =
-      "SELECT p.id_pedido, p.id_usuario, p.direccion, p.fecha, p.estado "
-      "FROM Pedido p JOIN Usuario u ON p.id_usuario = u.id WHERE u.dni = ?;";
+        "SELECT p.id_pedido, p.id_usuario, p.direccion, p.fecha, p.estado "
+        "FROM Pedido p JOIN Usuario u ON p.id_usuario = u.id WHERE u.dni = ?;";
 
-  // It's good practice to ensure the DB connection is open.
+    // It's good practice to ensure the DB connection is open.
     // db.abrir_conexion(); // If your BD class requires explicit opening per
   // operation.
 
@@ -168,14 +168,14 @@ std::vector<Pedido> PedidoDAO::historial(Usuario &usuario) {
     std::cerr << "Error preparing the Pedido historial query: "
               << sqlite3_errmsg(db.get_db()) << std::endl;
     return {};
-  }
+    }
 
-  sqlite3_bind_text(stmt, 1, usuario.getDni().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, usuario.getDni().c_str(), -1, SQLITE_STATIC);
 
     std::vector<Pedido>
-      pedidos_list; // Renamed to avoid confusion if 'pedidos' is a member
-  int result_step;
-  while ((result_step = sqlite3_step(stmt)) == SQLITE_ROW) {
+        pedidos_list; // Renamed to avoid confusion if 'pedidos' is a member
+    int result_step;
+    while ((result_step = sqlite3_step(stmt)) == SQLITE_ROW) {
         int id_pedido = sqlite3_column_int(stmt, 0);
       int id_usuario_db = sqlite3_column_int(
             stmt, 1); // Renamed to avoid conflict with function param
@@ -228,11 +228,11 @@ std::vector<Pedido> PedidoDAO::historial(Usuario &usuario) {
                     << std::endl;
         }
         pedidos_list.push_back(current_pedido);
-  }
+    }
 
-  if (result_step != SQLITE_DONE) {
-    std::cerr << "Error iterating over Pedido historial results: "
-              << sqlite3_errmsg(db.get_db()) << std::endl;
+    if (result_step != SQLITE_DONE) {
+      std::cerr << "Error iterating over Pedido historial results: "
+                << sqlite3_errmsg(db.get_db()) << std::endl;
     }
 
     sqlite3_finalize(stmt);
