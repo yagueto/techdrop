@@ -3,6 +3,7 @@
 #include "Socket.h"
 #include "Config.h"
 #include <iostream>
+#include <domain/Usuario.h>
 
 void handle_socket_exception() {
   std::cerr << "¡Error inicializando el servidor!" << std::endl;

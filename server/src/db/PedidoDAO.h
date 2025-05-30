@@ -5,6 +5,7 @@
 #ifndef PEDIDODAO_H
 #define PEDIDODAO_H
 #include <domain/Pedido.h>
+#include <domain/Usuario.h>
 
 #include "bd.h"
 
@@ -16,6 +17,7 @@ public:
     static void insert(Pedido &pedido);
     static void del(Pedido &pedido);
     static Pedido* select(Pedido &pedido);
+    static std::vector<Pedido> historial(Usuario &usuario);
 };
 
 
