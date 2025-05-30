@@ -30,7 +30,7 @@ public:
     string getDireccion() const;
     time_t getFecha() const;
     int getEstado() const;
-  void agregarPlato(int id_plato, int cantidad);
+    void agregarPlato(int id_plato, int cantidad);
   map<int, int> getMapa();
 
   void serializar(Message &m) const;
