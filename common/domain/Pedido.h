@@ -31,7 +31,7 @@ public:
     time_t getFecha() const;
     int getEstado() const;
     void agregarPlato(int id_plato, int cantidad);
-  map<int, int> getMapa();
+    map<int, int> getMapa();
 
   void serializar(Message &m) const;
   static Pedido deserializar(const Message &m);
