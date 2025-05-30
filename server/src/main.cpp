@@ -13,12 +13,6 @@ void handle_socket_exception() {
 }
 
 int main() {
-  //TODO: borrar esto
-  Message *test = new Message(PEDIDO_LIST, REQUEST);
-  Usuario u = Usuario("1", "test_user", "password123");
-  u.serializar(*test);
-  Message test2 = handle_message_request(test->serialize());
-
   if (!Socket::initializeWinSock()) {
     handle_socket_exception();
     return 1;
