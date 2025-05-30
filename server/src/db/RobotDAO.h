@@ -6,17 +6,18 @@
 #define ROBOTDAO_H
 #include <domain/Robot.h>
 
+#include "bd.h"
 #include "sqlite3.h"
 
 
 class RobotDAO {
-    static sqlite3* db;
+    static bd &db;
     RobotDAO();
 private:
-    bool insert(const Robot& &robot);
-    bool update(const Robot& &robot);
-    bool del(int id);
-    Robot select(const Robot& &robot);
+    void insert(const Robot& &robot);
+    void update(const Robot& &robot);
+    void del(const Robot &robot);
+    Robot* select(const Robot& &robot);
 };
 
 
