@@ -1,6 +1,7 @@
 
 #include "Pedido.h"
 
+#include "Protocol.h"
 #include <utility>
 
 Pedido::Pedido() {
@@ -17,11 +18,10 @@ Pedido::Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
   this->direccion = std::move(direccion);
   this->fecha = fecha;
   this->estado = estado;
-
 }
 int Pedido::getIdPedido() const { return this->id_pedido; }
 int Pedido::getIdUsuario() const { return this->id_usuario; }
-string Pedido::getDireccion() const{ return this->direccion; }
+string Pedido::getDireccion() { return this->direccion; }
 time_t Pedido::getFecha() const { return this->fecha; }
 int Pedido::getEstado() const { return this->estado; }
 map<int, int> Pedido::getMapa() { return this->mapa_pedido; }
@@ -37,7 +37,10 @@ void Pedido::serializar(Message &m) const {
   m.add_param(to_string(this->id_usuario));
   m.add_param(this->direccion);
 
-  m.add_param(to_string(this->fecha));
+  tm *ptm = localtime(&this->fecha);
+  char buffer[32];
+  strftime(buffer, 32, "%Y-%m-%d %H:%M:%S", ptm);
+  m.add_param(buffer);
   m.add_param(to_string(this->estado));
 
   if (!this->mapa_pedido.empty()) {
@@ -60,14 +63,4 @@ Pedido Pedido::deserializar(const Message &m) {
     return pedido;
   }
   return {};
-}
-Pedido::Pedido(int id_pedido, int id_usuario, string direccion, time_t fecha,
-         int estado, map<int, int> mapa_pedido) {
-  this->id_pedido = id_pedido;
-  this->id_usuario = id_usuario;
-  this->direccion = std::move(direccion);
-  this->fecha = fecha;
-  this->estado = estado;
-  this->mapa_pedido = mapa_pedido;
-
 }
