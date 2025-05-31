@@ -27,6 +27,7 @@ public:
     sqlite3_stmt* preparar_consulta(const std::string&sql) const;
     int crear_tablas();
     sqlite3* get_db();
+    int generar_datos_prueba();
 };
 
 
