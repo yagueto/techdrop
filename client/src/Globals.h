@@ -7,7 +7,7 @@
 class Globals {
 public:
     static inline Usuario usuario_actual;
-    static inline std::vector<StatusEntry> status;
+  static inline std::vector<StatusEntry> status;
 };
 
 #endif //GLOBALS_H

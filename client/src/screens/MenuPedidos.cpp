@@ -48,9 +48,10 @@ void MenuPedidos::gestionarOpcion(int opcion) {
   case 1: {
     clrscr();
 
-    cout << "ATENCIÓN: las siguientes incidencias pueden retrasar su pedido:" <<endl;
+    cout << "ATENCIÓN: las siguientes incidencias pueden retrasar su pedido:"
+         << endl;
     for (StatusEntry statu : Globals::status) {
-      cout << "- " << statu.titulo <<endl;
+      cout << "- " << statu.titulo << endl;
     }
 
     cout << endl << "¿Deseas continuar aún así? (S/n)";
@@ -59,7 +60,6 @@ void MenuPedidos::gestionarOpcion(int opcion) {
     if (response == "n") {
       return;
     }
-
 
     Message pedidos_message(PEDIDO_MENU, REQUEST);
     if (server_socket.send_message(pedidos_message.serialize()) < 0) {
